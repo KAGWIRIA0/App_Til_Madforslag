@@ -1,4 +1,5 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from .models import Dish, DishStewOption, ComradeMealStewOption, GymFood, ComradeFood, ComradeMeal, SkinFood, WellnessFood
 
 
@@ -10,7 +11,7 @@ class DishStewOptionInline(admin.TabularInline):
 
 
 @admin.register(Dish)
-class DishAdmin(admin.ModelAdmin):
+class DishAdmin(ImportExportModelAdmin):
     inlines = [DishStewOptionInline]
     list_display = ['name', 'category', 'estimated_cost', 'prep_time']
     list_filter = ['category']
@@ -18,14 +19,14 @@ class DishAdmin(admin.ModelAdmin):
 
 
 @admin.register(DishStewOption)
-class DishStewOptionAdmin(admin.ModelAdmin):
+class DishStewOptionAdmin(ImportExportModelAdmin):
     list_display = ['name', 'dish', 'category', 'estimated_cost', 'is_featured']
     list_filter = ['category', 'is_vegetarian', 'is_featured']
     search_fields = ['name']
 
 
 @admin.register(GymFood)
-class GymFoodAdmin(admin.ModelAdmin):
+class GymFoodAdmin(ImportExportModelAdmin):
     list_display = ['name', 'category', 'food_type', 'timing', 'protein', 'carbs', 'fats']
     list_filter = ['category', 'food_type', 'timing']
     search_fields = ['name', 'description']
@@ -38,27 +39,27 @@ class ComradeMealStewOptionInline(admin.TabularInline):
 
 
 @admin.register(ComradeFood)
-class ComradeFoodAdmin(admin.ModelAdmin):
+class ComradeFoodAdmin(ImportExportModelAdmin):
     list_display = ['name', 'category', 'price_ksh', 'unit']
     list_filter = ['category']
     search_fields = ['name']
 
 
 @admin.register(ComradeMealStewOption)
-class ComradeMealStewOptionAdmin(admin.ModelAdmin):
+class ComradeMealStewOptionAdmin(ImportExportModelAdmin):
     list_display = ['name', 'comrade_meal', 'category', 'estimated_cost', 'is_featured']
     list_filter = ['category', 'is_vegetarian', 'is_featured']
     search_fields = ['name']
 
 
 @admin.register(ComradeMeal)
-class ComradeMealAdmin(admin.ModelAdmin):
+class ComradeMealAdmin(ImportExportModelAdmin):
     inlines = [ComradeMealStewOptionInline]
     list_display = ['name', 'total_cost_ksh']
     search_fields = ['name']
 
 @admin.register(SkinFood)
-class SkinFoodAdmin(admin.ModelAdmin):
+class SkinFoodAdmin(ImportExportModelAdmin):
     list_display  = ['name', 'category', 'key_nutrient', 'is_featured', 'order']
     list_filter   = ['category', 'is_featured']
     list_editable = ['order', 'is_featured']
@@ -66,7 +67,7 @@ class SkinFoodAdmin(admin.ModelAdmin):
     ordering      = ['category', 'order']    
 
 @admin.register(WellnessFood)
-class WellnessFoodAdmin(admin.ModelAdmin):
+class WellnessFoodAdmin(ImportExportModelAdmin):
     list_display  = ['name', 'category', 'key_nutrient', 'is_featured', 'order']
     list_filter   = ['category', 'is_featured']
     list_editable = ['order', 'is_featured']
