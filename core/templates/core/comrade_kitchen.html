@@ -958,7 +958,6 @@
 
   /*  RESPONSIVE */
   @media (max-width: 700px) {
-
     .ck-meal-card,
     .ck-meal-card.reverse {
       flex-direction: column;
@@ -995,7 +994,7 @@
 
 {% block content %}
 
-<!--  HERO -->
+<!-- HERO -->
 <section class="ck-hero">
   <div class="ck-hero-overlay"></div>
   <div class="container ck-hero-content">
@@ -1035,25 +1034,27 @@
               <button type="button"
                 class="ck-mode-tab {% if search_mode == 'budget' or not search_mode %}active{% endif %}"
                 data-mode="budget" onclick="setMode(this)">Budget</button>
-              <button type="button" class="ck-mode-tab {% if search_mode == 'ingredients' %}active{% endif %}"
+              <button type="button"
+                class="ck-mode-tab {% if search_mode == 'ingredients' %}active{% endif %}"
                 data-mode="ingredients" onclick="setMode(this)">Ingredients</button>
-              <button type="button" class="ck-mode-tab {% if search_mode == 'both' %}active{% endif %}" data-mode="both"
-                onclick="setMode(this)">Both</button>
+              <button type="button"
+                class="ck-mode-tab {% if search_mode == 'both' %}active{% endif %}"
+                data-mode="both" onclick="setMode(this)">Both</button>
             </div>
 
             {# Budget field — shown for budget + both modes #}
-            <div id="field-budget" {% if search_mode == 'ingredients' %}style="display:none;" {% endif %}>
+            <div id="field-budget" {% if search_mode == 'ingredients' %}style="display:none;"{% endif %}>
               <label class="ck-label">Your budget (Ksh)</label>
               <input type="number" name="budget" class="ck-input" placeholder="e.g. 50, 100, 150…"
                 value="{{ budget|default:'' }}" min="0">
             </div>
 
             {# Ingredients field — shown for ingredients + both modes #}
-            <div id="field-ingredients" {% if search_mode == 'budget' or not search_mode %}style="display:none;" {% endif
-              %}>
+            <div id="field-ingredients" {% if search_mode == 'budget' or not search_mode %}style="display:none;"{% endif %}>
               <label class="ck-label">What do you already have?</label>
               <input type="text" name="ingredients" class="ck-input"
-                placeholder="e.g. rice, cooking oil, eggs, maize flour…" value="{{ ingredients_input|default:'' }}">
+                placeholder="e.g. rice, cooking oil, eggs, maize flour…"
+                value="{{ ingredients_input|default:'' }}">
               <p style="font-family:'Jost',sans-serif;font-size:.73rem;color:var(--text-mid);
                         margin-top:-10px;margin-bottom:14px;">
                 Separate with commas. We'll factor these in so you spend less.
@@ -1061,7 +1062,8 @@
             </div>
 
             <label class="ck-label">Eaten recently? (we'll skip these)</label>
-            <input type="text" name="recent" class="ck-input" placeholder="e.g. indomie, ugali, chapati beans…"
+            <input type="text" name="recent" class="ck-input"
+              placeholder="e.g. indomie, ugali, chapati beans…"
               value="{{ recent_food|default:'' }}">
 
             <button type="submit" class="ck-btn">Find My Meal →</button>
@@ -1072,8 +1074,9 @@
   </div>
 </section>
 
-<!-- RESULTS  -->
+<!-- RESULTS OR DEFAULT CONTENT -->
 {% if searched %}
+
 <section class="ck-section" id="results">
   <div class="container">
 
@@ -1088,9 +1091,9 @@
       <div>
         <h2 class="ck-section-title">
           {% if suggested_meals %}
-          {{ suggested_meals|length }} Meal{{ suggested_meals|length|pluralize }} Found
+            {{ suggested_meals|length }} Meal{{ suggested_meals|length|pluralize }} Found
           {% else %}
-          No Meals Found
+            No Meals Found
           {% endif %}
         </h2>
         <p class="ck-section-sub">
@@ -1110,11 +1113,18 @@
       {% with meal=entry.meal %}
       <div class="ck-meal-wrapper">
 
-        <div class="ck-meal-card {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
+        {% if forloop.counter|divisibleby:2 %}
+        <div class="ck-meal-card reverse">
+        {% else %}
+        <div class="ck-meal-card">
+        {% endif %}
+
           <div class="ck-meal-img">
             {% if meal.image %}
             <img src="{{ meal.image.url }}" alt="{{ meal.name }}">
-            {% else %}🍽️{% endif %}
+            {% else %}
+            🍽️
+            {% endif %}
           </div>
 
           <div class="ck-meal-body">
@@ -1130,7 +1140,9 @@
 
             {% if meal.get_tags %}
             <div class="ck-tags">
-              {% for tag in meal.get_tags %}<span class="ck-tag">{{ tag }}</span>{% endfor %}
+              {% for tag in meal.get_tags %}
+              <span class="ck-tag">{{ tag }}</span>
+              {% endfor %}
             </div>
             {% endif %}
 
@@ -1139,8 +1151,7 @@
 
             <div class="ck-meal-meta">
               {% if entry.savings > 0 %}
-              <span
-                style="font-family:'Jost',sans-serif;font-size:.82rem;text-decoration:line-through;opacity:.5;color:var(--text-mid);">
+              <span style="font-family:'Jost',sans-serif;font-size:.82rem;text-decoration:line-through;opacity:.5;color:var(--text-mid);">
                 Ksh {{ entry.original_cost }}
               </span>
               <span class="ck-meal-meta-price">Ksh {{ entry.adjusted_cost }}</span>
@@ -1191,18 +1202,18 @@
               {% endfor %}
             </div>
             {% endif %}
+
             {% if entry.has_stew_options %}
             <p class="ck-chip-label">🥘 Eat it with</p>
             <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
               {% for s in entry.all_stews %}
-              <div class="ck-stew-row{% if s.recently_eaten %} ck-stew-faded{% endif %}">
+              <div class="ck-stew-row {% if s.recently_eaten %}ck-stew-faded{% endif %}">
                 <div style="display:flex;align-items:center;gap:8px;">
                   <span style="font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:500;color:var(--text-dark);">
                     {{ s.stew.name }}
                   </span>
                   {% if s.recently_eaten %}
-                  <span
-                    style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;">
+                  <span style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;">
                     had recently
                   </span>
                   {% endif %}
@@ -1211,8 +1222,7 @@
                   <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--text-mid);">
                     +Ksh {{ s.stew_cost }}
                   </span>
-                  <span
-                    style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);">
+                  <span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);">
                     Ksh {{ s.total_cost }}
                   </span>
                 </div>
@@ -1238,10 +1248,9 @@
               </a>
               {% endif %}
             </div>
+
           </div>
         </div>
-
-        {# No collapse body needed — full details are on the detail page #}
 
       </div>
       {% endwith %}
@@ -1290,7 +1299,7 @@
 
 {% else %}
 
-<!-- FEATURED MEALS  -->
+<!-- FEATURED MEALS -->
 <section class="ck-section">
   <div class="container">
     <div class="d-flex align-items-baseline justify-content-between mb-4 flex-wrap gap-3">
@@ -1305,17 +1314,16 @@
     <div class="ck-food-grid">
       {% for meal in featured_meals %}
       <div>
-        {# Card #}
         <div class="ck-food-card" id="meal-card-{{ meal.pk }}">
-          {# Top image #}
           <div class="ck-food-card-img">
             {% if meal.image %}
             <img src="{{ meal.image.url }}" alt="{{ meal.name }}">
-            {% else %}🍽️{% endif %}
+            {% else %}
+            🍽️
+            {% endif %}
           </div>
 
           <div class="ck-food-card-body">
-            {# Category / tags #}
             {% if meal.get_tags %}
             <span class="ck-food-card-cat">
               {% for tag in meal.get_tags %}{{ tag }}{% if not forloop.last %} · {% endif %}{% endfor %}
@@ -1324,7 +1332,6 @@
 
             <h3 class="ck-food-card-name">{{ meal.name }}</h3>
             <p class="ck-food-card-desc">{{ meal.description }}</p>
-
 
             {% if meal.stew_options.exists %}
             <p class="ck-eat-with-label">Eat with</p>
@@ -1345,7 +1352,6 @@
             </div>
             {% endif %}
 
-            {# Price + meta #}
             <div class="ck-food-card-meta">
               <i class="bi bi-wallet2" style="color:var(--gold);font-size:0.85rem;"></i>
               <span class="ck-food-card-price">Ksh {{ meal.total_cost_ksh }}</span>
@@ -1355,7 +1361,6 @@
               </span>
               {% endif %}
             </div>
-
 
             <div class="ck-food-card-actions">
               {% if meal.comrade_food %}
@@ -1429,7 +1434,7 @@
   </div>
 </section>
 
-<!-- STOCK UP SECTION  -->
+<!-- STOCK UP SECTION -->
 <section style="padding:60px 0 80px;background:var(--cream);">
   <div class="container">
     <div class="d-flex align-items-baseline justify-content-between mb-2 flex-wrap gap-3">
@@ -1440,26 +1445,26 @@
       </div>
     </div>
 
-    {# Stock items displayed in a dark card container #}
     <div style="background:var(--brown-dark);border-radius:20px;padding:2rem 2rem 1.5rem;margin-top:1.5rem;">
       <div class="ck-stock-grid">
         {% for s in stock_items %}
         <div class="ck-stock-card">
           <div class="ck-stock-icon">🛒</div>
           <div>
-            <p class="ck-stock-name">{{ s.item }} <small style="font-weight:400;opacity:.6;font-size:.75rem;">({{ s.qty
-                }})</small></p>
+            <p class="ck-stock-name">{{ s.item }}
+              <small style="font-weight:400;opacity:.6;font-size:.75rem;">({{ s.qty }})</small>
+            </p>
             <p class="ck-stock-tip">{{ s.tip }}</p>
-            <span class="ck-stock-price">{{ s.price }} <small style="font-size:.7rem;opacity:.6;">· {{ s.unit_price
-                }}</small></span>
+            <span class="ck-stock-price">{{ s.price }}
+              <small style="font-size:.7rem;opacity:.6;">· {{ s.unit_price }}</small>
+            </span>
           </div>
         </div>
         {% endfor %}
       </div>
       <p style="font-family:'Jost',sans-serif;font-size:.75rem;color:rgba(255,252,248,0.4);
                 margin-top:1.5rem;margin-bottom:0;text-align:center;">
-        <em>Disclaimer: Not a must to have all items in stock. Keep the essentials and top up when the money comes
-          in.</em>
+        <em>Disclaimer: Not a must to have all items in stock. Keep the essentials and top up when the money comes in.</em>
       </p>
     </div>
   </div>
@@ -1495,11 +1500,12 @@
     } else if (mode === 'ingredients') {
       budgetField.style.display = 'none';
       ingredientsField.style.display = '';
-    } else { // both
+    } else {
       budgetField.style.display = '';
       ingredientsField.style.display = '';
     }
   }
-
 </script>
 {% endblock %}
+
+
