@@ -150,7 +150,6 @@
       opacity: 0;
       transform: translateY(20px);
     }
-
     to {
       opacity: 1;
       transform: translateY(0);
@@ -225,7 +224,7 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 3rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
   }
 
@@ -258,6 +257,17 @@
     opacity: 0.35;
     pointer-events: none;
   }
+
+  .section-pagination-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
 </style>
 {% endblock %}
 
@@ -269,8 +279,7 @@
     <h1 class="section-heading text-white" style="font-size: clamp(2rem, 5vw, 3.2rem); margin-top: 0.4rem;">
       Browse All Dishes
     </h1>
-    <p
-      style="font-family: 'Jost', sans-serif; color: rgba(255, 252, 248, 0.7); font-size: 0.99rem; margin-top: 0.8rem;">
+    <p style="font-family: 'Jost', sans-serif; color: rgba(255, 252, 248, 0.7); font-size: 0.99rem; margin-top: 0.8rem;">
       Over a million ideas made specifically for you. Breakfast, Lunch, Dinner and Everything in between.
     </p>
 
@@ -329,18 +338,23 @@
 
     {% else %}
 
+    {# DRINKS SECTION  #}
     {% if drinks %}
     <div style="margin-bottom: 3rem;">
       <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
         <div>
           <p class="section-label" style="margin-bottom: 4px;">
-            🥤 {% if selected_category %}{{ selected_category|title }} {% endif %}Drinks
+            {% if selected_category %}{{ selected_category|title }} {% endif %}Drinks
           </p>
           <p style="font-family: 'Jost', sans-serif; font-size: 0.85rem; color: var(--text-mid);">
             Pick a drink to see what foods pair well with it
           </p>
         </div>
-        <span class="dish-count-badge">{{ drinks|length }} drink{{ drinks|length|pluralize }}</span>
+        <span class="dish-count-badge">
+          {{ drinks.paginator.count }} drink{{ drinks.paginator.count|pluralize }}
+          page ( {{ drinks.number }} of {{ drinks.paginator.num_pages }} 
+          )
+        </span>
       </div>
 
       <div class="row g-4" id="drinksGrid">
@@ -361,9 +375,9 @@
               <div class="d-flex align-items-center justify-content-between mb-1">
                 <p class="dish-card-category" style="margin: 0;">{{ drink.get_category_display }}</p>
                 <span style="font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 700;
-                                   letter-spacing: 1px; text-transform: uppercase;
-                                   background: rgba(181, 84, 30, 0.10); color: #b5541e;
-                                   padding: 2px 8px; border-radius: 50px; border: 1px solid rgba(181, 84, 30, 0.3);">
+                             letter-spacing: 1px; text-transform: uppercase;
+                             background: rgba(181, 84, 30, 0.10); color: #b5541e;
+                             padding: 2px 8px; border-radius: 50px; border: 1px solid rgba(181, 84, 30, 0.3);">
                   DRINK
                 </span>
               </div>
@@ -373,18 +387,18 @@
 
               {% if drink.best_with_foods %}
               <div style="margin-bottom: 12px;">
-                <p
-                  style="font-family: 'Jost', sans-serif; font-size: 0.62rem; font-weight: 700;
-                                   letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px;">
+                <p style="font-family: 'Jost', sans-serif; font-size: 0.62rem; font-weight: 700;
+                           letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px;">
                   Pairs well with
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 5px;">
                   {% for food_name in drink.best_with_foods %}
-                  <a href="{% url 'browse' %}?q={{ food_name }}&category={{ drink.category }}" style="display: inline-block; background: var(--cream);
-                                      border: 1px solid rgba(196, 154, 60, 0.25); border-radius: 50px;
-                                      padding: 3px 10px; font-family: 'Jost', sans-serif;
-                                      font-size: 0.72rem; color: var(--text-dark); text-decoration: none;
-                                      transition: all 0.2s;"
+                  <a href="{% url 'browse' %}?q={{ food_name }}&category={{ drink.category }}"
+                    style="display: inline-block; background: var(--cream);
+                           border: 1px solid rgba(196, 154, 60, 0.25); border-radius: 50px;
+                           padding: 3px 10px; font-family: 'Jost', sans-serif;
+                           font-size: 0.72rem; color: var(--text-dark); text-decoration: none;
+                           transition: all 0.2s;"
                     onmouseover="this.style.background='var(--gold)'; this.style.color='var(--text-dark)'"
                     onmouseout="this.style.background='var(--cream)'; this.style.color='var(--text-dark)'">
                     {{ food_name }}
@@ -405,9 +419,10 @@
                   <i class="bi bi-journal-text me-1"></i> View Recipe
                 </a>
                 {% if drink.youtube_url %}
-                <a href="{{ drink.youtube_url }}" target="_blank" class="btn" style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
-                                  padding: 0.55rem 1rem; border-radius: 50px;
-                                  font-family: 'Jost', sans-serif; color: var(--text-mid);">
+                <a href="{{ drink.youtube_url }}" target="_blank" class="btn"
+                  style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
+                         padding: 0.55rem 1rem; border-radius: 50px;
+                         font-family: 'Jost', sans-serif; color: var(--text-mid);">
                   <i class="bi bi-youtube text-danger"></i> How-to
                 </a>
                 {% endif %}
@@ -417,10 +432,44 @@
         </div>
         {% endfor %}
       </div>
+
+      {# Drinks pagination #}
+      {% if drinks.has_other_pages %}
+      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{ drinks.paginator.num_pages }} 
+        )
+      </p>
+      <div class="pagination-wrapper">
+        {% if drinks.has_previous %}
+        <a href="?drink_page={{ drinks.previous_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">← Prev Drinks</a>
+        {% else %}
+        <span class="page-btn disabled">← Prev Drinks</span>
+        {% endif %}
+
+        {% for num in drinks.paginator.page_range %}
+          {% if drinks.number == num %}
+          <span class="page-btn active">{{ num }}</span>
+          {% elif num > drinks.number|add:'-3' and num < drinks.number|add:'3' %}
+          <a href="?drink_page={{ num }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+            class="page-btn">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if drinks.has_next %}
+        <a href="?drink_page={{ drinks.next_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">Next Drinks →</a>
+        {% else %}
+        <span class="page-btn disabled">Next Drinks →</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
     </div>
 
     <div style="border-top: 2px solid rgba(196, 154, 60, 0.15); margin: 2rem 0 2.5rem;"></div>
     {% endif %}
+
+    {# FOODS SECTION #}
 
     {% if foods %}
     <div>
@@ -433,7 +482,11 @@
             Full meals and dishes to cook
           </p>
         </div>
-        <span class="dish-count-badge">{{ foods|length }} dish{{ foods|length|pluralize }}</span>
+        <span class="dish-count-badge">
+          {{ foods.paginator.count }} dish{{ foods.paginator.count|pluralize }}
+          
+          ( page {{ foods.number }} of {{ foods.paginator.num_pages }} )
+        </span>
       </div>
 
       <div class="row g-4" id="foodsGrid">
@@ -457,18 +510,18 @@
 
               {% if dish.best_with_drinks %}
               <div style="margin-bottom: 12px;">
-                <p
-                  style="font-family: 'Jost', sans-serif; font-size: 0.62rem; font-weight: 700;
-                                   letter-spacing: 2px; text-transform: uppercase; color: #b5541e; margin-bottom: 6px;">
+                <p style="font-family: 'Jost', sans-serif; font-size: 0.62rem; font-weight: 700;
+                           letter-spacing: 2px; text-transform: uppercase; color: #b5541e; margin-bottom: 6px;">
                   Eat with
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 5px;">
                   {% for drink_name in dish.best_with_drinks %}
-                  <a href="{% url 'browse' %}?q={{ drink_name }}&category={{ dish.category }}" style="display: inline-block; background: rgba(181, 84, 30, 0.07);
-                                      border: 1px solid rgba(181, 84, 30, 0.28); border-radius: 50px;
-                                      padding: 3px 10px; font-family: 'Jost', sans-serif;
-                                      font-size: 0.72rem; color: #b5541e; text-decoration: none;
-                                      transition: all 0.2s;"
+                  <a href="{% url 'browse' %}?q={{ drink_name }}&category={{ dish.category }}"
+                    style="display: inline-block; background: rgba(181, 84, 30, 0.07);
+                           border: 1px solid rgba(181, 84, 30, 0.28); border-radius: 50px;
+                           padding: 3px 10px; font-family: 'Jost', sans-serif;
+                           font-size: 0.72rem; color: #b5541e; text-decoration: none;
+                           transition: all 0.2s;"
                     onmouseover="this.style.background='rgba(181, 84, 30, 0.18)'"
                     onmouseout="this.style.background='rgba(181, 84, 30, 0.07)'">
                     {{ drink_name }}
@@ -489,9 +542,10 @@
                   <i class="bi bi-journal-text me-1"></i> MORE ON...
                 </a>
                 {% if dish.youtube_url %}
-                <a href="{{ dish.youtube_url }}" target="_blank" class="btn" style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
-                                  padding: 0.55rem 1rem; border-radius: 50px;
-                                  font-family: 'Jost', sans-serif; color: var(--text-mid);">
+                <a href="{{ dish.youtube_url }}" target="_blank" class="btn"
+                  style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
+                         padding: 0.55rem 1rem; border-radius: 50px;
+                         font-family: 'Jost', sans-serif; color: var(--text-mid);">
                   <i class="bi bi-youtube text-danger"></i> How-to
                 </a>
                 {% endif %}
@@ -502,54 +556,42 @@
         {% endfor %}
       </div>
 
-      <div class="load-more-section" id="loadMoreSection">
-        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
-          Load More Dishes
-        </button>
-        <button class="load-more-btn" id="showAllBtn" onclick="showAll()"
-          style="margin-left: 12px; background: var(--beige); border-color: var(--gold); color: var(--brown-dark);">
-          Show All Dishes
-        </button>
-        <div class="progress-bar-wrapper">
-          <div class="progress-bar-fill" id="progressBar"></div>
-        </div>
-        <p class="load-more-info">
-          Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> dishes
-        </p>
+      {# Foods pagination #}
+      {% if foods.has_other_pages %}
+      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{ foods.paginator.num_pages }} )</p>
+      <div class="pagination-wrapper">
+        {% if foods.has_previous %}
+        <a href="?food_page={{ foods.previous_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">← Prev Foods</a>
+        {% else %}
+        <span class="page-btn disabled">← Prev Foods</span>
+        {% endif %}
+
+        {% for num in foods.paginator.page_range %}
+          {% if foods.number == num %}
+          <span class="page-btn active">{{ num }}</span>
+          {% elif num > foods.number|add:'-3' and num < foods.number|add:'3' %}
+          <a href="?food_page={{ num }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+            class="page-btn">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if foods.has_next %}
+        <a href="?food_page={{ foods.next_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">Next Foods →</a>
+        {% else %}
+        <span class="page-btn disabled">Next Foods →</span>
+        {% endif %}
       </div>
+      {% endif %}
+
     </div>
     {% endif %}
 
-    {% endif %}
+    {% endif %}{# end total_count == 0 #}
 
-  </div>
-  {% if dishes.has_other_pages %}
-  <div class="pagination-wrapper" id="paginationWrapper">
-    {% if dishes.has_previous %}
-    <a href="?food_page={{ dishes.previous_page_number }}&category={{ selected_category }}&q={{ search_query }}"
-      class="page-btn">← Previous</a>
-    {% else %}
-    <span class="page-btn disabled">← Previous</span>
-    {% endif %}
-
-    {% for num in dishes.paginator.page_range %}
-    {% if dishes.number == num %}
-    <span class="page-btn active">{{ num }}</span>
-    {% elif num > dishes.number|add:'-3' and num < dishes.number|add:'3' %} 
-    <a href="?food_page={{ num }}&category={{ selected_category }}&q={{ search_query }}" class="page-btn">{{ num }}</a>
-      {% endif %}
-      {% endfor %}
-
-      {% if dishes.has_next %}
-      <a href="?food_page={{ dishes.next_page_number }}&category={{ selected_category }}&q={{ search_query }}"
-        class="page-btn">Next →</a>
-      {% else %}
-      <span class="page-btn disabled">Next →</span>
-      {% endif %}
   </div>
 </section>
-
-{% endif %}
 
 {% endblock %}
 
@@ -559,53 +601,16 @@
   let showing = 0;
   const items = document.querySelectorAll('#foodsGrid .dish-item');
   const total = items.length;
-  const btn = document.getElementById('loadMoreBtn');
-  const showAllBtn = document.getElementById('showAllBtn');
   const progressBar = document.getElementById('progressBar');
   const showingCount = document.getElementById('showingCount');
   const totalCount = document.getElementById('totalCount');
 
-  items.forEach(item => item.style.display = 'none');
+  // Show all items on the current page immediately (pagination handles batching now)
+  items.forEach(item => item.style.display = 'block');
+  showing = total;
+
   if (totalCount) totalCount.textContent = total;
-
-  function updateUI() {
-    const pct = total > 0 ? Math.round((showing / total) * 100) : 0;
-    if (progressBar) progressBar.style.width = pct + '%';
-    if (showingCount) showingCount.textContent = showing;
-    if (showing >= total) {
-      if (btn) { btn.disabled = true; btn.textContent = 'All dishes loaded ✓'; }
-      if (showAllBtn) { showAllBtn.disabled = true; showAllBtn.textContent = 'All shown ✓'; }
-    }
-  }
-
-  function loadMore() {
-    let revealed = 0;
-    items.forEach(item => {
-      if (item.style.display === 'none' && revealed < BATCH) {
-        item.style.display = 'block';
-        item.style.animationDelay = (revealed * 0.08) + 's';
-        revealed++;
-        showing++;
-      }
-    });
-    updateUI();
-  }
-
-  function showAll() {
-    let delay = 0;
-    items.forEach(item => {
-      if (item.style.display === 'none') {
-        item.style.display = 'block';
-        item.style.animationDelay = (delay * 0.04) + 's';
-        delay++;
-        showing++;
-      }
-    });
-    updateUI();
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    loadMore();
-  });
+  if (showingCount) showingCount.textContent = showing;
+  if (progressBar) progressBar.style.width = '100%';
 </script>
 {% endblock %}

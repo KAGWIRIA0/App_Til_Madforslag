@@ -335,10 +335,10 @@
           Ksh {{ food.price_ksh }} &nbsp;·&nbsp; {{ food.unit }}
         </span>
         {% if meal.stew_options.exists %}
-        <span style="font-family:'Jost',sans-serif;font-size:0.8rem;color:rgba(255,252,248,0.55);
+        <span style="font-family:'Jost',sans-serif;font-size:0.95rem;color:rgb(238, 219, 4);
                      background:rgba(196,154,60,0.2);border:1px solid rgba(196,154,60,0.35);
                      border-radius:50px;padding:3px 12px;">
-          🥘 {{ meal.stew_options.count }} stew option{{ meal.stew_options.count|pluralize }}
+          {{ meal.stew_options.count }} stew option{{ meal.stew_options.count|pluralize }}
         </span>
         {% endif %}
       </div>
@@ -384,12 +384,12 @@
 
         <!-- Cooking tip -->
         {% if food.cooking_tip %}
-        <div class="cf-tip">⚡ <strong>Quickest way:</strong> {{ food.cooking_tip }}</div>
+        <div class="cf-tip"><strong>Quickest way:</strong> {{ food.cooking_tip }}</div>
         {% endif %}
 
         <!-- Upgrade tip -->
         {% if food.upgrade_tip %}
-        <div class="cf-upgrade">✨ <strong>Level up:</strong> {{ food.upgrade_tip }}</div>
+        <div class="cf-upgrade"><strong>Level up:</strong> {{ food.upgrade_tip }}</div>
         {% endif %}
 
         <!-- Meals that use this food -->
@@ -491,7 +491,7 @@
               <p style="font-family:'Jost',sans-serif;font-size:0.68rem;font-weight:700;
                         letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:0 0 0.3rem;">
                 {{ stew.get_category_display }}
-                {% if stew.is_vegetarian %}&nbsp;· 🌿 Vegetarian{% endif %}
+                {% if stew.is_vegetarian %}&nbsp;· Vegetarian{% endif %}
               </p>
 
               <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;

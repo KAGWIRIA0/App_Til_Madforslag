@@ -1204,7 +1204,7 @@
             {% endif %}
 
             {% if entry.has_stew_options %}
-            <p class="ck-chip-label">🥘 Eat it with</p>
+            <p class="ck-chip-label">Eat it with</p>
             <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
               {% for s in entry.all_stews %}
               <div class="ck-stew-row {% if s.recently_eaten %}ck-stew-faded{% endif %}">
@@ -1237,11 +1237,7 @@
                 MORE ON..
               </a>
               {% endif %}
-              {% if entry.has_stew_options %}
-              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-eat-with-btn">
-                🥘 Eat With ({{ entry.all_stews|length }})
-              </a>
-              {% endif %}
+
               {% if meal.youtube_url %}
               <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
                 <i class="bi bi-youtube text-danger"></i> How-to
@@ -1279,11 +1275,7 @@
             </div>
             <div style="display:flex;align-items:center;gap:1rem;">
               <div class="ck-price-amount">Ksh {{ item.price_ksh }}</div>
-              {% if item.stew_options.exists %}
-              <a href="{% url 'comrade_food_detail' item.pk %}" class="ck-eat-with-btn">
-                🥘 Eat With
-              </a>
-              {% endif %}
+
             </div>
           </div>
           {% endfor %}
@@ -1366,12 +1358,6 @@
               {% if meal.comrade_food %}
               <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-more-btn">
                 MORE ON..
-              </a>
-              {% endif %}
-              {% if meal.stew_options.exists %}
-              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-eat-with-btn">
-                🥘 Eat With ({{ meal.stew_options.count }})
-              </a>
               {% endif %}
               {% if meal.youtube_url %}
               <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
@@ -1405,7 +1391,7 @@
     <p style="font-family:'Jost',sans-serif;font-size:.88rem;
               color:rgba(255,252,248,0.5);margin-bottom:28px;">
       Common prices around Kenyan markets &amp; shops.
-      Click <strong style="color:var(--gold);">Eat With</strong> to see stew options.
+      Click <strong style="color:var(--gold);">MORE ON..</strong> to see stew options.
     </p>
 
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
@@ -1414,14 +1400,6 @@
         <div class="ck-market-info">
           <p class="ck-market-name">{{ food.name }}</p>
           <p class="ck-market-unit">{{ food.unit }}</p>
-        </div>
-        <div class="ck-market-right">
-          <span class="ck-market-price">Ksh {{ food.price_ksh }}</span>
-          {% if food.stew_options.exists %}
-          <a href="{% url 'comrade_food_detail' food.pk %}" class="ck-eat-with-btn">
-            🥘 Eat With
-          </a>
-          {% endif %}
         </div>
       </div>
       {% empty %}

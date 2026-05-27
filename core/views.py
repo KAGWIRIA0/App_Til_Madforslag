@@ -570,7 +570,7 @@ def comrade_kitchen(request):
         )
         match_ratio = len(matched_ings) / len(user_ingredients) if user_ingredients else 0
 
-        # ── Stew options ──────────────────────────────────────────────────
+        # Stew options
         all_stews = list(meal.stew_options.all())
 
         # Filter out stews the user recently had with this meal
@@ -621,7 +621,7 @@ def comrade_kitchen(request):
             'excluded_stews': excluded_stews,
         }
 
-    # ── PARSE INPUTS ──────────────────────────────────────────────────────
+    # PARSE INPUTS 
     if budget or ingredients_input:
         searched = True
 
@@ -641,7 +641,7 @@ def comrade_kitchen(request):
             if recent_food else []
         )
 
-        # ── MODE 1: BUDGET ONLY ───────────────────────────────────────────
+        # MODE 1: BUDGET ONLY 
         if search_mode == 'budget' and budget_int is not None:
             for meal in ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh'):
                 if meal.total_cost_ksh > budget_int:
@@ -657,7 +657,7 @@ def comrade_kitchen(request):
                 price_ksh__lte=budget_int
             ).order_by('price_ksh')
 
-        # ── MODE 2: INGREDIENTS ONLY ──────────────────────────────────────
+        # MODE 2: INGREDIENTS ONLY 
         elif search_mode == 'ingredients' and user_ingredients:
             tier1, tier2, tier3 = [], [], []
 
@@ -691,7 +691,7 @@ def comrade_kitchen(request):
                 tier.sort(key=lambda x: x['match_score'], reverse=True)
             suggested_meals = tier1 + tier2 + tier3
 
-        # ── MODE 3: BUDGET + INGREDIENTS ─────────────────────────────────
+        # MODE 3: BUDGET + INGREDIENTS
         elif search_mode == 'both':
             tier_a, tier_b, tier_c = [], [], []
 
@@ -736,7 +736,7 @@ def comrade_kitchen(request):
                 if budget_int else []
             )
 
-    # ── STATIC CONTEXT ────────────────────────────────────────────────────
+    # STATIC CONTEXT 
     featured_meals = ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh')[:8]
     all_foods = ComradeFood.objects.all().order_by('price_ksh')
     if active_category:
@@ -788,10 +788,11 @@ def comrade_kitchen(request):
 
 def comrade_food_detail(request, pk):
     food = get_object_or_404(ComradeFood, pk=pk)
+    meal = food.meals.prefetch_related('stew_options').first()
     return render(request, 'core/comrade_food_detail.html', {
         'food': food,
+        'meal': meal,  
     })
-
 #  handles camera, voice and text input
 @require_POST
 def ai_scan_ajax(request):
@@ -816,8 +817,8 @@ def ai_scan_ajax(request):
         error_str = str(e)
         # Clean quota error message
         if '429' in error_str or 'RESOURCE_EXHAUSTED' in error_str:
-            return JsonResponse({'error': '⚠️ AI is busy right now, free tier limit reached. Please try again in a minute or two.'})
+            return JsonResponse({'error': 'AI is busy right now, free tier limit reached. Please try again in a minute or two.'})
         elif '404' in error_str or 'not found' in error_str.lower():
-            return JsonResponse({'error': '⚠️ AI model unavailable. Please try again shortly.'})
+            return JsonResponse({'error': 'AI model unavailable. Please try again shortly.'})
         else:
-            return JsonResponse({'error': f'⚠️ AI unavailable. Please try again. ({error_str[:80]})'})
+            return JsonResponse({'error': f'AI unavailable. Please try again. ({error_str[:80]})'})
