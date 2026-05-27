@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}DishCraft — Cook What You Have{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --beige: #EDE5D4;
+      --gold: #C49A3C;
+      --gold-light: #D4AF6A;
+      --brown-dark: #3B2A1A;
+      --brown-mid: #6B4C2A;
+      --brown-warm: #8B6344;
+      --text-dark: #1A1209;
+      --text-mid: #5C4A32;
+      --white: #FEFCF8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      font-size: 1.05rem;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background-color: var(--white);
+      border-bottom: 1px solid rgba(196, 154, 60, 0.2);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 20px rgba(59, 42, 26, 0.07);
+    }
+
+    .navbar-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--text-dark) !important;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand span {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .nav-link {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-mid) !important;
+      padding: 0.4rem 1.1rem !important;
+      transition: color 0.25s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--gold) !important;
+    }
+
+    .navbar-toggler {
+      border: none;
+      padding: 0;
+      color: var(--text-dark);
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    /* BUTTONS */
+    .btn-gold {
+      background-color: var(--gold);
+      color: var(--text-dark);
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+      background-color: var(--gold-light);
+      color: var(--text-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 154, 60, 0.35);
+    }
+
+    .btn-outline-dark-custom {
+      border: 1.5px solid var(--text-dark);
+      color: var(--text-dark);
+      background: transparent;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 50px;
+      padding: 0.75rem 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-dark-custom:hover {
+      background-color: var(--text-dark);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn-brown {
+      background-color: var(--brown-dark);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      padding: 0.85rem 2rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-brown:hover {
+      background-color: var(--brown-mid);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 42, 26, 0.3);
+    }
+
+    /* SECTION LABELS */
+    .section-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--text-dark);
+    }
+
+    .section-subheading {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--text-mid);
+      font-size: 1.15rem;
+    }
+
+    /* DISH CARD */
+    .dish-card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 4px 20px rgba(59, 42, 26, 0.07);
+      transition: all 0.35s ease;
+      height: 100%;
+    }
+
+    .dish-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(59, 42, 26, 0.15);
+    }
+
+    .dish-card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .dish-card-body {
+      padding: 1.25rem;
+    }
+
+    .dish-card-category {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .dish-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .dish-card-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+    .dish-meta {
+      display: flex;
+      gap: 1rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+    }
+
+
+    .dish-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--brown-dark);
+      color: rgba(255, 252, 248, 0.8);
+      padding: 3rem 0 2rem;
+    }
+
+    footer .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    footer .brand span {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    footer p {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255, 252, 248, 0.6);
+    }
+
+    footer a {
+      color: rgba(255, 252, 248, 0.6);
+      text-decoration: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--gold-light);
+    }
+
+    /* FORM INPUTS */
+    .dc-input {
+      background: var(--white);
+      border: 1.5px solid rgba(59, 42, 26, 0.15);
+      border-radius: 10px;
+      padding: 0.85rem 1.2rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      width: 100%;
+      transition: border-color 0.25s;
+    }
+
+    .dc-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196, 154, 60, 0.1);
+    }
+
+    .dc-input::placeholder {
+      color: rgba(92, 74, 50, 0.45);
+    }
+
+    .dc-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /*  TAB TOGGLE */
+    .dc-tab {
+      display: flex;
+      background: var(--beige);
+      border-radius: 50px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .dc-tab-btn {
+      flex: 1;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      background: transparent;
+      border-radius: 50px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .dc-tab-btn.active {
+      background: var(--white);
+      color: var(--text-dark);
+      box-shadow: 0 2px 8px rgba(59, 42, 26, 0.12);
+    }
+
+    /* ── UTILITIES ── */
+    .divider-gold {
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+      border: none;
+      width: 60px;
+      margin: 1rem 0;
+    }
+
+    .badge-gold {
+      background: rgba(196, 154, 60, 0.12);
+      color: var(--gold);
+      border: 1px solid rgba(196, 154, 60, 0.3);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 0.3em 0.7em;
+      border-radius: 50px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .fade-up-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+
+    .fade-up-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    .fade-up-3 {
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .fade-up-4 {
+      animation-delay: 0.4s;
+      opacity: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .section-heading {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">Dish<span>Craft</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-lg-center gap-lg-1 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+              href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'browse' %}active{% endif %}"
+              href="{% url 'browse' %}">Browse Dishes</a></li>
+          <li class="nav-item"><a
+              class="nav-link {% if request.resolver_match.url_name == 'find_dishes' %}active{% endif %}"
+              href="{% url 'find_dishes' %}">Find My Dish</a></li>
+          <li class="nav-item"><a
+              class="nav-link {% if request.resolver_match.url_name == 'comrade_kitchen' %}active{% endif %}"
+              href="{% url 'comrade_kitchen' %}">LOW COST MEALS</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'gym' %}active{% endif %}"
+              href="{% url 'gym' %}">GYM</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'skin' %}active{% endif %}"
+              href="{% url 'skin' %}">SKIN</a></li>    
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+              href="{% url 'about' %}">ABOUT</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="brand mb-2">Dish<span>Craft</span></div>
+          <p>Making everyday cooking effortless & affordable.</p>
+        </div>
+        <div class="col-md-2">
+          <p class="mb-2 text-white fw-500"
+            style="font-family:'Jost',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;">Navigate
+          </p>
+          <div class="d-flex flex-column gap-2">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'browse' %}">Browse Dishes</a>
+            <a href="{% url 'find_dishes' %}">Find My Dish</a>
+            <a href="{% url 'find_dishes' %}">Low Cost Meals</a>
+            <a href="{% url 'skin' %}">SKIN</a>
+            <a href="{% url 'about' %}">ABOUT</a>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <p class="mb-2 text-white"
+            style="font-family:'Jost',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;">
+            Categories</p>
+          <div class="d-flex flex-column gap-2">
+            <a href="{% url 'browse' %}?category=breakfast">Breakfast</a>
+            <a href="{% url 'browse' %}?category=lunch">Lunch</a>
+            <a href="{% url 'browse' %}?category=dinner">Dinner / Supper</a>
+            <a href="{% url 'browse' %}?category=anytime">Anytime</a>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <p class="mb-2 text-white"
+            style="font-family:'Jost',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;">Smart
+            Discovery</p>
+          <p>Tell us your ingredients or budget and we'll suggest what to make.</p>
+          <a href="{% url 'find_dishes' %}" class="btn-gold btn" style="font-size:.8rem;padding:.6rem 1.4rem;">Start Now
+            →</a>
+        </div>
+      </div>
+      <hr style="border-color:rgba(255,252,248,0.1);margin-top:2.5rem;" />
+      <p class="text-center mb-0" style="font-size:.8rem;">© 2026 DishCraft. Never wonder what to cook again.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+
+</html>

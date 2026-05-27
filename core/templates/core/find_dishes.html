@@ -1,0 +1,985 @@
+{% extends 'core/base.html' %}
+{% block title %}Find My Dish — DishCraft{% endblock %}
+
+{% block extra_css %}
+<style>
+  .find-hero {
+    background: var(--beige);
+    padding: 4rem 0;
+    border-bottom: 1px solid rgba(196, 154, 60, .2);
+    overflow-x: hidden;
+  }
+
+  @media (max-width: 576px) {
+    .find-hero {
+      padding: 2.5rem 0 2rem;
+    }
+  }
+
+  .search-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 40px rgba(59, 42, 26, .1);
+  }
+
+  @media (max-width: 576px) {
+    .search-card {
+      padding: 1.2rem;
+      border-radius: 18px;
+    }
+  }
+
+  .result-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-mid);
+    margin-bottom: 2rem;
+  }
+
+  .result-count strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .dc-tab {
+    display: flex;
+    gap: 4px;
+    background: var(--beige);
+    border-radius: 50px;
+    padding: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dc-tab-btn {
+    flex: 1;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    text-align: center;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 6px;
+    background: transparent;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+
+  .dc-tab-btn span {
+    font-size: .6rem;
+    opacity: .7;
+    margin-left: 0px;
+  }
+
+  .dc-tab-btn.active {
+    background: var(--white);
+    color: var(--text-dark);
+    box-shadow: 0 2px 8px rgba(59, 42, 26, .1);
+  }
+
+  .dc-tab-btn.active.ai-tab-active {
+    background: var(--white);
+    color: var(--text-dark);
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .dc-tab-btn:hover:not(.active) {
+    color: var(--gold);
+  }
+
+  .dc-label {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: .82rem;
+    font-weight: 500;
+    letter-spacing: .04em;
+    color: var(--text-dark, #2a2218);
+    margin-bottom: .6rem;
+  }
+
+  .dc-input {
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+    font-size: .92rem;
+    font-weight: 300;
+    color: var(--text-dark, #2a2218);
+    background: var(--beige);
+    border: 1.5px solid rgba(196, 154, 60, .2);
+    border-radius: 12px;
+    padding: .85rem 1.1rem;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+
+  .dc-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(196, 154, 60, .1);
+    background: var(--white);
+  }
+
+  .dc-input::placeholder {
+    color: var(--text-light, #9c8c78);
+    font-weight: 300;
+  }
+
+  .budget-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(196, 154, 60, .12);
+    color: var(--brown-dark);
+    font-family: 'Jost', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(196, 154, 60, .25);
+  }
+
+  .meal-tag {
+    font-family: 'Jost', sans-serif;
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background: rgba(59, 42, 26, .07);
+    color: var(--text-mid);
+    border: 1px solid rgba(59, 42, 26, .12);
+  }
+
+  .buy-list {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  .buy-list-title {
+    font-family: 'Jost', sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .buy-list-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Jost', sans-serif;
+    font-size: .8rem;
+    color: var(--text-dark);
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(59, 42, 26, .06);
+  }
+
+  .buy-list-row:last-child {
+    border-bottom: none;
+  }
+
+  /* AI input sub-tabs (Text / Voice / Camera) */
+  .ai-input-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .ai-input-tab {
+    flex: 1;
+    padding: 9px 10px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(59, 42, 26, .15);
+    background: transparent;
+    color: var(--text-mid);
+    font-family: 'Jost', sans-serif;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .ai-input-tab.active {
+    background: var(--brown-dark);
+    border-color: var(--brown-dark);
+    color: var(--cream);
+  }
+
+  .ai-input-tab:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--brown-dark);
+  }
+
+  /* AI text input */
+  .ai-text-input {
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+    font-size: .9rem;
+    color: var(--text-dark);
+    background: var(--beige);
+    border: 1.5px solid rgba(196, 154, 60, .2);
+    border-radius: 12px;
+    padding: .85rem 1.1rem;
+    outline: none;
+    transition: border-color .2s;
+    margin-bottom: 6px;
+    resize: none;
+  }
+
+  .ai-text-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(196, 154, 60, .1);
+    background: var(--white);
+  }
+
+  .ai-text-input::placeholder {
+    color: var(--text-mid);
+    opacity: .6;
+  }
+
+  /* Mic button */
+  .mic-btn {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--brown-dark);
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    box-shadow: 0 4px 18px rgba(59, 42, 26, .22);
+  }
+
+  .mic-btn.recording {
+    background: #e53935;
+    animation: micpulse 1s infinite;
+  }
+
+  @keyframes micpulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(229, 57, 53, .45);
+    }
+
+    70% {
+      box-shadow: 0 0 0 14px rgba(229, 57, 53, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(229, 57, 53, 0);
+    }
+  }
+
+  .ai-voice-status {
+    font-family: 'Jost', sans-serif;
+    font-size: .8rem;
+    color: var(--text-mid);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .ai-voice-transcript {
+    background: var(--beige);
+    border: 1.5px solid rgba(196, 154, 60, .2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: .85rem;
+    color: var(--text-dark);
+    min-height: 42px;
+    margin-bottom: 12px;
+    display: none;
+    line-height: 1.6;
+  }
+
+  /* Camera upload */
+  .ai-camera-upload {
+    border: 2px dashed rgba(196, 154, 60, .3);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .ai-camera-upload:hover {
+    border-color: var(--gold);
+    background: rgba(196, 154, 60, .04);
+  }
+
+  .ai-camera-upload input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-camera-preview {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: none;
+    max-height: 200px;
+    object-fit: cover;
+  }
+
+  /* Loading spinner */
+  .ai-loading {
+    display: none;
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+
+  .ai-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(196, 154, 60, .2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: aispin .8s linear infinite;
+    margin: 0 auto 10px;
+  }
+
+  @keyframes aispin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* AI result box */
+  .ai-result-box {
+    background: var(--beige);
+    border: 1px solid rgba(196, 154, 60, .22);
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem;
+    font-family: 'Jost', sans-serif;
+    font-size: .88rem;
+    color: var(--text-dark);
+    line-height: 1.85;
+    white-space: pre-wrap;
+    margin-top: 14px;
+    display: none;
+  }
+
+  /* AI scan button */
+  .ai-scan-btn {
+    width: 100%;
+    background: var(--brown-dark);
+    color: var(--cream);
+    border: none;
+    border-radius: 12px;
+    padding: 13px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .ai-scan-btn:hover:not(:disabled) {
+    background: var(--brown-mid);
+    transform: translateY(-1px);
+  }
+
+  .ai-scan-btn:disabled {
+    opacity: .42;
+    cursor: not-allowed;
+  }
+
+  /* AI panel info note */
+  .ai-note {
+    font-family: 'Jost', sans-serif;
+    font-size: .7rem;
+    color: var(--text-mid);
+    text-align: center;
+    margin-top: 8px;
+    opacity: .75;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  @media (max-width: 768px) {
+
+    .dc-input,
+    .ai-text-input,
+    input[type="text"],
+    input[type="number"] {
+      font-size: 16px !important;
+    }
+
+    /* AI sub-tabs wrap on tiny screens */
+    .ai-input-tabs {
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .ai-input-tab {
+      flex: 1;
+      min-width: 80px;
+      font-size: 0.7rem;
+      padding: 8px 8px;
+    }
+
+    /* Results grid single column */
+    .row.g-4>[class*="col-"] {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- SEARCH HERO -->
+<section class="find-hero">
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <div class="col-lg-8 text-center mb-4">
+        <p class="section-label justify-content-center" style="font-size:16px;text-align:center;">✦ Smart Discovery</p>
+        <h1 class="section-heading" style="font-size:clamp(2rem,5vw,3.2rem);margin-top:.5rem;">What Can You Make?</h1>
+        <p class="section-subheading mt-2" style="font-size:20px;">
+          Tell us what you have and we'll handle the rest
+        </p>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="search-card">
+
+          <!-- TAB SWITCHER — 3 tabs -->
+          <div class="dc-tab mb-4">
+            <button type="button"
+              class="dc-tab-btn {% if query_type == 'ingredients' or not query_type %}active{% endif %}"
+              onclick="switchTab('ingredients', this)">
+              <i class="bi bi-search"></i> Ingredients
+            </button>
+            <button type="button" class="dc-tab-btn {% if query_type == 'budget' %}active{% endif %}"
+              onclick="switchTab('budget', this)">
+              Budget <span>(KSh)</span>
+            </button>
+            <!-- NEW AI TAB -->
+            <button type="button" class="dc-tab-btn {% if query_type == 'ai' %}active ai-tab-active{% endif %}"
+              onclick="switchTab('ai', this)">
+              Ask AI
+            </button>
+          </div>
+
+          <!-- ══ EXISTING FORM (Ingredients + Budget + Recent) ══ -->
+          <form method="GET" action="{% url 'find_dishes' %}#results" id="mainForm">
+            <input type="hidden" name="query_type" id="queryTypeInput" value="{{ query_type|default:'ingredients' }}">
+
+            <!-- Ingredients panel — UNCHANGED -->
+            <div id="ingredientsPanel"
+              style="{% if query_type == 'budget' or query_type == 'ai' %}display:none;{% endif %}">
+              <label class="dc-label">What ingredients do you have?</label>
+              <input type="text" name="ingredients" class="dc-input" placeholder="e.g. eggs, tomatoes, onion, rice"
+                value="{{ ingredients_input|default:'' }}">
+              <p style="font-family:'Jost',sans-serif;font-size:.78rem;
+                        color:var(--text-mid);margin-top:.4rem;">
+                Separate ingredients with commas
+              </p>
+            </div>
+
+            <!-- Budget panel — UNCHANGED -->
+            <div id="budgetPanel" style="{% if query_type != 'budget' %}display:none;{% endif %}">
+              <label class="dc-label">What's your budget per dish?</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);
+                             color:var(--text-mid);font-family:'Jost',sans-serif;">KSh</span>
+                <input type="number" name="budget" class="dc-input" placeholder="e.g. 150" style="padding-left:3.2rem;"
+                  value="{{ budget_input|default:'' }}" min="0" step="0.01">
+              </div>
+            </div>
+
+            <!-- Recent food — hidden when AI tab active -->
+            <div class="mt-4" id="recentFoodSection" style="{% if query_type == 'ai' %}display:none;{% endif %}">
+              <label class="dc-label">
+                <i class="bi bi-clock-history" style="color:var(--gold);"></i>
+                What did you eat recently?
+                <span style="color:var(--text-mid);font-weight:400;font-size:.82rem;">(optional)</span>
+              </label>
+              <input type="text" name="recent_food" class="dc-input" placeholder="e.g. pasta, tacos, oats"
+                value="{{ recent_food|default:'' }}">
+              <p style="font-family:'Jost',sans-serif;font-size:.78rem;
+                        color:var(--text-mid);margin-top:.4rem;">
+                We'll suggest something different so you don't eat the same thing twice
+              </p>
+            </div>
+
+            <!-- Main submit button — hidden when AI tab active -->
+            <button type="submit" class="btn-brown btn mt-4 w-100" id="mainSubmitBtn"
+              style="{% if query_type == 'ai' %}display:none;{% endif %}">
+              Find Dishes
+            </button>
+          </form>
+
+          <!-- AI PANEL -->
+          <div id="aiPanel" style="{% if query_type != 'ai' %}display:none;{% endif %}">
+
+            <p style="font-family:'Jost',sans-serif;font-size:.8rem;
+                      color:var(--text-mid);margin-bottom:14px;line-height:1.6;">
+              Ask Gemini AI for creative Kenyan meal ideas. Type, Speak, or
+              Snap a photo of what you have.
+            </p>
+
+            <!-- AI input sub-tabs -->
+            <div class="ai-input-tabs">
+              <button type="button" class="ai-input-tab active" id="aiTextTabBtn" onclick="switchAIInput('text')">
+                <i class="bi bi-keyboard"></i> Type
+              </button>
+              <button type="button" class="ai-input-tab" id="aiVoiceTabBtn" onclick="switchAIInput('voice')">
+                <i class="bi bi-mic-fill"></i> Voice
+              </button>
+              <button type="button" class="ai-input-tab" id="aiCameraTabBtn" onclick="switchAIInput('camera')">
+                <i class="bi bi-camera-fill"></i> Camera
+              </button>
+            </div>
+
+            <!-- Text input sub-panel -->
+            <div id="aiTextPanel">
+              <textarea class="ai-text-input" id="aiTextInput" rows="2"
+                placeholder="e.g. I have eggs, maize flour, sukuma and cooking oil..."></textarea>
+              <p style="font-family:'Jost',sans-serif;font-size:.72rem;
+                        color:var(--text-mid);margin-bottom:12px;">
+                Describe what you have, Gemini will suggest meals and what to buy
+              </p>
+            </div>
+
+            <!-- Voice sub-panel -->
+            <div id="aiVoicePanel" style="display:none;">
+              <div style="text-align:center;padding:8px 0 4px;">
+                <button type="button" class="mic-btn" id="micBtn" onclick="toggleRecording()">
+                  <i class="bi bi-mic-fill" id="micIcon"></i>
+                </button>
+                <p class="ai-voice-status" id="voiceStatus">
+                  Tap mic and say what you have in your kitchen
+                </p>
+              </div>
+              <div class="ai-voice-transcript" id="voiceTranscript"></div>
+            </div>
+
+            <!-- Camera sub-panel -->
+            <div id="aiCameraPanel" style="display:none;">
+              <img id="cameraPreview" class="ai-camera-preview" alt="Preview">
+              <div class="ai-camera-upload" id="uploadArea">
+                <input type="file" accept="image/*" capture="environment" id="imageFileInput"
+                  onchange="previewImage(this)">
+                <span style="font-size:2rem;display:block;margin-bottom:8px;">📷</span>
+                <p style="font-family:'Jost',sans-serif;font-size:.85rem;
+                          color:var(--text-mid);margin:0;">
+                  <strong>Tap to take a photo</strong> or upload from gallery
+                </p>
+                <p style="font-family:'Jost',sans-serif;font-size:.72rem;
+                          color:var(--text-mid);opacity:.65;margin:4px 0 0;">
+                  Point at your fridge, pantry or ingredients
+                </p>
+              </div>
+            </div>
+
+            <!-- AI loading -->
+            <div class="ai-loading" id="aiLoading">
+              <div class="ai-spinner"></div>
+              <p style="font-family:'Jost',sans-serif;font-size:.8rem;color:var(--text-mid);">
+                Gemini AI is thinking... 🤔
+              </p>
+            </div>
+
+            <!-- AI result shown inline (no page reload) -->
+            <div class="ai-result-box" id="aiResultBox"></div>
+
+            <!-- Scan button -->
+            <button type="button" class="ai-scan-btn" id="aiScanBtn" onclick="runAIScan()">
+              <i class="bi bi-stars"></i> Ask Gemini AI
+            </button>
+
+            <p class="ai-note">
+              Powered by Google Gemini · Results are AI-generated suggestions
+            </p>
+          </div>
+          <!-- END AI PANEL -->
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- RESULTS -->
+{% if searched %}
+
+<!-- LOW COST MEALS -->
+{% if comrade_results %}
+<section style="padding:4rem 0 2rem;background:var(--beige);">
+  <div class="container">
+    <div style="margin-bottom:1.8rem;">
+      <p class="section-label">Budget Picks</p>
+      <h2 class="section-heading" style="font-size:1.8rem;margin-top:.3rem;">
+        Low Cost Meals That Match
+      </h2>
+      <p style="font-family:'Jost',sans-serif;font-size:.88rem;
+                  color:var(--text-mid);margin-top:.4rem;">
+        Affordable student meals using similar ingredients
+      </p>
+    </div>
+
+    <div class="row g-4">
+      {% for meal in comrade_results %}
+      <div class="col-md-6 col-lg-4">
+        <div class="dish-card" style="border:1px solid rgba(196,154,60,.2);">
+
+          {% if meal.image %}
+          <img src="{{ meal.image.url }}" alt="{{ meal.name }}" class="dish-card-img">
+          {% else %}
+          <div class="dish-card-img" style="background:var(--beige);display:flex;align-items:center;
+                        justify-content:center;font-size:3rem;">🍽️</div>
+          {% endif %}
+
+          <div class="dish-card-body">
+            {% if meal.get_tags %}
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.5rem;">
+              {% for tag in meal.get_tags %}
+              <span class="meal-tag">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <span class="budget-tag">Ksh {{ meal.total_cost_ksh }}</span>
+            <p class="dish-card-category">Budget Meal</p>
+            <h3 class="dish-card-title">{{ meal.name }}</h3>
+            <p class="dish-card-desc">{{ meal.description|truncatewords:18 }}</p>
+
+            {% if meal.get_items %}
+            <div class="buy-list">
+              <span class="buy-list-title">🛒 What to buy</span>
+              {% for item in meal.get_items %}
+              <div class="buy-list-row">
+                <span>{{ item.qty }} {{ item.item }}</span>
+                <span style="font-weight:700;">Ksh {{ item.cost }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="d-flex gap-2 flex-wrap">
+              <a href="{% url 'comrade_kitchen' %}" class="btn btn-gold"
+                style="font-size:.78rem;padding:.55rem 1.2rem;">
+                See More Budget Meals
+              </a>
+              {% if meal.youtube_url %}
+              <a href="{{ meal.youtube_url }}" target="_blank" class="btn" style="border:1.5px solid rgba(59,42,26,.2);font-size:.78rem;
+                          padding:.55rem 1rem;border-radius:50px;
+                          font-family:'Jost',sans-serif;color:var(--text-mid);">
+                <i class="bi bi-youtube text-danger"></i> How-to
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ALL DISHES — UNCHANGED -->
+<section id="results" style="padding:4rem 0;background:var(--cream);">
+  <div class="container">
+
+    {% if results %}
+    <p class="result-count">
+      Found <strong>{{ results|length }}</strong> dish{{ results|length|pluralize }} for you
+    </p>
+    <div class="row g-4">
+      {% for dish in results %}
+      <div class="col-md-6 col-lg-4">
+        <div class="dish-card">
+          {% if dish.image %}
+          <img src="{{ dish.image.url }}" alt="{{ dish.name }}" class="dish-card-img">
+          {% elif dish.image_url %}
+          <img src="{{ dish.image_url }}" alt="{{ dish.name }}" class="dish-card-img">
+          {% endif %}
+          <div class="dish-card-body">
+            <p class="dish-card-category">{{ dish.get_category_display }}</p>
+            <h3 class="dish-card-title">{{ dish.name }}</h3>
+            <p class="dish-card-desc">{{ dish.description|truncatewords:20 }}</p>
+            <div class="dish-meta mb-3">
+              <span><i class="bi bi-clock"></i> {{ dish.prep_time }}</span>
+              <span>Ksh {{ dish.estimated_cost }}</span>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+              <a href="{% url 'dish_detail' dish.pk %}" class="btn btn-gold"
+                style="font-size:.78rem;padding:.55rem 1.2rem;">
+                <i class="bi bi-journal-text me-1"></i> MORE ON..
+              </a>
+              {% if dish.youtube_url %}
+              <a href="{{ dish.youtube_url }}" target="_blank" class="btn" style="border:1.5px solid rgba(59,42,26,.2);font-size:.78rem;
+                          padding:.55rem 1rem;border-radius:50px;
+                          font-family:'Jost',sans-serif;color:var(--text-mid);">
+                <i class="bi bi-youtube text-danger"></i> How to
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+      <div style="font-size:3rem;margin-bottom:1rem;">🍽️</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--text-dark);">
+        No dishes found
+      </h3>
+      <p style="font-family:'Jost',sans-serif;color:var(--text-mid);margin-top:.5rem;">
+        Try different ingredients or adjust your budget.
+        You can also browse all our dishes below.
+      </p>
+      <a href="{% url 'browse' %}" class="btn btn-gold mt-3">Browse All Dishes</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+
+  function switchTab(type, btn) {
+    // Remove active from all tabs
+    document.querySelectorAll('.dc-tab-btn').forEach(b => {
+      b.classList.remove('active', 'ai-tab-active');
+    });
+    btn.classList.add('active');
+    if (type === 'ai') btn.classList.add('ai-tab-active');
+
+    // Update hidden input so Django knows the active tab
+    document.getElementById('queryTypeInput').value = type;
+
+    // Show/hide existing panels
+    document.getElementById('ingredientsPanel').style.display = (type === 'ingredients') ? 'block' : 'none';
+    document.getElementById('budgetPanel').style.display = (type === 'budget') ? 'block' : 'none';
+
+    // Show/hide AI panel
+    document.getElementById('aiPanel').style.display = (type === 'ai') ? 'block' : 'none';
+
+    // Hide recent food + submit button when AI is active
+    document.getElementById('recentFoodSection').style.display = (type === 'ai') ? 'none' : 'block';
+    document.getElementById('mainSubmitBtn').style.display = (type === 'ai') ? 'none' : 'block';
+
+    // Clear AI result when switching away
+    if (type !== 'ai') {
+      document.getElementById('aiResultBox').style.display = 'none';
+    }
+  }
+
+  function switchAIInput(mode) {
+    ['text', 'voice', 'camera'].forEach(m => {
+      document.getElementById('ai' + m.charAt(0).toUpperCase() + m.slice(1) + 'TabBtn')
+        .classList.toggle('active', m === mode);
+    });
+    document.getElementById('aiTextPanel').style.display = (mode === 'text') ? 'block' : 'none';
+    document.getElementById('aiVoicePanel').style.display = (mode === 'voice') ? 'block' : 'none';
+    document.getElementById('aiCameraPanel').style.display = (mode === 'camera') ? 'block' : 'none';
+    document.getElementById('aiResultBox').style.display = 'none';
+  }
+
+
+  function previewImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.getElementById('cameraPreview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        document.getElementById('uploadArea').style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  let recognition = null;
+  let isRecording = false;
+  let voiceText = '';
+
+  function toggleRecording() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice input requires Chrome browser. Please use Chrome.');
+      return;
+    }
+    if (isRecording) { recognition.stop(); return; }
+
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = 'en-KE';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      isRecording = true;
+      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('micIcon').className = 'bi bi-stop-fill';
+      document.getElementById('voiceStatus').textContent = 'Listening... speak now 🎙️';
+    };
+
+    recognition.onresult = (e) => {
+      let t = '';
+      for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+      voiceText = t;
+      const box = document.getElementById('voiceTranscript');
+      box.textContent = '"' + t + '"';
+      box.style.display = 'block';
+    };
+
+    recognition.onend = () => {
+      isRecording = false;
+      document.getElementById('micBtn').classList.remove('recording');
+      document.getElementById('micIcon').className = 'bi bi-mic-fill';
+      document.getElementById('voiceStatus').textContent =
+        voiceText ? '✅ Got it! Click "Ask Gemini AI" below.' : 'Nothing heard. Tap to try again.';
+    };
+
+    recognition.onerror = () => {
+      isRecording = false;
+      document.getElementById('micBtn').classList.remove('recording');
+      document.getElementById('micIcon').className = 'bi bi-mic-fill';
+      document.getElementById('voiceStatus').textContent = "Couldn't hear clearly. Try again.";
+    };
+
+    recognition.start();
+  }
+
+  async function runAIScan() {
+    const btn = document.getElementById('aiScanBtn');
+    const loading = document.getElementById('aiLoading');
+    const resultBox = document.getElementById('aiResultBox');
+
+    btn.disabled = true;
+    loading.style.display = 'block';
+    resultBox.style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    // Determine which AI sub-panel is active
+    const cameraVisible = document.getElementById('aiCameraPanel').style.display !== 'none';
+    const voiceVisible = document.getElementById('aiVoicePanel').style.display !== 'none';
+
+    if (cameraVisible) {
+      const fileInput = document.getElementById('imageFileInput');
+      if (!fileInput.files[0]) {
+        loading.style.display = 'none';
+        resultBox.textContent = 'Please take or upload a photo first.';
+        resultBox.style.display = 'block';
+        btn.disabled = false;
+        return;
+      }
+      formData.append('input_type', 'camera');
+      formData.append('image', fileInput.files[0]);
+
+    } else if (voiceVisible) {
+      if (!voiceText) {
+        loading.style.display = 'none';
+        resultBox.textContent = 'Please record your voice first.';
+        resultBox.style.display = 'block';
+        btn.disabled = false;
+        return;
+      }
+      formData.append('input_type', 'voice');
+      formData.append('transcript', voiceText);
+
+    } else {
+      // Text input
+      const textVal = document.getElementById('aiTextInput').value.trim();
+      if (!textVal) {
+        loading.style.display = 'none';
+        resultBox.textContent = 'Please type what ingredients you have.';
+        resultBox.style.display = 'block';
+        btn.disabled = false;
+        return;
+      }
+      formData.append('input_type', 'text');
+      formData.append('ingredients', textVal);
+    }
+
+    try {
+      const response = await fetch('{% url "ai_scan_ajax" %}', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      loading.style.display = 'none';
+      resultBox.textContent = data.result || data.error || 'No result returned.';
+      resultBox.style.display = 'block';
+    } catch (err) {
+      loading.style.display = 'none';
+      resultBox.textContent = 'Something went wrong. Please try again.';
+      resultBox.style.display = 'block';
+    }
+
+    btn.disabled = false;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const resultsSection = document.getElementById('results');
+    if (resultsSection) {
+      setTimeout(() => {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  });
+</script>
+{% endblock %}

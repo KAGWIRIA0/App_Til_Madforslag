@@ -1,0 +1,735 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Gym & Performance — DishCraft{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ===== PAGE WRAPPER ===== */
+  .gym-page {
+    background: var(--cream);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ===== TOP HEADER ===== */
+  .gym-header {
+    padding: 36px 0 0;
+    background: var(--cream);
+  }
+
+  /* eyebrow — was 0.68rem, now matches browse section-label */
+  .gym-header-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* H1 — was clamp(2.4,5vw,3.5rem), aligned to browse clamp */
+  .gym-header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .gym-header-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* sub — was 0.9rem, up to match browse hero desc */
+  .gym-header-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.99rem;
+    color: var(--text-mid);
+    margin: 0 0 28px;
+    line-height: 1.75;
+  }
+
+  /* ===== SEGMENTED TIMING PILLS ===== */
+  .gym-timing-pills {
+    display: inline-flex;
+    background: var(--beige);
+    border-radius: 50px;
+    padding: 4px;
+    gap: 0;
+    margin-bottom: 28px;
+    border: 1px solid rgba(59, 42, 26, 0.1);
+    flex-wrap: wrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .gym-timing-pills::-webkit-scrollbar { display: none; }
+
+  /* pill label — was 0.78rem, aligned to browse filter-btn */
+  .timing-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border: none;
+    color: var(--text-mid);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .timing-pill.active {
+    background: var(--white);
+    color: var(--brown-dark);
+    box-shadow: 0 2px 10px rgba(59, 42, 26, 0.12);
+  }
+
+  .timing-pill.inactive:hover { color: var(--brown-dark); }
+
+  /* ===== DIVIDER ===== */
+  .gym-divider {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;       /* was 0.7rem — small bump for consistency */
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    opacity: 0.55;
+    margin: 6px 0 18px;
+    display: block;
+  }
+
+  /* ===== SEARCH BAR ===== */
+  .gym-search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1.5px solid rgba(59, 42, 26, 0.15);
+    border-radius: 12px;
+    padding: 10px 14px;
+    gap: 10px;
+    margin-bottom: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .gym-search-bar:focus-within {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(196, 154, 60, 0.1);
+  }
+
+  .gym-search-bar i {
+    color: var(--text-mid);
+    font-size: 0.95rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* search input — was 0.9rem, up to match browse search */
+  .gym-search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-dark);
+  }
+
+  .gym-search-input::placeholder {
+    color: var(--text-mid);
+    opacity: 0.5;
+  }
+
+  /* ===== CATEGORY PILLS ===== */
+  .gym-category-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  /* cat pill — was 0.75rem, up to 0.82rem matching browse filter-btn */
+  .cat-pill {
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    border: 1.5px solid rgba(59, 42, 26, 0.15);
+    text-decoration: none;
+    color: var(--text-mid);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--white);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .cat-pill:hover {
+    border-color: var(--gold);
+    color: var(--brown-dark);
+  }
+
+  .cat-pill.active {
+    background: var(--brown-dark);
+    color: var(--cream);
+    border-color: var(--brown-dark);
+  }
+
+  /* ===== RESULTS INFO ===== */
+  /* was 0.82rem — keep, already matches browse */
+  .gym-results-info {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    margin-bottom: 16px;
+  }
+
+  /* ===== FOOD CARDS ===== */
+  .gym-foods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .gym-food-card {
+    background: var(--white);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(59, 42, 26, 0.08);
+    box-shadow: 0 2px 12px rgba(59, 42, 26, 0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .gym-food-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(59, 42, 26, 0.13);
+  }
+
+  .gym-food-image {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    background: var(--beige);
+  }
+
+  .gym-food-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .gym-food-card:hover .gym-food-image img { transform: scale(1.04); }
+
+  .gym-food-icon-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--beige), var(--cream));
+  }
+
+  /* badge — was 0.6rem, small bump */
+  .food-type-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+  }
+
+  .food-type-badge.drink {
+    background: rgba(190, 140, 33, 0.14);
+    color: var(--brown-mid);
+    border: 1px solid rgba(239, 171, 23, 0.32);
+  }
+
+  .food-type-badge.snack {
+    background: rgba(255, 152, 0, 0.18);
+    color: #bf360c;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+  }
+
+  .food-type-badge.food {
+    background: rgba(218, 166, 53, 0.2);
+    color: var(--brown-dark);
+    border: 1px solid rgba(225, 161, 25, 0.4);
+  }
+
+  .gym-food-body {
+    padding: 20px 22px 18px;
+  }
+
+  .gym-food-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  /* category chip — was 0.6rem, up to match browse dish-card-category */
+  .gym-food-category {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* food name — was 1.55rem, kept — already strong; align weight */
+  .gym-food-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+
+  /* desc — was 0.84rem, up to 0.88rem matching browse card desc */
+  .gym-food-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    font-style: italic;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .gym-timing-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  /* timing label — was 0.6rem */
+  .timing-section-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* timing value — was 0.84rem */
+  .timing-value-text {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+
+  .gym-food-benefits { margin-bottom: 18px; }
+
+  /* benefits label — was 0.6rem */
+  .benefits-section-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .gym-food-benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  /* benefit items — was 0.84rem */
+  .gym-food-benefits li {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .gym-food-benefits li::before {
+    content: '•';
+    color: var(--gold);
+    font-weight: 900;
+    font-size: 1rem;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  /* ===== MACRO BLOCK ===== */
+  .gym-food-macros {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid rgba(196, 154, 60, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .macro-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    border-right: 1px solid rgba(196, 154, 60, 0.15);
+    background: rgba(196, 154, 60, 0.04);
+  }
+
+  .macro-item:last-child { border-right: none; }
+
+  /* macro value — was 1.3rem, up to match section stat numbers */
+  .macro-value {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    line-height: 1.1;
+  }
+
+  /* macro label — was 0.58rem */
+  .macro-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    color: var(--text-mid);
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .gym-empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .gym-empty p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;          /* was 1.6rem */
+    color: var(--text-mid);
+    margin-bottom: 16px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (min-width: 860px) {
+    .gym-foods-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .gym-foods-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .gym-timing-pills {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      border-radius: 50px;
+    }
+
+    .timing-pill {
+      padding: 9px 14px;
+      font-size: 0.75rem;     /* was 0.7rem */
+    }
+
+    .gym-food-body {
+      padding: 16px 16px 14px;
+    }
+
+    .gym-food-name {
+      font-size: 1.35rem;
+    }
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="gym-page">
+  <div class="container">
+
+    <!-- ── HEADER ── -->
+    <div class="gym-header">
+      <p class="gym-header-eyebrow">
+        <i class=""></i> Gym &amp; Performance
+      </p>
+      <h1 class="gym-header-title">Eat to <em>Perform</em></h1>
+      <p class="gym-header-sub">
+        Curated foods for every phase of your training.
+      </p>
+    </div>
+
+    <!-- ── TIMING SEGMENTED CONTROL ── -->
+    <div class="gym-timing-pills">
+
+      <a href="{% url 'gym' %}?category={{ active_category }}"
+        class="timing-pill {% if not active_timing %}active{% else %}inactive{% endif %}">
+        All
+      </a>
+
+      {% for value, label in timings %}
+      <a href="{% url 'gym' %}?timing={{ value }}&category={{ active_category }}"
+        class="timing-pill {% if active_timing == value %}active{% else %}inactive{% endif %}">
+        {% if value == 'pre-workout' %}
+        {% elif value == 'during-workout' %}
+        {% else %}{% endif %}
+        {{ label }}
+      </a>
+      {% endfor %}
+
+    </div>
+
+    <span class="gym-divider">Find up. Train smart.</span>
+
+    <!-- ── SEARCH ── -->
+    <form method="GET" action="{% url 'gym' %}">
+      {% if active_timing %}
+      <input type="hidden" name="timing" value="{{ active_timing }}">
+      {% endif %}
+      {% if active_category and active_category != 'all' %}
+      <input type="hidden" name="category" value="{{ active_category }}">
+      {% endif %}
+      <div class="gym-search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" name="search" placeholder="Search foods, snacks, drinks..."
+          value="{{ search_query }}" class="gym-search-input">
+      </div>
+    </form>
+
+    <!-- ── CATEGORY PILLS ── -->
+    <div class="gym-category-row">
+      <a href="{% url 'gym' %}{% if active_timing %}?timing={{ active_timing }}{% endif %}"
+        class="cat-pill {% if active_category == 'all' %}active{% endif %}">
+        All
+      </a>
+      {% for value, label in categories %}
+      <a href="{% url 'gym' %}?category={{ value }}{% if active_timing %}&timing={{ active_timing }}{% endif %}"
+        class="cat-pill {% if active_category == value %}active{% endif %}">
+        {% if value == 'high-protein' %}{% endif %}
+        {% if value == 'complex-carbs' %}{% endif %}
+        {% if value == 'fruits' %}{% endif %}
+        {% if value == 'healthy-fats' %}{% endif %}
+        {% if value == 'low-calorie' %}{% endif %}
+        {% if value == 'gym-snacks' %}{% endif %}
+        {{ label }}
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- ── RESULTS INFO ── -->
+    {% if search_query %}
+    <p class="gym-results-info">
+      Results for <strong>"{{ search_query }}"</strong> — {{ foods|length }} found
+    </p>
+    {% endif %}
+
+    <!-- ── FOOD CARDS ── -->
+    {% if foods %}
+    <div class="gym-foods-list">
+      {% for food in foods %}
+
+      <div class="gym-food-card">
+
+        <!-- Image -->
+        <div class="gym-food-image">
+          <span class="food-type-badge {{ food.food_type }}">{{ food.food_type|upper }}</span>
+          {% if food.image %}
+          <img src="{{ food.image.url }}" alt="{{ food.name }}">
+          {% else %}
+          <div class="gym-food-icon-placeholder">
+            {% if food.food_type == 'drink' %}
+            {% elif food.food_type == 'snack' %}
+            {% else %}🍽️{% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Body -->
+        <div class="gym-food-body">
+
+          <div class="gym-food-meta-row">
+            <h3 class="gym-food-name">{{ food.name }}</h3>
+            <span class="gym-food-category">{{ food.get_category_display }}</span>
+          </div>
+
+          <p class="gym-food-desc">{{ food.description }}</p>
+
+          <!-- Timing -->
+          <div class="gym-timing-row">
+            <span class="timing-section-label">Timing</span>
+            <span class="timing-value-text">
+              {{ food.timing_detail|default:food.get_timing_display }}
+            </span>
+          </div>
+
+          <!-- Purpose badge -->
+          {% if food.purpose %}
+          <div style="margin-bottom:12px;">
+            <span style="display:inline-flex;align-items:center;gap:6px;
+                         background:rgba(196,154,60,0.12);border:1px solid rgba(196,154,60,0.3);
+                         border-radius:50px;padding:5px 14px;font-family:'Jost',sans-serif;
+                         font-size:0.78rem;font-weight:700;letter-spacing:0.08em;
+                         text-transform:uppercase;color:var(--brown-dark);">
+              {{ food.get_purpose_display }}
+            </span>
+          </div>
+          {% endif %}
+
+          <!-- Ingredients -->
+          {% if food.get_ingredients_list %}
+          <div style="margin-top:14px;border-top:1px solid rgba(196,154,60,0.15);padding-top:12px;">
+            <span style="font-family:'Jost',sans-serif;font-size:0.65rem;font-weight:800;
+                         letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+                         display:block;margin-bottom:8px;">Ingredients</span>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              {% for ingredient in food.get_ingredients_list %}
+              <span style="background:rgba(196,154,60,0.1);border:1px solid rgba(196,154,60,0.25);
+                           border-radius:50px;padding:3px 10px;font-family:'Jost',sans-serif;
+                           font-size:0.78rem;color:var(--brown-dark);">{{ ingredient }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Recipe Steps — collapsible -->
+          {% if food.get_recipe_steps %}
+          <div style="margin-top:12px;">
+            <button onclick="toggleRecipe(this)"
+                    style="background:none;border:none;padding:0;cursor:pointer;
+                           font-family:'Jost',sans-serif;font-size:0.65rem;font-weight:800;
+                           letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+                           margin-bottom:8px;display:flex;align-items:center;gap:4px;">
+              <span>▸ How to Prepare</span>
+            </button>
+            <ol style="display:none;padding-left:0;margin:0;list-style:none;
+                       flex-direction:column;gap:6px;" class="recipe-steps-list">
+              {% for step in food.get_recipe_steps %}
+              <li style="display:flex;gap:10px;align-items:flex-start;">
+                <span style="min-width:20px;height:20px;background:var(--brown-dark);
+                             color:var(--cream);border-radius:50%;font-family:'Jost',sans-serif;
+                             font-size:0.65rem;font-weight:700;display:flex;align-items:center;
+                             justify-content:center;flex-shrink:0;">{{ forloop.counter }}</span>
+                <span style="font-family:'Jost',sans-serif;font-size:0.88rem;
+                             color:var(--text-mid);line-height:1.65;">{{ step }}</span>
+              </li>
+              {% endfor %}
+            </ol>
+          </div>
+          {% endif %}
+
+          <!-- YouTube -->
+          {% if food.youtube_url %}
+          <div style="margin-top:14px;">
+            <a href="{{ food.youtube_url }}" target="_blank" rel="noopener noreferrer"
+               class="btn"
+               style="border:1.5px solid rgba(59,42,26,0.2);font-size:0.78rem;
+                      padding:0.55rem 1rem;border-radius:50px;font-family:'Jost',sans-serif;
+                      color:var(--text-mid);text-decoration:none;
+                      display:inline-flex;align-items:center;gap:6px;">
+              <i class="bi bi-youtube text-danger"></i> How-to
+            </a>
+          </div>
+          {% endif %}
+
+          <!-- Benefits -->
+          {% if food.get_benefits_list %}
+          <div class="gym-food-benefits" style="margin-top:16px;">
+            <span class="benefits-section-label">Benefits</span>
+            <ul>
+              {% for benefit in food.get_benefits_list %}
+              <li>{{ benefit }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <!-- Macros -->
+          {% if food.protein or food.carbs or food.fats %}
+          <div class="gym-food-macros" style="margin-top:16px;">
+            <div class="macro-item">
+              <span class="macro-value">{{ food.protein }}g</span>
+              <span class="macro-label">Protein</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value">{{ food.carbs }}g</span>
+              <span class="macro-label">Carbs</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value">{{ food.fats }}g</span>
+              <span class="macro-label">Fats</span>
+            </div>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="gym-empty">
+      <p style="font-size:3rem;margin-bottom:8px;">🏋️</p>
+      <p>No foods found. Try a different filter.</p>
+      <a href="{% url 'gym' %}" class="btn btn-gold mt-2" style="font-size:.85rem;">View All</a>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function toggleRecipe(btn) {
+    const list = btn.nextElementSibling;
+    const isOpen = list.style.display === 'flex';
+    list.style.display = isOpen ? 'none' : 'flex';
+    btn.querySelector('span').textContent = isOpen ? '▸ How to Prepare' : '▾ How to Prepare';
+  }
+</script>
+{% endblock %}

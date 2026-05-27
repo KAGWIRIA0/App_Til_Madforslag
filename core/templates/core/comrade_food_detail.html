@@ -1,0 +1,688 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ food.name }} — DishCraft{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* HERO */
+  .cf-hero {
+    position: relative;
+    height: 52vh;
+    min-height: 340px;
+    overflow: hidden;
+    background: var(--brown-dark);
+  }
+
+  .cf-hero img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.65;
+  }
+
+  .cf-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(26,14,6,0.15) 0%,
+      rgba(26,14,6,0.72) 100%);
+  }
+
+  .cf-hero-no-img {
+    background: linear-gradient(135deg, var(--brown-dark) 0%, #2c1a0e 100%);
+  }
+
+  .cf-hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 2rem 0;
+  }
+
+  /* CHIPS / CHIPS */
+  .cf-chip {
+    display: inline-block;
+    background: var(--cream);
+    border: 1px solid rgba(196,154,60,0.22);
+    border-radius: 50px;
+    padding: 0.3rem 0.8rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    margin: 0.2rem;
+    transition: all 0.18s;
+  }
+  .cf-chip:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--text-dark);
+  }
+
+  /* RECIPE STEPS */
+  .cf-step-li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--white);
+    border-radius: 12px;
+    border-left: 3px solid var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.93rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  .cf-step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 26px;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  /* TIPS */
+  .cf-tip {
+    background: rgba(196,154,60,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 11px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .cf-upgrade {
+    background: rgba(59,42,26,0.05);
+    border-left: 3px solid var(--brown-mid, #7a5c3a);
+    border-radius: 0 8px 8px 0;
+    padding: 11px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  /* INFO SIDEBAR */
+  .cf-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(59,42,26,0.08);
+  }
+  .cf-info-row:last-child { border-bottom: none; }
+  .cf-info-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+  .cf-info-value {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: right;
+  }
+
+  /* STEW PILLS */
+  #stewPills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .stew-pill {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border: 1.5px solid rgba(196,154,60,0.3);
+    border-radius: 50px;
+    padding: 0.52rem 1.2rem;
+    background: transparent;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .stew-pill:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(196,154,60,0.06);
+  }
+  .stew-pill.active {
+    background: var(--brown-dark);
+    border-color: var(--brown-dark);
+    color: var(--cream);
+  }
+
+  /* STEW PANELS */
+  .stew-panel { display: none; }
+  .stew-panel.active {
+    display: block;
+    animation: panelIn 0.28s ease;
+  }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .stew-panel-inner {
+    display: flex;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(196,154,60,0.15);
+    box-shadow: 0 4px 24px rgba(59,42,26,0.08);
+  }
+
+  .stew-img-side {
+    flex: 1;
+    min-height: 220px;
+  }
+  .stew-img-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 280px;
+  }
+  .stew-img-placeholder {
+    width: 100%;
+    min-height: 280px;
+    background: var(--beige);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+  }
+
+  .stew-content-side {
+    flex: 1.45;
+    padding: 1.8rem;
+    min-width: 0;
+  }
+
+  /* Stew recipe steps — shown directly, no toggle */
+  .stew-recipe-block {
+    margin-top: 1.2rem;
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid rgba(196,154,60,0.12);
+  }
+
+  .stew-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    line-height: 1.55;
+  }
+  .stew-step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 20px;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  /* YOUTUBE PILL */
+  .cf-yt-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid rgba(59, 42, 26, 0.2);
+    border-radius: 50px;
+    padding: 0.5rem 1.1rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    background: var(--white);
+    transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .cf-yt-pill:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+  .cf-yt-pill i {
+    font-size: 1rem;
+  }
+
+  /* SECTION HEADING HELPERS */
+  .cf-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin: 0 0 0.8rem;
+  }
+
+  .cf-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin: 0 0 0.4rem;
+    display: block;
+  }
+
+  .divider-gold {
+    border: none;
+    border-top: 1px solid rgba(196,154,60,0.2);
+    margin: 2rem 0;
+  }
+
+  /* RESPONSIVE  */
+  @media (max-width: 768px) {
+    .stew-panel-inner { flex-direction: column; }
+    .stew-img-side img { min-height: 220px !important; height: 220px !important; }
+    .stew-img-placeholder { min-height: 180px; }
+    .stew-content-side { padding: 1.2rem; }
+    #stewPills {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #stewPills::-webkit-scrollbar { display: none; }
+    .stew-pill { flex-shrink: 0; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<div class="cf-hero {% if not food.image %}cf-hero-no-img{% endif %}">
+  {% if food.image %}
+  <img src="{{ food.image.url }}" alt="{{ food.name }}">
+  {% endif %}
+  <div class="cf-hero-content">
+    <div class="container">
+      <span class="badge bg-warning text-dark mb-2" style="font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.08em;">
+        {{ food.get_category_display }}
+      </span>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.4rem);
+                 font-weight:600;color:#fff;margin:0;line-height:1.08;">
+        {{ food.name }}
+      </h1>
+      <div style="display:flex;align-items:center;gap:1.2rem;margin-top:0.6rem;flex-wrap:wrap;">
+        <span style="font-family:'Jost',sans-serif;font-size:1rem;color:rgba(255,252,248,0.75);">
+          Ksh {{ food.price_ksh }} &nbsp;·&nbsp; {{ food.unit }}
+        </span>
+        {% if meal.stew_options.exists %}
+        <span style="font-family:'Jost',sans-serif;font-size:0.8rem;color:rgba(255,252,248,0.55);
+                     background:rgba(196,154,60,0.2);border:1px solid rgba(196,154,60,0.35);
+                     border-radius:50px;padding:3px 12px;">
+          🥘 {{ meal.stew_options.count }} stew option{{ meal.stew_options.count|pluralize }}
+        </span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT-->
+<section style="padding:3rem 0 5rem;background:var(--cream);">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- LEFT COLUMN -->
+      <div class="col-lg-8">
+
+        <!-- Description -->
+        <p style="font-family:'Jost',sans-serif;font-size:1rem;color:var(--text-mid);
+                  line-height:1.85;margin-bottom:1.8rem;">
+          {{ food.description }}
+        </p>
+
+        <!-- Ingredients needed -->
+        {% if food.get_ingredients_list %}
+        <h2 class="cf-h2">Ingredients Needed</h2>
+        <div style="margin-bottom:1.6rem;">
+          {% for ing in food.get_ingredients_list %}
+          <span class="cf-chip">{{ ing }}</span>
+          {% endfor %}
+        </div>
+        <hr class="divider-gold">
+        {% endif %}
+
+        <!-- Pairs well with -->
+        {% if food.get_combinations %}
+        <h2 class="cf-h2">Pairs Well With</h2>
+        <div style="margin-bottom:1.6rem;">
+          {% for combo in food.get_combinations %}
+          <span class="cf-chip">{{ combo }}</span>
+          {% endfor %}
+        </div>
+        <hr class="divider-gold">
+        {% endif %}
+
+        <!-- Cooking tip -->
+        {% if food.cooking_tip %}
+        <div class="cf-tip">⚡ <strong>Quickest way:</strong> {{ food.cooking_tip }}</div>
+        {% endif %}
+
+        <!-- Upgrade tip -->
+        {% if food.upgrade_tip %}
+        <div class="cf-upgrade">✨ <strong>Level up:</strong> {{ food.upgrade_tip }}</div>
+        {% endif %}
+
+        <!-- Meals that use this food -->
+        {% if food.meals.exists %}
+        <hr class="divider-gold">
+        <h2 class="cf-h2">Meals You Can Make</h2>
+        <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);margin-bottom:1.2rem;">
+          Full recipes that feature {{ food.name }} as the base ingredient.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:0.5rem;">
+          {% for meal in food.meals.all %}
+          <div style="background:var(--white);border-radius:14px;padding:1.2rem 1.4rem;
+                      border:1px solid rgba(196,154,60,0.15);display:flex;align-items:center;
+                      justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;
+                        color:var(--brown-dark);margin:0 0 3px;">{{ meal.name }}</p>
+              <p style="font-family:'Jost',sans-serif;font-size:0.8rem;color:var(--text-mid);margin:0;">
+                Ksh {{ meal.total_cost_ksh }}
+                {% if meal.get_tags %}
+                  &nbsp;·&nbsp;
+                  {% for tag in meal.get_tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                {% endif %}
+              </p>
+            </div>
+            <a href="{% url 'comrade_kitchen' %}"
+               style="font-family:'Jost',sans-serif;font-size:0.78rem;font-weight:600;
+                      color:var(--gold);text-decoration:none;white-space:nowrap;">
+              View in Low Cost Meals →
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- YouTube -->
+        {% if food.youtube_url %}
+        <hr class="divider-gold">
+        <div style="background:var(--white);border-radius:16px;padding:1.4rem 1.6rem;
+                    border:1px solid rgba(196,154,60,0.2);display:flex;align-items:center;
+                    justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <i class="bi bi-youtube" style="color:#ff0000;font-size:1.5rem;"></i>
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;margin:0;">
+                Watch How to Make It
+              </p>
+              <p style="font-family:'Jost',sans-serif;font-size:0.82rem;color:var(--text-mid);margin:0;">
+                Step-by-step video guide
+              </p>
+            </div>
+          </div>
+          <a href="{{ food.youtube_url }}" target="_blank" rel="noopener noreferrer"
+             class="btn btn-gold" style="font-size:0.82rem;">
+            <i class="bi bi-play-circle me-1"></i> Watch on YouTube
+          </a>
+        </div>
+        {% endif %}
+
+        <!-- STEW OPTIONS / EAT WITH -->
+        <hr class="divider-gold">
+        {% with stews=meal.stew_options.all %}
+        {% if stews %}
+        <h2 class="cf-h2">What to Eat With {{ food.name }}</h2>
+        <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);margin-bottom:1.4rem;">
+          Select a stew or side below to see its ingredients, recipe, and how to make it.
+        </p>
+
+        <!-- Pill navigation -->
+        <div id="stewPills">
+          {% for stew in stews %}
+          <button
+            class="stew-pill {% if forloop.first %}active{% endif %}"
+            onclick="selectStew({{ forloop.counter0 }}, this)">
+            {{ stew.name }}
+          </button>
+          {% endfor %}
+        </div>
+
+        <!-- Stew panels -->
+        {% for stew in stews %}
+        <div class="stew-panel {% if forloop.first %}active{% endif %}"
+             id="stew-panel-{{ forloop.counter0 }}">
+
+          <!-- Top card: image + info -->
+          <div class="stew-panel-inner">
+
+            <div class="stew-img-side">
+              {% if stew.image %}
+                <img src="{{ stew.image.url }}" alt="{{ stew.name }}">
+              {% elif stew.image_url %}
+                <img src="{{ stew.image_url }}" alt="{{ stew.name }}">
+              {% else %}
+                <div class="stew-img-placeholder">🥘</div>
+              {% endif %}
+            </div>
+
+            <div class="stew-content-side">
+              <p style="font-family:'Jost',sans-serif;font-size:0.68rem;font-weight:700;
+                        letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:0 0 0.3rem;">
+                {{ stew.get_category_display }}
+                {% if stew.is_vegetarian %}&nbsp;· 🌿 Vegetarian{% endif %}
+              </p>
+
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;
+                         color:var(--text-dark);margin:0 0 0.5rem;line-height:1.1;">
+                {{ stew.name }}
+              </h3>
+
+              {% if stew.description %}
+              <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);
+                        line-height:1.65;margin:0 0 1rem;">
+                {{ stew.description }}
+              </p>
+              {% endif %}
+
+              <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">
+                <span style="font-family:'Jost',sans-serif;font-size:0.8rem;color:var(--text-mid);
+                              display:flex;align-items:center;gap:4px;">
+                  <i class="bi bi-wallet2" style="color:var(--gold);"></i>
+                  {{ stew.get_budget_level_display }}
+                </span>
+                {% if stew.estimated_cost %}
+                <span style="font-family:'Jost',sans-serif;font-size:0.9rem;font-weight:700;color:var(--gold);">
+                  Ksh {{ stew.estimated_cost }}
+                </span>
+                {% endif %}
+              </div>
+
+              {% if stew.get_ingredients_list %}
+              <span class="cf-label">Ingredients</span>
+              <div style="margin-bottom:0.9rem;">
+                {% for ing in stew.get_ingredients_list %}
+                <span class="cf-chip">{{ ing }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              {% if stew.get_add_ons_list %}
+              <span class="cf-label">Add-ons</span>
+              <div style="margin-bottom:0.9rem;">
+                {% for addon in stew.get_add_ons_list %}
+                <span class="cf-chip">{{ addon }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              {% if stew.youtube_url %}
+              <a href="{{ stew.youtube_url }}" target="_blank" rel="noopener noreferrer"
+                 class="cf-yt-pill">
+                <i class="bi bi-youtube text-danger"></i> How-to Video
+              </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Recipe steps — shown directly (no toggle) -->
+          {% if stew.get_recipe_steps_list %}
+          <div class="stew-recipe-block">
+            <p style="font-family:'Jost',sans-serif;font-size:0.65rem;font-weight:700;
+                      letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);
+                      margin:0 0 1rem;">👨‍🍳 How to Make {{ stew.name }}</p>
+            {% for step in stew.get_recipe_steps_list %}
+            <div class="stew-step">
+              <span class="stew-step-num">{{ forloop.counter }}</span>
+              <span>{{ step }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <!-- No stew options -->
+        <div style="background:var(--white);border-radius:16px;padding:2.5rem;text-align:center;
+                    border:1px dashed rgba(196,154,60,0.3);">
+          <span style="font-size:2.5rem;display:block;margin-bottom:12px;">🥘</span>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--text-mid);margin:0 0 6px;">
+            No stew options added yet.
+          </p>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+      </div>
+
+      <!-- RIGHT COLUMN — SIDEBAR -->
+      <div class="col-lg-4">
+        <div style="background:var(--white);border-radius:20px;padding:1.8rem;
+                    box-shadow:0 4px 24px rgba(59,42,26,0.08);position:sticky;top:90px;">
+
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;
+                     font-weight:600;margin-bottom:1.2rem;color:var(--brown-dark);">
+            Quick Info
+          </h3>
+
+          <div>
+            <div class="cf-info-row">
+              <span class="cf-info-label">Price</span>
+              <span class="cf-info-value" style="color:var(--gold);">Ksh {{ food.price_ksh }}</span>
+            </div>
+            <div class="cf-info-row">
+              <span class="cf-info-label">Unit / Size</span>
+              <span class="cf-info-value">{{ food.unit }}</span>
+            </div>
+            <div class="cf-info-row">
+              <span class="cf-info-label">Category</span>
+              <span class="cf-info-value">{{ food.get_category_display }}</span>
+            </div>
+            <div class="cf-info-row">
+              <span class="cf-info-label">Stew Options</span>
+              <span class="cf-info-value">{{ meal.stew_options.count }}</span>
+            </div>
+            {% if food.meals.exists %}
+            <div class="cf-info-row">
+              <span class="cf-info-label">Linked Meals</span>
+              <span class="cf-info-value">{{ food.meals.count }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Stew options quick list -->
+          {% if meal.stew_options.exists %}
+          <div style="margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid rgba(59,42,26,0.08);">
+            <p style="font-family:'Jost',sans-serif;font-size:0.68rem;font-weight:700;
+                      letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;">
+              Eat {{ food.name }} With
+            </p>
+            <div>
+              {% for stew in meal.stew_options.all %}
+              <button onclick="selectStewFromSidebar({{ forloop.counter0 }})"
+                style="display:block;width:100%;text-align:left;background:none;border:none;
+                       padding:0.5rem 0;border-bottom:1px solid rgba(59,42,26,0.07);
+                       font-family:'Jost',sans-serif;font-size:0.85rem;color:var(--text-dark);
+                       cursor:pointer;transition:color 0.2s;">
+                <span style="color:var(--gold);margin-right:6px;">›</span> {{ stew.name }}
+                {% if stew.estimated_cost %}
+                <span style="float:right;color:var(--text-mid);font-size:0.78rem;">Ksh {{ stew.estimated_cost }}</span>
+                {% endif %}
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(59,42,26,0.08);
+                      display:flex;flex-direction:column;gap:0.6rem;">
+            <a href="{% url 'comrade_kitchen' %}" class="btn btn-gold" style="width:100%;font-size:0.85rem;">
+              ← Back to Low Cost Meals
+            </a>
+            {% if food.youtube_url %}
+            <a href="{{ food.youtube_url }}" target="_blank" rel="noopener noreferrer"
+               class="btn" style="width:100%;font-size:0.85rem;border:1.5px solid rgba(59,42,26,0.2);
+                      border-radius:50px;font-family:'Jost',sans-serif;color:var(--text-mid);
+                      text-decoration:none;text-align:center;padding:0.55rem 1rem;">
+              <i class="bi bi-youtube text-danger me-1"></i> Watch How to Make It
+            </a>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function selectStew(index, pill) {
+    document.querySelectorAll('.stew-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    document.querySelectorAll('.stew-panel').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('stew-panel-' + index);
+    if (target) {
+      target.classList.add('active');
+      // Smooth scroll to the stew section on mobile
+      if (window.innerWidth < 768) {
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      }
+    }
+  }
+
+  function selectStewFromSidebar(index) {
+    const pills = document.querySelectorAll('.stew-pill');
+    if (pills[index]) selectStew(index, pills[index]);
+    // Scroll to stew pills section
+    const pillsEl = document.getElementById('stewPills');
+    if (pillsEl) pillsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+{% endblock %}

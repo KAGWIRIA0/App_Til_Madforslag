@@ -1,0 +1,13 @@
+venv/
+media/
+.env
+*.pyc
+__pycache__
+*.sqlite3  
+*.swp
+*.swo
+datadump.json
+db.sqlite3.backup
+staticfiles
+core/fixtures/
+core_wellness_backup.json
