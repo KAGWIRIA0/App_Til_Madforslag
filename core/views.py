@@ -484,48 +484,55 @@ def comrade_kitchen(request):
 
     def fuzzy_exclude(meal, recent_terms):
         """
-        Exclude a meal only if BOTH the base meal AND one of its stew options
-        match what the user recently ate.
-
-        - "Rice and Beans" → excludes Rice only when Beans stew is also matched
-        - "Rice" alone → does NOT exclude Rice (user can have rice with a different stew)
-        - Meals with no stew options are excluded on base meal match alone
+         Exclude a meal ONLY when the user recently had this EXACT meal+stew combination.
+    
+         Rules:
+         - "Rice and Beans"   → exclude Rice meal only if Beans stew is also matched
+         - "Rice" alone       → DO NOT exclude Rice meal (user can have it with a different stew)
+         - "Ugali and Mayai"  → exclude Ugali+Eggs combo, but NOT Ugali+Sukuma
+         - No stew options    → exclude on base meal name match alone
         """
-        meal_name = meal.name.lower()
+
+        meal_name_lower = meal.name.lower()
         stew_options = list(meal.stew_options.all())
         stew_names = [s.name.lower() for s in stew_options]
 
-        base_matched = False
-        stew_matched_names = []  # which stews from recent_terms matched
+        base_matched = any(term_matches_text(term, meal_name_lower) for term in recent_terms)
 
-        for term in recent_terms:
-            if term_matches_text(term, meal_name):
-                base_matched = True
-            for stew_name in stew_names:
-                if term_matches_text(term, stew_name):
-                    stew_matched_names.append(stew_name)
 
         if not base_matched:
-            return False  # recent food doesn't mention this meal at all
+            return False  # this meal not mentioned at all → keep it
 
-        if not stew_names:
-            return True  # standalone meal (no stew options), exclude it
+        if not stew_options:
+            return True   # no stew options, standalone meal matched → exclude it
 
-        if stew_matched_names:
-            return True  # user had this meal + a specific stew → exclude
+    # Base matched — checks if ANY specific stew was also mentioned
+        for term in recent_terms:
+            for stew_name in stew_names:
+                if term_matches_text(term, stew_name):
+                    return True  # user had this meal + this specific stew → exclude
 
-        # Base meal matched but no specific stew matched →
-        # Don't exclude — user can have this meal with a different stew
+    # Base matched but NO specific stew matched:
+    # Keep the meal, user can have it with a different stew
         return False
 
+
+
     def get_excluded_stew_names(meal, recent_terms):
-        """Return set of stew names the user recently had with this meal."""
+        """
+        Return the set of stew names the user recently had with this meal.
+        These will be greyed out in the UI, not hidden.
+        """
         stew_options = list(meal.stew_options.all())
         excluded = set()
-        for term in recent_terms:
-            for stew in stew_options:
-                if term_matches_text(term, stew.name.lower()):
-                    excluded.add(stew.name.lower())
+        if not recent_terms:
+            return excluded
+        for stew in stew_options:
+            stew_lower = stew.name.lower()
+            for term in recent_terms:
+                if term_matches_text(term, stew_lower):
+                    excluded.add(stew_lower)
+                
         return excluded
 
     def build_meal_entry(meal, user_ingredients, budget_remaining=None, recent_terms=None):
@@ -576,6 +583,15 @@ def comrade_kitchen(request):
         # Filter out stews the user recently had with this meal
         excluded_stews = get_excluded_stew_names(meal, recent_terms) if recent_terms else set()
         available_stews = [s for s in all_stews if s.name.lower() not in excluded_stews]
+        base_recently_eaten = any(
+            term_matches_text(term, meal.name.lower())
+            for term in (recent_terms or [])
+        )
+        all_stews_excluded = (
+            len(all_stews) > 0 and
+            len(excluded_stews) >= len(all_stews) and
+            base_recently_eaten
+        )
 
         # Budget-aware stew filtering
         if budget_remaining is not None:
@@ -619,7 +635,10 @@ def comrade_kitchen(request):
             'available_stews': affordable_stews,    # stews not recently eaten + within budget
             'has_stew_options': len(all_stews) > 0,
             'excluded_stews': excluded_stews,
+            'suggest_other_stews': base_recently_eaten and not all_stews_excluded and len(excluded_stews) > 0,
+            'all_stews_excluded': all_stews_excluded,
         }
+
 
     # PARSE INPUTS 
     if budget or ingredients_input:

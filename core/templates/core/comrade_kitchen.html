@@ -5,7 +5,6 @@
 
 {% block extra_css %}
 <style>
-  /*  HERO  */
   .ck-hero {
     position: relative;
     background: linear-gradient(135deg, var(--brown-dark) 0%, #2c1a0e 60%, var(--brown-dark) 100%);
@@ -15,980 +14,252 @@
     overflow: hidden;
     padding: 60px 20px;
   }
-
   .ck-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,
-        rgba(26, 14, 6, 0.88) 0%,
-        rgba(59, 32, 12, 0.68) 50%,
-        rgba(26, 14, 6, 0.55) 100%);
+    background: linear-gradient(135deg, rgba(26,14,6,0.88) 0%, rgba(59,32,12,0.68) 50%, rgba(26,14,6,0.55) 100%);
     z-index: 1;
   }
-
-  .ck-hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
+  .ck-hero-content { position: relative; z-index: 2; }
   .ck-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
+    font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
   }
-
   .ck-hero h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    font-weight: 600;
-    line-height: 1.05;
-    color: #ffffff;
-    margin-bottom: 1rem;
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 600; line-height: 1.05; color: #ffffff; margin-bottom: 1rem;
   }
-
-  .ck-hero h1 em {
-    color: var(--gold-light);
-    font-style: italic;
-  }
-
+  .ck-hero h1 em { color: var(--gold-light); font-style: italic; }
   .ck-hero-desc {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 300;
-    color: rgba(255, 252, 248, 0.85);
-    line-height: 1.7;
-    max-width: 480px;
-    margin-bottom: 2rem;
+    font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 300;
+    color: rgba(255,252,248,0.85); line-height: 1.7; max-width: 480px; margin-bottom: 2rem;
   }
-
-  /* Search Card */
   .ck-search-card {
-    background: var(--white);
-    border: 1px solid rgba(196, 154, 60, 0.2);
-    border-radius: 24px;
-    padding: 1.8rem;
-    box-shadow: 0 8px 40px rgba(59, 42, 26, 0.12);
+    background: var(--white); border: 1px solid rgba(196,154,60,0.2);
+    border-radius: 24px; padding: 1.8rem; box-shadow: 0 8px 40px rgba(59,42,26,0.12);
   }
-
   .ck-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #a07820;
-    display: block;
-    margin-bottom: 8px;
+    font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase; color: #a07820; display: block; margin-bottom: 8px;
   }
-
   .ck-input {
-    width: 100%;
-    background: var(--cream);
-    border: 1.5px solid rgba(59, 42, 26, 0.15);
-    border-radius: 12px;
-    padding: 11px 16px;
-    color: var(--text-dark);
-    font-family: 'Jost', sans-serif;
-    font-size: 0.92rem;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 14px;
+    width: 100%; background: var(--cream); border: 1.5px solid rgba(59,42,26,0.15);
+    border-radius: 12px; padding: 11px 16px; color: var(--text-dark);
+    font-family: 'Jost', sans-serif; font-size: 0.92rem; outline: none;
+    transition: border-color 0.2s; margin-bottom: 14px;
   }
-
-  .ck-input:focus {
-    border-color: var(--gold);
-  }
-
-  .ck-input::placeholder {
-    color: var(--text-mid);
-    opacity: 0.6;
-  }
-
-  /* Mode tabs */
+  .ck-input:focus { border-color: var(--gold); }
+  .ck-input::placeholder { color: var(--text-mid); opacity: 0.6; }
   .ck-mode-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 18px;
-    background: var(--cream);
-    border-radius: 12px;
-    padding: 4px;
+    display: flex; gap: 6px; margin-bottom: 18px;
+    background: var(--cream); border-radius: 12px; padding: 4px;
   }
-
   .ck-mode-tab {
-    flex: 1;
-    padding: 8px 6px;
-    border: none;
-    border-radius: 9px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    cursor: pointer;
-    background: transparent;
-    color: var(--text-mid);
-    transition: all 0.2s;
-    text-align: center;
+    flex: 1; padding: 8px 6px; border: none; border-radius: 9px;
+    font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+    background: transparent; color: var(--text-mid); transition: all 0.2s; text-align: center;
   }
-
   .ck-mode-tab.active {
-    background: var(--white);
-    color: var(--brown-dark);
-    box-shadow: 0 2px 8px rgba(59, 42, 26, 0.1);
+    background: var(--white); color: var(--brown-dark); box-shadow: 0 2px 8px rgba(59,42,26,0.1);
   }
-
   .ck-btn {
-    width: 100%;
-    background: var(--gold);
-    color: var(--text-dark);
-    border: none;
-    border-radius: 12px;
-    padding: 13px;
-    font-family: 'Jost', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 6px;
+    width: 100%; background: var(--gold); color: var(--text-dark); border: none;
+    border-radius: 12px; padding: 13px; font-family: 'Jost', sans-serif;
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; margin-top: 6px;
   }
-
-  .ck-btn:hover {
-    background: var(--gold-light);
-    transform: translateY(-1px);
-  }
-
-  /* Budget badge */
+  .ck-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
   .budget-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(196, 154, 60, 0.12);
-    border: 1px solid rgba(196, 154, 60, 0.3);
-    border-radius: 50px;
-    padding: 5px 14px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--gold);
-    margin-bottom: 24px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(196,154,60,0.12); border: 1px solid rgba(196,154,60,0.3);
+    border-radius: 50px; padding: 5px 14px; font-family: 'Jost', sans-serif;
+    font-size: 0.75rem; font-weight: 600; color: var(--gold); margin-bottom: 24px;
   }
-
-  /* Stats */
-  .ck-stats {
-    display: flex;
-    gap: 28px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
+  .ck-stats { display: flex; gap: 28px; margin-bottom: 2rem; flex-wrap: wrap; }
   .ck-stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--gold-light);
-    display: block;
-    line-height: 1;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700;
+    color: var(--gold-light); display: block; line-height: 1;
   }
-
   .ck-stat-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.62rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 252, 248, 0.45);
-    margin-top: 3px;
-    display: block;
+    font-family: 'Jost', sans-serif; font-size: 0.62rem; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,252,248,0.45); margin-top: 3px; display: block;
   }
-
-  /* SECTIONS */
-  .ck-section {
-    padding: 60px 0 80px;
-    background: var(--cream);
-  }
-
-  .ck-section-dark {
-    padding: 60px 0 80px;
-    background: var(--brown-dark);
-  }
-
+  .ck-section { padding: 60px 0 80px; background: var(--cream); }
+  .ck-section-dark { padding: 60px 0 80px; background: var(--brown-dark); }
   .ck-section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: var(--brown-dark);
-    margin: 0;
+    font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600;
+    color: var(--brown-dark); margin: 0;
   }
-
   .ck-section-title-light {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: var(--white);
-    margin: 0;
+    font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600;
+    color: var(--white); margin: 0;
   }
-
-  .ck-section-sub {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.88rem;
-    color: var(--text-mid);
-    margin: 6px 0 0;
-  }
-
-  /* BROWSE-STYLE FOOD CARDS (grid, image on top) */
-  .ck-food-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 991px) {
-    .ck-food-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 575px) {
-    .ck-food-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
+  .ck-section-sub { font-family: 'Jost', sans-serif; font-size: 0.88rem; color: var(--text-mid); margin: 6px 0 0; }
+  .ck-food-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 991px) { .ck-food-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 575px) { .ck-food-grid { grid-template-columns: 1fr; } }
   .ck-food-card {
-    background: var(--white);
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(59, 42, 26, 0.08);
-    box-shadow: 0 4px 20px rgba(59, 42, 26, 0.06);
-    transition: transform 0.25s, box-shadow 0.25s;
-    display: flex;
-    flex-direction: column;
+    background: var(--white); border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(59,42,26,0.08); box-shadow: 0 4px 20px rgba(59,42,26,0.06);
+    transition: transform 0.25s, box-shadow 0.25s; display: flex; flex-direction: column;
   }
-
-  .ck-food-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(59, 42, 26, 0.13);
-  }
-
+  .ck-food-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(59,42,26,0.13); }
   .ck-food-card-img {
-    width: 100%;
-    height: 210px;
-    overflow: hidden;
-    background: var(--beige);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    position: relative;
-    flex-shrink: 0;
+    width: 100%; height: 210px; overflow: hidden; background: var(--beige);
+    display: flex; align-items: center; justify-content: center; font-size: 3.5rem;
+    position: relative; flex-shrink: 0;
   }
-
-  .ck-food-card-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-
-  .ck-food-card:hover .ck-food-card-img img {
-    transform: scale(1.04);
-  }
-
-  .ck-food-card-body {
-    flex: 1;
-    padding: 1.3rem 1.4rem 1.1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
+  .ck-food-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .ck-food-card:hover .ck-food-card-img img { transform: scale(1.04); }
+  .ck-food-card-body { flex: 1; padding: 1.3rem 1.4rem 1.1rem; display: flex; flex-direction: column; }
   .ck-food-card-cat {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.35rem;
+    font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem;
   }
-
   .ck-food-card-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.45rem;
-    font-weight: 600;
-    color: var(--brown-dark);
-    line-height: 1.15;
-    margin: 0 0 0.4rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600;
+    color: var(--brown-dark); line-height: 1.15; margin: 0 0 0.4rem;
   }
-
-  .ck-food-card-desc {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.83rem;
-    color: var(--text-mid);
-    line-height: 1.55;
-    margin: 0 0 0.75rem;
-    flex: 1;
-  }
-
-  /* Eat-with row (like browse dishes) */
+  .ck-food-card-desc { font-family: 'Jost', sans-serif; font-size: 0.83rem; color: var(--text-mid); line-height: 1.55; margin: 0 0 0.75rem; flex: 1; }
   .ck-eat-with-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.35rem;
+    font-family: 'Jost', sans-serif; font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem;
   }
-
-  .ck-eat-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 0.85rem;
-  }
-
+  .ck-eat-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.85rem; }
   .ck-eat-chip {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.7rem;
-    padding: 3px 11px;
-    border-radius: 50px;
-    border: 1.5px solid rgba(59, 42, 26, 0.16);
-    color: var(--text-dark);
-    background: transparent;
+    font-family: 'Jost', sans-serif; font-size: 0.7rem; padding: 3px 11px;
+    border-radius: 50px; border: 1.5px solid rgba(59,42,26,0.16); color: var(--text-dark); background: transparent;
   }
-
-  /* Price + meta row */
-  .ck-food-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.9rem;
-    flex-wrap: wrap;
-  }
-
-  .ck-food-card-price {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  .ck-food-card-time {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.78rem;
-    color: var(--text-mid);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  /* Card action buttons */
-  .ck-food-card-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
+  .ck-food-card-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+  .ck-food-card-price { font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--gold); }
+  .ck-food-card-time { font-family: 'Jost', sans-serif; font-size: 0.78rem; color: var(--text-mid); display: flex; align-items: center; gap: 4px; }
+  .ck-food-card-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
   .ck-more-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--brown-dark);
-    color: var(--cream);
-    border: none;
-    border-radius: 50px;
-    padding: 0.5rem 1.1rem;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px; background: var(--brown-dark);
+    color: var(--cream); border: none; border-radius: 50px; padding: 0.5rem 1.1rem;
+    font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none;
   }
-
-  .ck-more-btn:hover {
-    background: #1a0e06;
-    color: var(--cream);
-  }
-
-  .ck-more-btn.open {
-    background: rgba(196, 154, 60, 0.15);
-    color: var(--brown-dark);
-  }
-
+  .ck-more-btn:hover { background: #1a0e06; color: var(--cream); }
   .ck-eat-with-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--gold);
-    border: none;
-    border-radius: 50px;
-    padding: 0.5rem 1.1rem;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px; background: var(--gold);
+    border: none; border-radius: 50px; padding: 0.5rem 1.1rem; font-family: 'Jost', sans-serif;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--text-dark); cursor: pointer; transition: all 0.2s; text-decoration: none;
   }
-
-  .ck-eat-with-btn:hover {
-    background: var(--gold-light);
-    color: var(--text-dark);
-    transform: translateY(-1px);
-  }
-
+  .ck-eat-with-btn:hover { background: var(--gold-light); color: var(--text-dark); transform: translateY(-1px); }
   .ck-yt-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--white);
-    color: var(--text-mid) !important;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none !important;
-    padding: 0.5rem 0.9rem;
-    border-radius: 50px;
-    border: 1.5px solid rgba(59, 42, 26, 0.2);
-    transition: border-color 0.2s;
+    display: inline-flex; align-items: center; gap: 5px; background: var(--white);
+    color: var(--text-mid) !important; font-family: 'Jost', sans-serif; font-size: 0.75rem;
+    font-weight: 500; text-decoration: none !important; padding: 0.5rem 0.9rem;
+    border-radius: 50px; border: 1.5px solid rgba(59,42,26,0.2); transition: border-color 0.2s;
   }
-
-  .ck-yt-btn:hover {
-    border-color: #dc3545;
-  }
-
-  .ck-tip {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-dark);
-    background: rgba(196, 154, 60, 0.06);
-    border-left: 3px solid var(--gold);
-    padding: 10px 12px;
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 10px;
-    line-height: 1.55;
-  }
-
-  .ck-upgrade {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-dark);
-    background: rgba(59, 42, 26, 0.05);
-    border-left: 3px solid var(--brown-mid);
-    padding: 10px 12px;
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 10px;
-    line-height: 1.55;
-  }
-
-  .ck-steps-title {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  .ck-step {
-    display: flex;
-    gap: 10px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-mid);
-    padding: 3px 0;
-    line-height: 1.45;
-  }
-
-  .ck-step-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--gold);
-    min-width: 18px;
-    flex-shrink: 0;
-  }
-
-  /*  RESULTS (list-style, used for search results)  */
-  .ck-meal-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-
+  .ck-yt-btn:hover { border-color: #dc3545; }
+  .ck-meal-wrapper { display: flex; flex-direction: column; }
   .ck-meal-card {
-    background: var(--white);
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(59, 42, 26, .08);
-    box-shadow: 0 4px 20px rgba(59, 42, 26, .06);
-    transition: transform .25s, box-shadow .25s;
-    display: flex;
-    flex-direction: row;
-    min-height: 260px;
+    background: var(--white); border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(59,42,26,.08); box-shadow: 0 4px 20px rgba(59,42,26,.06);
+    transition: transform .25s, box-shadow .25s; display: flex; flex-direction: row; min-height: 260px;
   }
-
-  .ck-meal-card.reverse {
-    flex-direction: row-reverse;
-  }
-
-  .ck-meal-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(59, 42, 26, .12);
-  }
-
+  .ck-meal-card.reverse { flex-direction: row-reverse; }
+  .ck-meal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(59,42,26,.12); }
   .ck-meal-img {
-    width: 260px;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: var(--beige);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
+    width: 260px; flex-shrink: 0; overflow: hidden; background: var(--beige);
+    display: flex; align-items: center; justify-content: center; font-size: 3.5rem;
   }
-
-  .ck-meal-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .ck-meal-body {
-    flex: 1;
-    padding: 1.6rem;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
+  .ck-meal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ck-meal-body { flex: 1; padding: 1.6rem; display: flex; flex-direction: column; min-width: 0; }
   .ck-meal-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--brown-dark);
-    margin: 0 0 .4rem;
-    line-height: 1.15;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600;
+    color: var(--brown-dark); margin: 0 0 .4rem; line-height: 1.15;
   }
-
-  .ck-meal-desc {
-    font-family: 'Jost', sans-serif;
-    font-size: .86rem;
-    color: var(--text-mid);
-    line-height: 1.6;
-    margin: 0 0 .8rem;
-  }
-
-  .ck-meal-meta {
-    display: flex;
-    align-items: center;
-    gap: .8rem;
-    margin-bottom: .8rem;
-    flex-wrap: wrap;
-  }
-
-  .ck-meal-meta-price {
-    font-family: 'Jost', sans-serif;
-    font-size: .88rem;
-    font-weight: 600;
-    color: var(--gold);
-  }
-
+  .ck-meal-desc { font-family: 'Jost', sans-serif; font-size: .86rem; color: var(--text-mid); line-height: 1.6; margin: 0 0 .8rem; }
+  .ck-meal-meta { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; flex-wrap: wrap; }
+  .ck-meal-meta-price { font-family: 'Jost', sans-serif; font-size: .88rem; font-weight: 600; color: var(--gold); }
   .ck-chip-label {
-    font-family: 'Jost', sans-serif;
-    font-size: .65rem;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--text-mid);
-    margin: 0 0 .35rem;
+    font-family: 'Jost', sans-serif; font-size: .65rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--text-mid); margin: 0 0 .35rem;
   }
-
   .ck-chip {
-    display: inline-block;
-    background: var(--cream);
-    border: 1px solid rgba(196, 154, 60, .2);
-    border-radius: 50px;
-    padding: .25rem .65rem;
-    font-family: 'Jost', sans-serif;
-    font-size: .72rem;
-    color: var(--text-dark);
-    margin: .15rem;
+    display: inline-block; background: var(--cream); border: 1px solid rgba(196,154,60,.2);
+    border-radius: 50px; padding: .25rem .65rem; font-family: 'Jost', sans-serif;
+    font-size: .72rem; color: var(--text-dark); margin: .15rem;
   }
-
-  .ck-tags {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-bottom: .6rem;
-  }
-
+  .ck-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: .6rem; }
   .ck-tag {
-    font-family: 'Jost', sans-serif;
-    font-size: .6rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 50px;
-    background: rgba(59, 42, 26, .07);
-    color: var(--text-mid);
-    border: 1px solid rgba(59, 42, 26, .12);
+    font-family: 'Jost', sans-serif; font-size: .6rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 50px;
+    background: rgba(59,42,26,.07); color: var(--text-mid); border: 1px solid rgba(59,42,26,.12);
   }
-
   .ck-card-actions {
-    display: flex;
-    gap: .6rem;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: auto;
-    padding-top: .8rem;
+    display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: auto; padding-top: .8rem;
   }
-
   .ck-collapse-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    background: var(--brown-dark);
-    border: none;
-    border-radius: 50px;
-    padding: .5rem 1.1rem;
-    font-family: 'Jost', sans-serif;
-    font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--cream);
-    cursor: pointer;
-    transition: all .2s;
-    text-decoration: none;
+    display: inline-flex; align-items: center; gap: .5rem; background: var(--brown-dark);
+    border: none; border-radius: 50px; padding: .5rem 1.1rem; font-family: 'Jost', sans-serif;
+    font-size: .75rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--cream); cursor: pointer; transition: all .2s; text-decoration: none;
   }
-
-  .ck-collapse-btn:hover {
-    background: #1a0e06;
-    color: var(--cream);
-  }
-
-  .ck-collapse-btn.open {
-    background: rgba(196, 154, 60, .15);
-    color: var(--brown-dark);
-  }
-
-  .ck-chevron {
-    font-size: .65rem;
-    transition: transform .3s;
-    display: inline-block;
-  }
-
-  .ck-collapse-btn.open .ck-chevron {
-    transform: rotate(180deg);
-  }
-
-  .ck-collapse-body {
-    display: none;
-    border: 1px solid rgba(196, 154, 60, .15);
-    border-top: none;
-    border-radius: 0 0 20px 20px;
-    padding: 1.4rem 1.8rem;
-    background: var(--white);
-  }
-
-  .ck-collapse-body.open {
-    display: block;
-  }
-
-  .ck-savings-badge {
-    font-family: 'Jost', sans-serif;
-    font-size: .72rem;
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: .5rem;
-  }
-
-  /* Tier label badges */
+  .ck-collapse-btn:hover { background: #1a0e06; color: var(--cream); }
+  .ck-savings-badge { font-family: 'Jost', sans-serif; font-size: .72rem; color: var(--gold); font-weight: 600; margin-bottom: .5rem; }
   .ck-tier-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 3px 12px;
-    border-radius: 50px;
-    margin-bottom: 0.5rem;
+    display: inline-flex; align-items: center; gap: 5px; font-family: 'Jost', sans-serif;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 12px; border-radius: 50px; margin-bottom: 0.5rem;
   }
-
-  .ck-tier-badge.ingredients-unlock {
-    background: rgba(34, 197, 94, 0.12);
-    color: #15803d;
-    border: 1px solid rgba(34, 197, 94, 0.25);
-  }
-
-  .ck-tier-badge.within-budget-match {
-    background: rgba(196, 154, 60, 0.12);
-    color: var(--gold);
-    border: 1px solid rgba(196, 154, 60, 0.25);
-  }
-
-  .ck-tier-badge.budget-only {
-    background: rgba(59, 42, 26, 0.07);
-    color: var(--text-mid);
-    border: 1px solid rgba(59, 42, 26, 0.15);
-  }
-
-  /* Price list */
-  .ck-price-list {
-    background: var(--white);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(59, 42, 26, .08);
-  }
-
+  .ck-tier-badge.ingredients-unlock { background: rgba(34,197,94,0.12); color: #15803d; border: 1px solid rgba(34,197,94,0.25); }
+  .ck-tier-badge.within-budget-match { background: rgba(196,154,60,0.12); color: var(--gold); border: 1px solid rgba(196,154,60,0.25); }
+  .ck-tier-badge.budget-only { background: rgba(59,42,26,0.07); color: var(--text-mid); border: 1px solid rgba(59,42,26,0.15); }
+  .ck-price-list { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(59,42,26,.08); }
   .ck-price-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px;
-    border-bottom: 1px solid rgba(59, 42, 26, .07);
-    transition: background .15s;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; border-bottom: 1px solid rgba(59,42,26,.07); transition: background .15s;
   }
-
-  .ck-price-row:last-child {
-    border-bottom: none;
-  }
-
-  .ck-price-row:hover {
-    background: var(--cream);
-  }
-
-  .ck-price-name {
-    font-family: 'Jost', sans-serif;
-    font-size: .9rem;
-    font-weight: 500;
-    color: var(--text-dark);
-  }
-
-  .ck-price-unit {
-    font-family: 'Jost', sans-serif;
-    font-size: .75rem;
-    color: var(--text-mid);
-    margin-top: 2px;
-  }
-
-  .ck-price-amount {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  /* MARKET PRICE ROW — emoji card style */
+  .ck-price-row:last-child { border-bottom: none; }
+  .ck-price-row:hover { background: var(--cream); }
+  .ck-price-name { font-family: 'Jost', sans-serif; font-size: .9rem; font-weight: 500; color: var(--text-dark); }
+  .ck-price-unit { font-family: 'Jost', sans-serif; font-size: .75rem; color: var(--text-mid); margin-top: 2px; }
+  .ck-price-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold); }
   .ck-market-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--white);
-    border-radius: 14px;
-    padding: 14px 18px;
-    border-bottom: 3px solid var(--brown-dark);
-    box-shadow: 0 2px 10px rgba(59, 42, 26, 0.07);
-    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex; align-items: center; gap: 14px; background: var(--white);
+    border-radius: 14px; padding: 14px 18px; border-bottom: 3px solid var(--brown-dark);
+    box-shadow: 0 2px 10px rgba(59,42,26,0.07); transition: transform 0.18s, box-shadow 0.18s;
   }
-
-  .ck-market-row:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 42, 26, 0.13);
-  }
-
-  .ck-market-emoji {
-    font-size: 1.6rem;
-    flex-shrink: 0;
-    line-height: 1;
-  }
-
-  .ck-market-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .ck-market-name {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--brown-dark);
-    margin: 0 0 2px;
-  }
-
-  .ck-market-unit {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.74rem;
-    color: var(--text-mid);
-    margin: 0;
-  }
-
-  .ck-market-right {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    flex-shrink: 0;
-  }
-
-  .ck-market-price {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  /* Empty state */
-  .ck-empty {
-    text-align: center;
-    padding: 60px 20px;
-  }
-
-  .ck-empty-icon {
-    font-size: 4rem;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .ck-empty p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    color: var(--text-mid);
-  }
-
-  /* STOCK SECTION */
-  .ck-stock-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-
-  @media (max-width: 991px) {
-    .ck-stock-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 575px) {
-    .ck-stock-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
+  .ck-market-row:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59,42,26,0.13); }
+  .ck-market-info { flex: 1; min-width: 0; }
+  .ck-market-name { font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--brown-dark); margin: 0 0 2px; }
+  .ck-market-unit { font-family: 'Jost', sans-serif; font-size: 0.74rem; color: var(--text-mid); margin: 0; }
+  .ck-empty { text-align: center; padding: 60px 20px; }
+  .ck-empty-icon { font-size: 4rem; margin-bottom: 16px; display: block; }
+  .ck-empty p { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--text-mid); }
+  .ck-stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 991px) { .ck-stock-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 575px) { .ck-stock-grid { grid-template-columns: 1fr; } }
   .ck-stew-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.85rem;
-    border-radius: 10px;
-    background: var(--cream);
-    border: 1px solid rgba(196, 154, 60, 0.2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.5rem 0.85rem; border-radius: 10px; background: var(--cream); border: 1px solid rgba(196,154,60,0.2);
   }
-
-  .ck-stew-faded {
-    background: rgba(59, 42, 26, 0.04) !important;
-    border-color: rgba(59, 42, 26, 0.1) !important;
-    opacity: 0.5;
-  }
-
+  .ck-stew-faded { background: rgba(59,42,26,0.04) !important; border-color: rgba(59,42,26,0.1) !important; opacity: 0.5; }
   .ck-stock-card {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(196, 154, 60, 0.2);
-    border-radius: 14px;
-    padding: 1rem 1.2rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    transition: background 0.2s;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(196,154,60,0.2);
+    border-radius: 14px; padding: 1rem 1.2rem; display: flex; align-items: flex-start; gap: 0.75rem; transition: background 0.2s;
   }
-
-  .ck-stock-card:hover {
-    background: rgba(255, 255, 255, 0.11);
-  }
-
-  .ck-stock-icon {
-    font-size: 1.4rem;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .ck-stock-name {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--white);
-    margin: 0 0 2px;
-  }
-
-  .ck-stock-tip {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    color: rgba(255, 252, 248, 0.55);
-    line-height: 1.45;
-    margin: 0;
-  }
-
-  .ck-stock-price {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--gold-light);
-    margin-top: 3px;
-    display: block;
-  }
-
-  /*  RESPONSIVE */
+  .ck-stock-card:hover { background: rgba(255,255,255,0.11); }
+  .ck-stock-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .ck-stock-name { font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); margin: 0 0 2px; }
+  .ck-stock-tip { font-family: 'Jost', sans-serif; font-size: 0.75rem; color: rgba(255,252,248,0.55); line-height: 1.45; margin: 0; }
+  .ck-stock-price { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-top: 3px; display: block; }
   @media (max-width: 700px) {
-    .ck-meal-card,
-    .ck-meal-card.reverse {
-      flex-direction: column;
-    }
-
-    .ck-meal-img {
-      width: 100%;
-      height: 200px;
-    }
+    .ck-meal-card, .ck-meal-card.reverse { flex-direction: column; }
+    .ck-meal-img { width: 100%; height: 200px; }
   }
-
   @media (max-width: 768px) {
-    .ck-hero {
-      min-height: 100svh;
-      padding: 60px 20px;
-    }
-
-    .ck-hero h1 {
-      font-size: 2.2rem;
-    }
-
-    .ck-stats {
-      gap: 20px;
-    }
+    .ck-hero { min-height: 100svh; padding: 60px 20px; }
+    .ck-hero h1 { font-size: 2.2rem; }
+    .ck-stats { gap: 20px; }
   }
-
-  @media (min-width: 769px) {
-    .ck-hero {
-      min-height: 70vh;
-    }
-  }
+  @media (min-width: 769px) { .ck-hero { min-height: 70vh; } }
 </style>
 {% endblock %}
 
@@ -1025,11 +296,7 @@
       <div class="col-lg-6">
         <div class="ck-search-card">
           <form method="GET" action="{% url 'comrade_kitchen' %}#results" id="ck-form">
-
-            {# Hidden mode field driven by tabs #}
             <input type="hidden" name="mode" id="ck-mode-input" value="{{ search_mode|default:'budget' }}">
-
-            {# Mode tabs #}
             <div class="ck-mode-tabs" role="tablist">
               <button type="button"
                 class="ck-mode-tab {% if search_mode == 'budget' or not search_mode %}active{% endif %}"
@@ -1041,31 +308,24 @@
                 class="ck-mode-tab {% if search_mode == 'both' %}active{% endif %}"
                 data-mode="both" onclick="setMode(this)">Both</button>
             </div>
-
-            {# Budget field — shown for budget + both modes #}
             <div id="field-budget" {% if search_mode == 'ingredients' %}style="display:none;"{% endif %}>
               <label class="ck-label">Your budget (Ksh)</label>
               <input type="number" name="budget" class="ck-input" placeholder="e.g. 50, 100, 150…"
                 value="{{ budget|default:'' }}" min="0">
             </div>
-
-            {# Ingredients field — shown for ingredients + both modes #}
             <div id="field-ingredients" {% if search_mode == 'budget' or not search_mode %}style="display:none;"{% endif %}>
               <label class="ck-label">What do you already have?</label>
               <input type="text" name="ingredients" class="ck-input"
                 placeholder="e.g. rice, cooking oil, eggs, maize flour…"
                 value="{{ ingredients_input|default:'' }}">
-              <p style="font-family:'Jost',sans-serif;font-size:.73rem;color:var(--text-mid);
-                        margin-top:-10px;margin-bottom:14px;">
+              <p style="font-family:'Jost',sans-serif;font-size:.73rem;color:var(--text-mid);margin-top:-10px;margin-bottom:14px;">
                 Separate with commas. We'll factor these in so you spend less.
               </p>
             </div>
-
             <label class="ck-label">Eaten recently? (we'll skip these)</label>
             <input type="text" name="recent" class="ck-input"
               placeholder="e.g. indomie, ugali, chapati beans…"
               value="{{ recent_food|default:'' }}">
-
             <button type="submit" class="ck-btn">Find My Meal →</button>
           </form>
         </div>
@@ -1074,9 +334,9 @@
   </div>
 </section>
 
-<!-- RESULTS OR DEFAULT CONTENT -->
 {% if searched %}
 
+<!-- RESULTS -->
 <section class="ck-section" id="results">
   <div class="container">
 
@@ -1112,13 +372,11 @@
       {% for entry in suggested_meals %}
       {% with meal=entry.meal %}
       <div class="ck-meal-wrapper">
-
         {% if forloop.counter|divisibleby:2 %}
         <div class="ck-meal-card reverse">
         {% else %}
         <div class="ck-meal-card">
         {% endif %}
-
           <div class="ck-meal-img">
             {% if meal.image %}
             <img src="{{ meal.image.url }}" alt="{{ meal.name }}">
@@ -1126,10 +384,7 @@
             🍽️
             {% endif %}
           </div>
-
           <div class="ck-meal-body">
-
-            {# Tier badge #}
             {% if entry.tier_label == 'ingredients_unlock' %}
             <span class="ck-tier-badge ingredients-unlock">Your ingredients unlock this!</span>
             {% elif entry.tier_label == 'within_budget_match' %}
@@ -1237,17 +492,14 @@
                 MORE ON..
               </a>
               {% endif %}
-
               {% if meal.youtube_url %}
               <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
                 <i class="bi bi-youtube text-danger"></i> How-to
               </a>
               {% endif %}
             </div>
-
           </div>
         </div>
-
       </div>
       {% endwith %}
       {% endfor %}
@@ -1275,7 +527,6 @@
             </div>
             <div style="display:flex;align-items:center;gap:1rem;">
               <div class="ck-price-amount">Ksh {{ item.price_ksh }}</div>
-
             </div>
           </div>
           {% endfor %}
@@ -1314,17 +565,14 @@
             🍽️
             {% endif %}
           </div>
-
           <div class="ck-food-card-body">
             {% if meal.get_tags %}
             <span class="ck-food-card-cat">
               {% for tag in meal.get_tags %}{{ tag }}{% if not forloop.last %} · {% endif %}{% endfor %}
             </span>
             {% endif %}
-
             <h3 class="ck-food-card-name">{{ meal.name }}</h3>
             <p class="ck-food-card-desc">{{ meal.description }}</p>
-
             {% if meal.stew_options.exists %}
             <p class="ck-eat-with-label">Eat with</p>
             <div class="ck-eat-chips">
@@ -1343,7 +591,6 @@
               {% endfor %}
             </div>
             {% endif %}
-
             <div class="ck-food-card-meta">
               <i class="bi bi-wallet2" style="color:var(--gold);font-size:0.85rem;"></i>
               <span class="ck-food-card-price">Ksh {{ meal.total_cost_ksh }}</span>
@@ -1353,11 +600,11 @@
               </span>
               {% endif %}
             </div>
-
             <div class="ck-food-card-actions">
               {% if meal.comrade_food %}
               <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-more-btn">
                 MORE ON..
+              </a>
               {% endif %}
               {% if meal.youtube_url %}
               <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
@@ -1388,12 +635,10 @@
   <div class="container">
     <p class="section-label" style="color:var(--gold-light);">Reference</p>
     <h2 class="ck-section-title-light" style="margin-bottom:8px;">Market Price List</h2>
-    <p style="font-family:'Jost',sans-serif;font-size:.88rem;
-              color:rgba(255,252,248,0.5);margin-bottom:28px;">
+    <p style="font-family:'Jost',sans-serif;font-size:.88rem;color:rgba(255,252,248,0.5);margin-bottom:28px;">
       Common prices around Kenyan markets &amp; shops.
       Click <strong style="color:var(--gold);">MORE ON..</strong> to see stew options.
     </p>
-
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
       {% for food in all_foods %}
       <div class="ck-market-row">
@@ -1422,7 +667,6 @@
         <p class="ck-section-sub">Keep these around so an empty pocket doesn't mean an empty plate.</p>
       </div>
     </div>
-
     <div style="background:var(--brown-dark);border-radius:20px;padding:2rem 2rem 1.5rem;margin-top:1.5rem;">
       <div class="ck-stock-grid">
         {% for s in stock_items %}
@@ -1454,7 +698,6 @@
 
 {% block extra_js %}
 <script>
-  /* Scroll to results */
   document.addEventListener('DOMContentLoaded', function () {
     const resultsSection = document.getElementById('results');
     if (resultsSection) {
@@ -1462,16 +705,13 @@
     }
   });
 
-  /* Search mode tabs */
   function setMode(tab) {
     document.querySelectorAll('.ck-mode-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     const mode = tab.dataset.mode;
     document.getElementById('ck-mode-input').value = mode;
-
     const budgetField = document.getElementById('field-budget');
     const ingredientsField = document.getElementById('field-ingredients');
-
     if (mode === 'budget') {
       budgetField.style.display = '';
       ingredientsField.style.display = 'none';
@@ -1485,5 +725,3 @@
   }
 </script>
 {% endblock %}
-
-
