@@ -4,5 +4,8 @@
   "html.validate.scripts": false,
   "files.associations": {
     "*.html": "html"
+  },
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportUndefinedVariable": "none"
   }
 }

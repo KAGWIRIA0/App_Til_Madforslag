@@ -134,7 +134,7 @@ class GymFood(models.Model):
         ('endurance', 'Boosts Endurance'),
         ('recovery', 'Aids Recovery'),
         ('general', 'General Fitness'),
-]
+    ]
     TYPE_CHOICES = [
         ('food', 'Food'),
         ('drink', 'Drink'),

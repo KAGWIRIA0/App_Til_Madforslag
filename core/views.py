@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import Dish, GymFood, ComradeFood, ComradeMeal, SkinFood, WellnessFood
-from .ai_engine import suggest_meals_from_ingredients, suggest_from_voice, suggest_meals_from_image
+from .models import Dish, GymFood, ComradeFood, ComradeMeal, ComradeMealStewOption, SkinFood, WellnessFood
+from .ai_engine import suggest_from_voice, suggest_meals_from_image, suggest_meals_from_ingredients
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 import random
@@ -47,7 +47,7 @@ def browse(request):
             Q(description__icontains=search_query)
         )
 
-    # Split into foods and drinks 
+    # Split into foods and drinks
     foods = dishes.filter(meal_type='food')
     drinks = dishes.filter(meal_type='drink')
 
@@ -64,13 +64,14 @@ def browse(request):
     return render(request, 'core/browse.html', {
         'foods': food_page_obj,
         'drinks': drink_page_obj,
-        'all_dishes': dishes,  # for count
+        'all_dishes': dishes,
         'selected_category': category,
         'selected_role': role,
         'search_query': search_query,
         'total_count': dishes.count(),
-        'dishes': food_page_obj,   # Keep backwards compatibility
+        'dishes': food_page_obj,
     })
+
 
 def about(request):
     return render(request, 'core/about.html')
@@ -78,14 +79,12 @@ def about(request):
 
 def skin(request):
     active_category = request.GET.get('category', 'all')
-    active_section  = request.GET.get('section', 'skin') 
-    
-    # Skin foods grouped
+    active_section  = request.GET.get('section', 'skin')
+
     grouped_skin = {}
     for food in SkinFood.objects.all().order_by('category', 'order'):
         grouped_skin.setdefault(food.category, []).append(food)
 
-    # Wellness foods grouped
     grouped_wellness = {}
     for food in WellnessFood.objects.all().order_by('category', 'order'):
         grouped_wellness.setdefault(food.category, []).append(food)
@@ -103,6 +102,7 @@ def skin(request):
         'categories':        SkinFood.CATEGORY_CHOICES,
         'wellness_cats':     WellnessFood.CATEGORY_CHOICES,
     })
+
 
 def find_dishes(request):
     query_type        = request.GET.get('query_type', 'ingredients')
@@ -140,12 +140,10 @@ def find_dishes(request):
     ]
 
     def get_synonyms(term):
-        """Return the full synonym set for a term, or just {term} if no group found."""
         t = term.lower().strip()
         for group in SYNONYM_GROUPS:
             if t in group:
                 return group
-        # Also check if term is a substring match for a group member
         for group in SYNONYM_GROUPS:
             for member in group:
                 if t == member:
@@ -153,52 +151,36 @@ def find_dishes(request):
         return {t}
 
     def ingredient_in_text(user_ing, text):
-        """
-        True only if user_ing (or a true synonym) appears as a meaningful
-        word/phrase in text. Uses word-boundary logic to avoid
-        'flour' matching 'wheat flour' when user meant 'maize flour'.
-        """
         text_lower = text.lower()
         synonyms   = get_synonyms(user_ing)
-
         for variant in synonyms:
             if variant in text_lower:
                 if variant == 'flour':
                     import re
                     if re.search(r'(wheat|plain|all.?purpose|self.?raising)\s+flour', text_lower):
-                        continue   # it's wheat flour, skip
+                        continue
                 return True
         return False
 
     def score_dish(dish_text, dish_ingredients_list, ingredient_list):
-        """
-        Returns (match_count, coverage, matched_ingredients) or None if dish
-        doesn't actually contain ANY of the user's ingredients.
-        """
         total = len(dish_ingredients_list) if dish_ingredients_list else 1
-
         matched_user_ings = []
         for u_ing in ingredient_list:
             if ingredient_in_text(u_ing, dish_text):
                 matched_user_ings.append(u_ing)
-
         if not matched_user_ings:
-            return None  # dish has NONE of the user's ingredients → skip entirely
-
-        # Coverage = how many of the dish's own ingredients the user has
+            return None
         user_has_count = sum(
             1 for d_ing in dish_ingredients_list
             if any(ingredient_in_text(u_ing, d_ing) for u_ing in ingredient_list)
         )
         coverage = user_has_count / total
-
         return (len(matched_user_ings), coverage, matched_user_ings)
 
     if request.GET.get('ingredients') or request.GET.get('budget'):
         searched = True
         dishes   = Dish.objects.all()
 
-        # Exclude recently eaten
         if recent_food:
             for item in [r.strip().lower() for r in recent_food.split(',') if r.strip()]:
                 synonyms = get_synonyms(item)
@@ -206,7 +188,6 @@ def find_dishes(request):
                     if variant:
                         dishes = dishes.exclude(name__icontains=variant)
 
-        # UDGET mode 
         if query_type == 'budget' and budget_input:
             try:
                 budget = float(budget_input)
@@ -220,14 +201,11 @@ def find_dishes(request):
                 pass
             results = list(dishes[:12])
 
-        # INGREDIENTS mode 
         elif query_type == 'ingredients' and ingredients_input:
             ingredient_list = [
                 i.strip().lower()
                 for i in ingredients_input.split(',') if i.strip()
             ]
-
-            # Broad pre-filter: at least one synonym must appear somewhere in the dish
             q = Q()
             for ing in ingredient_list:
                 for variant in get_synonyms(ing):
@@ -237,37 +215,30 @@ def find_dishes(request):
                         q |= Q(description__icontains=variant)
             dishes = dishes.filter(q)
 
-            # Score and strictly filter
-            tier1 = []  # has ALL user ingredients
-            tier2 = []  # has MOST (≥50%)
-            tier3 = []  # has at least ONE
+            tier1 = []
+            tier2 = []
+            tier3 = []
 
             for dish in dishes:
                 dish_ings  = [i.strip().lower() for i in dish.ingredients.split(',') if i.strip()]
                 dish_text  = f"{dish.name} {dish.ingredients} {dish.description}".lower()
-
                 scored = score_dish(dish_text, dish_ings, ingredient_list)
                 if scored is None:
-                    continue  # truly doesn't match — skip
-
+                    continue
                 match_count, coverage, matched = scored
                 total_user = len(ingredient_list)
-                match_ratio = match_count / total_user  # how many of USER's ings match
-
+                match_ratio = match_count / total_user
                 entry = (match_count, coverage, dish)
-
                 if match_ratio == 1.0:
-                    tier1.append(entry)          # has every ingredient user listed
+                    tier1.append(entry)
                 elif match_ratio >= 0.5:
-                    tier2.append(entry)          # has half or more
+                    tier2.append(entry)
                 else:
-                    tier3.append(entry)          # has at least one
+                    tier3.append(entry)
 
-            # Sort each tier by coverage desc, then take top results
             for tier in (tier1, tier2, tier3):
                 tier.sort(key=lambda x: (x[0], x[1]), reverse=True)
 
-            # Build final list: tier1 first, then tier2, then tier3
             seen = set()
             ordered = []
             for tier in (tier1, tier2, tier3):
@@ -277,10 +248,8 @@ def find_dishes(request):
                         ordered.append(dish)
                 if len(ordered) >= 12:
                     break
-
             results = ordered[:12]
 
-            # Comrade meals
             comrade_q = Q()
             for ing in ingredient_list:
                 for variant in get_synonyms(ing):
@@ -290,7 +259,6 @@ def find_dishes(request):
                         comrade_q |= Q(description__icontains=variant)
 
             comrade_dishes = ComradeMeal.objects.filter(comrade_q).distinct()
-
             c_tier1, c_tier2, c_tier3 = [], [], []
 
             for meal in comrade_dishes:
@@ -302,15 +270,12 @@ def find_dishes(request):
                     [item.get('item', '').lower() for item in items_list] +
                     [k.strip().lower() for k in kitchen_text.split(',') if k.strip()]
                 )
-
                 scored = score_dish(full_text, meal_ings, ingredient_list)
                 if scored is None:
                     continue
-
                 match_count, coverage, matched = scored
                 match_ratio = match_count / len(ingredient_list)
                 entry = (match_count, coverage, meal)
-
                 if match_ratio == 1.0:
                     c_tier1.append(entry)
                 elif match_ratio >= 0.5:
@@ -328,7 +293,6 @@ def find_dishes(request):
                         ordered_c.append(meal)
                 if len(ordered_c) >= 6:
                     break
-
             comrade_results = ordered_c[:6]
 
     return render(request, 'core/find_dishes.html', {
@@ -341,11 +305,11 @@ def find_dishes(request):
         'query_type':        query_type,
     })
 
+
 def dish_detail(request, pk):
     dish               = get_object_or_404(Dish, pk=pk)
     recommended_foods  = Dish.objects.filter(name__in=dish.best_with_foods)
     recommended_drinks = Dish.objects.filter(name__in=dish.best_with_drinks)
-
     return render(request, 'core/dish_detail.html', {
         'dish':               dish,
         'recommended_foods':  recommended_foods,
@@ -359,27 +323,369 @@ def gym(request):
     timing_filter  = request.GET.get('timing', '')
 
     foods = GymFood.objects.all()
-
     if category and category != 'all':
         foods = foods.filter(category=category)
-
     if search:
         foods = (
             foods.filter(name__icontains=search) |
             foods.filter(description__icontains=search)
         )
-
     if timing_filter:
         foods = foods.filter(timing=timing_filter)
 
     return render(request, 'core/gym.html', {
-        'foods':          foods,
+        'foods':           foods,
         'active_category': category,
-        'active_timing':  timing_filter,
-        'search_query':   search,
-        'categories':     GymFood.CATEGORY_CHOICES,
-        'timings':        GymFood.TIMING_CHOICES,
+        'active_timing':   timing_filter,
+        'search_query':    search,
+        'categories':      GymFood.CATEGORY_CHOICES,
+        'timings':         GymFood.TIMING_CHOICES,
     })
+
+
+
+_SYNONYMS = {
+    'mayai': ['eggs', 'egg', 'mayai'],
+    'eggs': ['eggs', 'egg', 'mayai'],
+    'egg': ['eggs', 'egg', 'mayai'],
+    'sukuma': ['sukuma', 'kales', 'sukuma wiki', 'collard'],
+    'sukuma wiki': ['sukuma', 'kales', 'sukuma wiki', 'collard'],
+    'kales': ['sukuma', 'kales', 'sukuma wiki'],
+    'unga': ['maize', 'unga', 'ugali', 'flour', 'corn'],
+    'maize flour': ['maize', 'unga', 'ugali', 'flour', 'corn', 'maize flour'],
+    'maize': ['maize', 'unga', 'ugali', 'flour'],
+    'ugali': ['ugali', 'unga', 'maize', 'maize flour'],
+    'noodles': ['noodles', 'indomie', 'instant'],
+    'indomie': ['noodles', 'indomie', 'instant'],
+    'githeri': ['githeri', 'beans', 'maize'],
+    'dengu': ['ndengu', 'dengu', 'grams', 'green grams'],
+    'ndengu': ['ndengu', 'dengu', 'grams', 'green grams'],
+    'beans': ['beans', 'maharagwe'],
+    'maharagwe': ['beans', 'maharagwe'],
+    'rice': ['rice', 'wali'],
+    'wali': ['rice', 'wali'],
+    'tomatoes': ['tomatoes', 'tomato', 'nyanya'],
+    'tomato': ['tomatoes', 'tomato', 'nyanya'],
+    'nyanya': ['tomatoes', 'tomato', 'nyanya'],
+    'onion': ['onion', 'onions', 'vitunguu'],
+    'onions': ['onion', 'onions', 'vitunguu'],
+    'vitunguu': ['onion', 'onions', 'vitunguu'],
+    'oil': ['oil', 'mafuta', 'cooking oil'],
+    'cooking oil': ['oil', 'mafuta', 'cooking oil'],
+    'mafuta': ['oil', 'mafuta', 'cooking oil'],
+    'cabbage': ['cabbage', 'kabeji'],
+    'kabeji': ['cabbage', 'kabeji'],
+    'potatoes': ['potatoes', 'viazi'],
+    'viazi': ['potatoes', 'viazi'],
+    'salt': ['salt', 'chumvi'],
+    'chumvi': ['salt', 'chumvi'],
+    'water': ['water', 'maji'],
+    'maji': ['water', 'maji'],
+    'chapati': ['chapati', 'chapatti'],
+    'beef': ['beef', 'nyama', "ng'ombe", 'meat'],
+    'meat': ['meat', 'beef', 'nyama', "ng'ombe"],
+    'chicken': ['chicken', 'kuku'],
+    'kuku': ['chicken', 'kuku'],
+    'fish': ['fish', 'samaki'],
+    'samaki': ['fish', 'samaki'],
+    'milk': ['milk', 'maziwa'],
+    'maziwa': ['milk', 'maziwa'],
+    'sugar': ['sugar', 'sukari'],
+    'sukari': ['sugar', 'sukari'],
+    'porridge': ['porridge', 'uji'],
+    'uji': ['porridge', 'uji'],
+    'tilapia': ['tilapia', 'fish', 'samaki'],
+    'omena': ['omena', 'dagaa', 'fish'],
+    'sardines': ['sardines', 'omena', 'dagaa'],
+    'sausage': ['sausage', 'sausages', 'sosej'],
+    'smokie': ['smokie', 'smokies', 'sausage'],
+    'spinach': ['spinach', 'mchicha'],
+    'mchicha': ['spinach', 'mchicha'],
+    'terere': ['terere', 'amaranth'],
+    'ndengu stew': ['ndengu', 'dengu', 'green grams'],
+    'green grams': ['ndengu', 'dengu', 'green grams', 'grams'],
+    'kamande': ['kamande', 'lentils'],
+    'lentils': ['lentils', 'kamande'],
+    'peas': ['peas', 'minji', 'green peas'],
+    'minji': ['peas', 'minji', 'green peas'],
+}
+
+
+def _expand_term(term):
+    """Return all synonym variants for a term."""
+    t = term.lower().strip()
+    result = {t}
+    result.update(t.split())
+    for key, syns in _SYNONYMS.items():
+        if t == key or t in syns:
+            result.update(syns)
+    return result
+
+
+def _text_has_term(term, text):
+    """Return True if term (or any synonym) appears in text."""
+    text_lower = text.lower()
+    for variant in _expand_term(term):
+        if variant and variant in text_lower:
+            return True
+    return False
+
+
+
+
+def _parse_recent_pairs(recent_food_str):
+    """
+    Parse the "eaten recently" string into a list of (base_term, stew_term_or_None) tuples.
+
+    Examples
+    --------
+    "Rice and Beans, Ugali and Sukuma, Chapati"
+      → [('rice', 'beans'), ('ugali', 'sukuma'), ('chapati', None)]
+
+    "Rice, Beans"  — comma-separated without "and"
+      → [('rice', None), ('beans', None)]
+
+    "Rice Beans"   — space only (treated as single entry, no stew)
+      → [('rice beans', None)]
+    """
+    if not recent_food_str:
+        return []
+
+    pairs = []
+    # Split on commas first
+    entries = [e.strip() for e in recent_food_str.split(',') if e.strip()]
+    for entry in entries:
+        # Each entry may be "Base and Stew"
+        if ' and ' in entry.lower():
+            parts = entry.lower().split(' and ', 1)
+            base  = parts[0].strip()
+            stew  = parts[1].strip()
+            pairs.append((base, stew))
+        else:
+            pairs.append((entry.lower().strip(), None))
+    return pairs
+
+
+def _should_exclude_meal(meal, recent_pairs):
+    """
+    Decide whether an entire ComradeMeal should be EXCLUDED from results.
+
+    Rules
+    -----
+    • If the user says "Rice and Beans":
+        - Rice (base) matches → check if "Beans" matches any stew option.
+        - If the meal has NO stew options AND base matches → exclude it.
+        - If the meal HAS stew options and ALL of them are in recent_pairs → exclude it.
+        - If only SOME stews match → keep the meal (those stews will be greyed out).
+
+    • If the user says "Rice" (no stew specified):
+        - If the meal has stew options → KEEP IT (different stew today is fine).
+        - If the meal has NO stew options → exclude it.
+
+    • A meal is also excluded if EVERY one of its stew options has been eaten recently.
+    """
+    meal_name_lower  = meal.name.lower()
+    stew_options     = list(meal.stew_options.all())
+
+    for base_term, stew_term in recent_pairs:
+        base_matches = _text_has_term(base_term, meal_name_lower)
+        if not base_matches:
+            continue
+
+        # Base meal matches the recent entry
+        if not stew_options:
+            # No stew choices → this is a standalone meal → exclude it
+            return True
+
+        if stew_term is None:
+            # User mentioned the base only (e.g. "Rice") → keep if stew options exist
+            continue
+
+        # User specified both base + stew (e.g. "Rice and Beans")
+        # Exclude ONLY if the specific stew matches one of the stew options
+        for stew in stew_options:
+            if _text_has_term(stew_term, stew.name.lower()):
+                # That exact combo was eaten — but we still keep the meal
+                # unless ALL stews have been eaten. We handle that below.
+                break
+
+    # Final pass: exclude if ALL stew options have been eaten recently
+    if stew_options:
+        excluded_stew_names = _get_excluded_stew_names(meal, recent_pairs)
+        if len(excluded_stew_names) >= len(stew_options):
+            return True
+
+    return False
+
+
+def _get_excluded_stew_names(meal, recent_pairs):
+    """
+    Return the set of stew names (lowercased) that the user has eaten recently
+    WITH this meal. These stews will be greyed out in the UI.
+
+    A stew is excluded only when the user ate THIS meal + THIS stew together,
+    i.e. their recent entry has both the base term (matching the meal name) AND
+    the stew term (matching this stew's name).
+
+    If the user typed just "Beans" (no base meal context), we do NOT grey out
+    the Beans stew on the Rice card — because "Beans" alone is ambiguous.
+    """
+    excluded = set()
+    if not recent_pairs:
+        return excluded
+
+    meal_name_lower = meal.name.lower()
+    stew_options    = list(meal.stew_options.all())
+
+    for base_term, stew_term in recent_pairs:
+        if stew_term is None:
+            # Entry like "Rice" — no stew mentioned → nothing to grey out
+            continue
+
+        base_matches = _text_has_term(base_term, meal_name_lower)
+        if not base_matches:
+            continue
+
+        # Base matches — check which stew matches stew_term
+        for stew in stew_options:
+            if _text_has_term(stew_term, stew.name.lower()):
+                excluded.add(stew.name.lower())
+
+    return excluded
+
+
+def _stew_match_score(stew, user_ingredients):
+    """
+    Return how many of the user's ingredients appear in this stew's name/ingredients.
+    Used to sort stews so user-matching ones appear first.
+    """
+    if not user_ingredients:
+        return 0
+    stew_text = f"{stew.name} {stew.ingredients}".lower()
+    return sum(1 for ing in user_ingredients if _text_has_term(ing, stew_text))
+
+
+def _build_meal_entry(meal, user_ingredients, budget_remaining=None, recent_pairs=None):
+    """
+    Build the full context dict for a ComradeMeal card.
+
+    Key improvements over original:
+    - Uses _get_excluded_stew_names / _should_exclude_meal for correct greying.
+    - Sorts stew options so user-ingredient matches float to the top.
+    - Computes match score / savings correctly.
+    """
+    items_list       = meal.get_items() or []
+    savings          = 0
+    items_user_has   = []
+    items_to_buy     = []
+
+    for item in items_list:
+        item_name = item.get('item', '')
+        item_cost = item.get('cost', 0)
+        user_has  = (
+            any(_text_has_term(ing, item_name) for ing in user_ingredients)
+            if user_ingredients else False
+        )
+        if user_has:
+            savings += item_cost
+            items_user_has.append(item)
+        else:
+            items_to_buy.append(item)
+
+    kitchen_user_has = []
+    kitchen_needed   = []
+    for k in meal.get_kitchen_items() or []:
+        if user_ingredients and any(_text_has_term(ing, k) for ing in user_ingredients):
+            kitchen_user_has.append(k)
+        else:
+            kitchen_needed.append(k)
+
+    adjusted_cost = max(0, meal.total_cost_ksh - savings)
+
+    full_text = ' '.join(filter(None, [
+        meal.name,
+        meal.kitchen_items_needed or '',
+        ' '.join(item.get('item', '') for item in items_list),
+    ])).lower()
+
+    matched_ings = (
+        [ing for ing in user_ingredients if _text_has_term(ing, full_text)]
+        if user_ingredients else []
+    )
+    match_ratio = len(matched_ings) / len(user_ingredients) if user_ingredients else 0
+
+    # Stew options
+    all_stews = list(meal.stew_options.all())
+
+    # Which stews are greyed out (eaten recently WITH this meal)
+    excluded_stew_names = _get_excluded_stew_names(meal, recent_pairs or [])
+
+    # Available stews = not recently eaten + (optionally) within remaining budget
+    available_stews = [s for s in all_stews if s.name.lower() not in excluded_stew_names]
+    if budget_remaining is not None:
+        available_stews = [
+            s for s in available_stews
+            if float(s.estimated_cost) <= budget_remaining
+        ]
+
+    # Sort: stews matching user's ingredients first, then alphabetically
+    def stew_sort_key(stew):
+        score = _stew_match_score(stew, user_ingredients)
+        in_excluded = stew.name.lower() in excluded_stew_names
+        # Higher score = higher priority; excluded (greyed) stews go last
+        return (not in_excluded, score, stew.is_featured)
+
+    all_stews_sorted = sorted(all_stews, key=stew_sort_key, reverse=True)
+
+    stews_with_total = [
+        {
+            'stew':          s,
+            'stew_cost':     float(s.estimated_cost),
+            'total_cost':    meal.total_cost_ksh + float(s.estimated_cost),
+            'recently_eaten': s.name.lower() in excluded_stew_names,
+            'user_has_ingredients': _stew_match_score(s, user_ingredients) > 0,
+        }
+        for s in all_stews_sorted
+    ]
+
+    base_recently_eaten = any(
+        _text_has_term(base_term, meal.name.lower())
+        for base_term, _ in (recent_pairs or [])
+    )
+
+    all_stews_excluded = (
+        len(all_stews) > 0 and
+        len(excluded_stew_names) >= len(all_stews)
+    )
+
+    return {
+        'meal':                    meal,
+        'original_cost':           meal.total_cost_ksh,
+        'adjusted_cost':           adjusted_cost,
+        'savings':                 savings,
+        'items_user_has':          items_user_has,
+        'items_to_buy':            items_to_buy,
+        'kitchen_items_user_has':  kitchen_user_has,
+        'kitchen_items_needed':    kitchen_needed,
+        'match_score':             len(matched_ings),
+        'match_ratio':             match_ratio,
+        'match_label': (
+            'full' if match_ratio == 1.0
+            else 'most' if match_ratio >= 0.5
+            else 'some'
+        ),
+        'tier_label':              'default',
+        # Stew data
+        'all_stews':               stews_with_total,
+        'available_stews':         available_stews,
+        'has_stew_options':        len(all_stews) > 0,
+        'excluded_stews':          excluded_stew_names,
+        'suggest_other_stews':     base_recently_eaten and not all_stews_excluded and len(excluded_stew_names) > 0,
+        'all_stews_excluded':      all_stews_excluded,
+    }
+
+
+
 
 def comrade_kitchen(request):
     budget            = request.GET.get('budget', '').strip()
@@ -393,254 +699,7 @@ def comrade_kitchen(request):
     affordable_items  = []
     budget_int        = None
 
-    SYNONYMS = {
-        'mayai': ['eggs', 'egg', 'mayai'],
-        'eggs': ['eggs', 'egg', 'mayai'],
-        'egg': ['eggs', 'egg', 'mayai'],
-        'sukuma': ['sukuma', 'kales', 'sukuma wiki', 'collard'],
-        'sukuma wiki': ['sukuma', 'kales', 'sukuma wiki', 'collard'],
-        'kales': ['sukuma', 'kales', 'sukuma wiki'],
-        'unga': ['maize', 'unga', 'ugali', 'flour', 'corn'],
-        'maize flour': ['maize', 'unga', 'ugali', 'flour', 'corn', 'maize flour'],
-        'maize': ['maize', 'unga', 'ugali', 'flour'],
-        'ugali': ['ugali', 'unga', 'maize', 'maize flour'],
-        'noodles': ['noodles', 'indomie', 'instant'],
-        'indomie': ['noodles', 'indomie', 'instant'],
-        'githeri': ['githeri', 'beans', 'maize'],
-        'dengu': ['ndengu', 'dengu', 'grams', 'green grams'],
-        'ndengu': ['ndengu', 'dengu', 'grams', 'green grams'],
-        'beans': ['beans', 'maharagwe'],
-        'maharagwe': ['beans', 'maharagwe'],
-        'rice': ['rice', 'wali'],
-        'wali': ['rice', 'wali'],
-        'tomatoes': ['tomatoes', 'tomato', 'nyanya'],
-        'tomato': ['tomatoes', 'tomato', 'nyanya'],
-        'nyanya': ['tomatoes', 'tomato', 'nyanya'],
-        'onion': ['onion', 'onions', 'vitunguu'],
-        'onions': ['onion', 'onions', 'vitunguu'],
-        'vitunguu': ['onion', 'onions', 'vitunguu'],
-        'oil': ['oil', 'mafuta', 'cooking oil'],
-        'cooking oil': ['oil', 'mafuta', 'cooking oil'],
-        'mafuta': ['oil', 'mafuta', 'cooking oil'],
-        'cabbage': ['cabbage', 'kabeji'],
-        'kabeji': ['cabbage', 'kabeji'],
-        'potatoes': ['potatoes', 'viazi'],
-        'viazi': ['potatoes', 'viazi'],
-        'salt': ['salt', 'chumvi'],
-        'chumvi': ['salt', 'chumvi'],
-        'water': ['water', 'maji'],
-        'maji': ['water', 'maji'],
-        'chapati': ['chapati', 'chapatti'],
-        'beef': ['beef', 'nyama', "ng'ombe"],
-        'chicken': ['chicken', 'kuku'],
-        'fish': ['fish', 'samaki'],
-        'milk': ['milk', 'maziwa'],
-        'maziwa': ['milk', 'maziwa'],
-        'sugar': ['sugar', 'sukari'],
-        'sukari': ['sugar', 'sukari'],
-        'porridge': ['porridge', 'uji'],
-        'uji': ['porridge', 'uji'],
-    }
 
-    def expand_term(term):
-        t = term.lower().strip()
-        result = {t}
-        result.update(t.split())
-        for key, syns in SYNONYMS.items():
-            if t == key or t in syns:
-                result.update(syns)
-        return result
-
-    def text_contains_ingredient(user_ing, text):
-        text_lower = text.lower()
-        text_clean = (
-            text_lower
-            .replace('(', ' ').replace(')', ' ')
-            .replace(',', ' ').replace('&', ' ')
-        )
-        expanded = expand_term(user_ing)
-        for variant in expanded:
-            if variant in text_lower:
-                return True
-        for word in text_clean.split():
-            word = word.strip()
-            if len(word) < 3:
-                continue
-            for variant in expanded:
-                if variant == word:
-                    return True
-                if len(variant) >= 4 and len(word) >= 4:
-                    if variant in word or word in variant:
-                        return True
-        return False
-
-    def term_matches_text(term, text):
-        """Check if a single term matches any word/phrase in text."""
-        text_lower = text.lower()
-        for variant in expand_term(term):
-            if variant and variant in text_lower:
-                return True
-        return False
-
-    def fuzzy_exclude(meal, recent_terms):
-        """
-         Exclude a meal ONLY when the user recently had this EXACT meal+stew combination.
-    
-         Rules:
-         - "Rice and Beans"   → exclude Rice meal only if Beans stew is also matched
-         - "Rice" alone       → DO NOT exclude Rice meal (user can have it with a different stew)
-         - "Ugali and Mayai"  → exclude Ugali+Eggs combo, but NOT Ugali+Sukuma
-         - No stew options    → exclude on base meal name match alone
-        """
-
-        meal_name_lower = meal.name.lower()
-        stew_options = list(meal.stew_options.all())
-        stew_names = [s.name.lower() for s in stew_options]
-
-        base_matched = any(term_matches_text(term, meal_name_lower) for term in recent_terms)
-
-
-        if not base_matched:
-            return False  # this meal not mentioned at all → keep it
-
-        if not stew_options:
-            return True   # no stew options, standalone meal matched → exclude it
-
-    # Base matched — checks if ANY specific stew was also mentioned
-        for term in recent_terms:
-            for stew_name in stew_names:
-                if term_matches_text(term, stew_name):
-                    return True  # user had this meal + this specific stew → exclude
-
-    # Base matched but NO specific stew matched:
-    # Keep the meal, user can have it with a different stew
-        return False
-
-
-
-    def get_excluded_stew_names(meal, recent_terms):
-        """
-        Return the set of stew names the user recently had with this meal.
-        These will be greyed out in the UI, not hidden.
-        """
-        stew_options = list(meal.stew_options.all())
-        excluded = set()
-        if not recent_terms:
-            return excluded
-        for stew in stew_options:
-            stew_lower = stew.name.lower()
-            for term in recent_terms:
-                if term_matches_text(term, stew_lower):
-                    excluded.add(stew_lower)
-                
-        return excluded
-
-    def build_meal_entry(meal, user_ingredients, budget_remaining=None, recent_terms=None):
-        """Build a full entry dict for a ComradeMeal, including stew options."""
-        items_list = meal.get_items() or []
-        savings = 0
-        items_user_has = []
-        items_to_buy = []
-
-        for item in items_list:
-            item_name = item.get('item', '')
-            item_cost = item.get('cost', 0)
-            user_has = (
-                any(text_contains_ingredient(ing, item_name) for ing in user_ingredients)
-                if user_ingredients else False
-            )
-            if user_has:
-                savings += item_cost
-                items_user_has.append(item)
-            else:
-                items_to_buy.append(item)
-
-        kitchen_user_has = []
-        kitchen_needed = []
-        for k in meal.get_kitchen_items() or []:
-            if user_ingredients and any(text_contains_ingredient(ing, k) for ing in user_ingredients):
-                kitchen_user_has.append(k)
-            else:
-                kitchen_needed.append(k)
-
-        adjusted_cost = max(0, meal.total_cost_ksh - savings)
-
-        full_text = ' '.join(filter(None, [
-            meal.name,
-            meal.kitchen_items_needed or '',
-            ' '.join(item.get('item', '') for item in items_list),
-        ])).lower()
-
-        matched_ings = (
-            [ing for ing in user_ingredients if text_contains_ingredient(ing, full_text)]
-            if user_ingredients else []
-        )
-        match_ratio = len(matched_ings) / len(user_ingredients) if user_ingredients else 0
-
-        # Stew options
-        all_stews = list(meal.stew_options.all())
-
-        # Filter out stews the user recently had with this meal
-        excluded_stews = get_excluded_stew_names(meal, recent_terms) if recent_terms else set()
-        available_stews = [s for s in all_stews if s.name.lower() not in excluded_stews]
-        base_recently_eaten = any(
-            term_matches_text(term, meal.name.lower())
-            for term in (recent_terms or [])
-        )
-        all_stews_excluded = (
-            len(all_stews) > 0 and
-            len(excluded_stews) >= len(all_stews) and
-            base_recently_eaten
-        )
-
-        # Budget-aware stew filtering
-        if budget_remaining is not None:
-            affordable_stews = [
-                s for s in available_stews
-                if float(s.estimated_cost) <= budget_remaining
-            ]
-        else:
-            affordable_stews = available_stews
-
-        # Annotate each stew with total cost (meal base + stew)
-        stews_with_total = [
-            {
-                'stew': s,
-                'stew_cost': float(s.estimated_cost),
-                'total_cost': meal.total_cost_ksh + float(s.estimated_cost),
-                'recently_eaten': s.name.lower() in excluded_stews,
-            }
-            for s in all_stews
-        ]
-
-        return {
-            'meal': meal,
-            'original_cost': meal.total_cost_ksh,
-            'adjusted_cost': adjusted_cost,
-            'savings': savings,
-            'items_user_has': items_user_has,
-            'items_to_buy': items_to_buy,
-            'kitchen_items_user_has': kitchen_user_has,
-            'kitchen_items_needed': kitchen_needed,
-            'match_score': len(matched_ings),
-            'match_ratio': match_ratio,
-            'match_label': (
-                'full' if match_ratio == 1.0
-                else 'most' if match_ratio >= 0.5
-                else 'some'
-            ),
-            'tier_label': 'default',
-            # Stew option data
-            'all_stews': stews_with_total,          # all stews with total cost annotation
-            'available_stews': affordable_stews,    # stews not recently eaten + within budget
-            'has_stew_options': len(all_stews) > 0,
-            'excluded_stews': excluded_stews,
-            'suggest_other_stews': base_recently_eaten and not all_stews_excluded and len(excluded_stews) > 0,
-            'all_stews_excluded': all_stews_excluded,
-        }
-
-
-    # PARSE INPUTS 
     if budget or ingredients_input:
         searched = True
 
@@ -655,20 +714,22 @@ def comrade_kitchen(request):
             except ValueError:
                 pass
 
-        recent_terms = (
-            [r.strip() for r in recent_food.replace(' and ', ',').split(',') if r.strip()]
-            if recent_food else []
-        )
+        # Parse "eaten recently" into structured pairs
+        recent_pairs = _parse_recent_pairs(recent_food)
 
-        # MODE 1: BUDGET ONLY 
+
         if search_mode == 'budget' and budget_int is not None:
             for meal in ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh'):
                 if meal.total_cost_ksh > budget_int:
                     continue
-                if recent_terms and fuzzy_exclude(meal, recent_terms):
+                if recent_pairs and _should_exclude_meal(meal, recent_pairs):
                     continue
                 budget_remaining = budget_int - meal.total_cost_ksh
-                entry = build_meal_entry(meal, [], budget_remaining=budget_remaining, recent_terms=recent_terms)
+                entry = _build_meal_entry(
+                    meal, [],
+                    budget_remaining=budget_remaining,
+                    recent_pairs=recent_pairs,
+                )
                 entry['tier_label'] = 'budget_only'
                 suggested_meals.append(entry)
 
@@ -676,25 +737,28 @@ def comrade_kitchen(request):
                 price_ksh__lte=budget_int
             ).order_by('price_ksh')
 
-        # MODE 2: INGREDIENTS ONLY 
+
         elif search_mode == 'ingredients' and user_ingredients:
             tier1, tier2, tier3 = [], [], []
 
             for meal in ComradeMeal.objects.prefetch_related('stew_options').all():
-                if recent_terms and fuzzy_exclude(meal, recent_terms):
+                if recent_pairs and _should_exclude_meal(meal, recent_pairs):
                     continue
+
                 full_text = ' '.join(filter(None, [
                     meal.name,
                     meal.kitchen_items_needed or '',
                     ' '.join(item.get('item', '') for item in (meal.get_items() or [])),
                 ])).lower()
+
                 matched_ings = [
                     ing for ing in user_ingredients
-                    if text_contains_ingredient(ing, full_text)
+                    if _text_has_term(ing, full_text)
                 ]
                 if not matched_ings:
                     continue
-                entry = build_meal_entry(meal, user_ingredients, recent_terms=recent_terms)
+
+                entry = _build_meal_entry(meal, user_ingredients, recent_pairs=recent_pairs)
                 match_ratio = entry['match_ratio']
                 if match_ratio == 1.0:
                     entry['tier_label'] = 'full_match'
@@ -710,18 +774,23 @@ def comrade_kitchen(request):
                 tier.sort(key=lambda x: x['match_score'], reverse=True)
             suggested_meals = tier1 + tier2 + tier3
 
-        # MODE 3: BUDGET + INGREDIENTS
+
         elif search_mode == 'both':
             tier_a, tier_b, tier_c = [], [], []
 
             for meal in ComradeMeal.objects.prefetch_related('stew_options').all():
-                if recent_terms and fuzzy_exclude(meal, recent_terms):
+                if recent_pairs and _should_exclude_meal(meal, recent_pairs):
                     continue
+
                 budget_remaining = (budget_int - meal.total_cost_ksh) if budget_int else None
-                entry = build_meal_entry(meal, user_ingredients, budget_remaining=budget_remaining, recent_terms=recent_terms)
-                adjusted_cost    = entry['adjusted_cost']
+                entry = _build_meal_entry(
+                    meal, user_ingredients,
+                    budget_remaining=budget_remaining,
+                    recent_pairs=recent_pairs,
+                )
+                adjusted_cost      = entry['adjusted_cost']
                 matched_ings_count = entry['match_score']
-                original_cost    = entry['original_cost']
+                original_cost      = entry['original_cost']
 
                 if budget_int is not None:
                     over_budget_originally = original_cost > budget_int
@@ -755,7 +824,7 @@ def comrade_kitchen(request):
                 if budget_int else []
             )
 
-    # STATIC CONTEXT 
+
     featured_meals = ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh')[:8]
     all_foods = ComradeFood.objects.all().order_by('price_ksh')
     if active_category:
@@ -788,34 +857,35 @@ def comrade_kitchen(request):
     ]
 
     return render(request, 'core/comrade_kitchen.html', {
-        'searched':               searched,
-        'suggested_meals':        suggested_meals,
-        'comrade_food_suggestions': comrade_food_suggestions,
-        'affordable_items':       affordable_items,
-        'featured_meals':         featured_meals,
-        'all_foods':              all_foods,
-        'comrade_foods_display':  comrade_foods_display,
-        'active_category':        active_category,
-        'search_mode':            search_mode,
-        'budget':                 budget,
-        'budget_int':             budget_int,
-        'ingredients_input':      ingredients_input,
-        'recent_food':            recent_food,
-        'tips':                   [],
-        'stock_items':            stock_items,
+        'searched':                  searched,
+        'suggested_meals':           suggested_meals,
+        'comrade_food_suggestions':  comrade_food_suggestions,
+        'affordable_items':          affordable_items,
+        'featured_meals':            featured_meals,
+        'all_foods':                 all_foods,
+        'comrade_foods_display':     comrade_foods_display,
+        'active_category':           active_category,
+        'search_mode':               search_mode,
+        'budget':                    budget,
+        'budget_int':                budget_int,
+        'ingredients_input':         ingredients_input,
+        'recent_food':               recent_food,
+        'tips':                      [],
+        'stock_items':               stock_items,
     })
+
 
 def comrade_food_detail(request, pk):
     food = get_object_or_404(ComradeFood, pk=pk)
     meal = food.meals.prefetch_related('stew_options').first()
     return render(request, 'core/comrade_food_detail.html', {
         'food': food,
-        'meal': meal,  
+        'meal': meal,
     })
-#  handles camera, voice and text input
+
+
 @require_POST
 def ai_scan_ajax(request):
-    from .ai_engine import suggest_from_voice, suggest_meals_from_image, suggest_meals_from_ingredients
     input_type = request.POST.get('input_type')
     try:
         if input_type == 'text':
@@ -834,7 +904,6 @@ def ai_scan_ajax(request):
 
     except Exception as e:
         error_str = str(e)
-        # Clean quota error message
         if '429' in error_str or 'RESOURCE_EXHAUSTED' in error_str:
             return JsonResponse({'error': 'AI is busy right now, free tier limit reached. Please try again in a minute or two.'})
         elif '404' in error_str or 'not found' in error_str.lower():
