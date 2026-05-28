@@ -340,6 +340,7 @@ _SYNONYM_GROUPS = [
     frozenset(['self raising flour', 'self-raising flour']),
     frozenset(['sukuma', 'sukuma wiki', 'kales', 'collard greens', 'collard', 'managu']),
     frozenset(['eggs', 'egg', 'mayai']),
+    frozenset(['maize', 'mahindi']),
     frozenset(['milk', 'maziwa', 'whole milk']),
     frozenset(['cooking oil', 'mafuta', 'vegetable oil', 'oil']),
     frozenset(['onion', 'onions', 'vitunguu']),
