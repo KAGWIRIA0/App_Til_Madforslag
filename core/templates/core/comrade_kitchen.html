@@ -160,16 +160,20 @@
   .ck-meal-card {
     background: var(--white); border-radius: 20px; overflow: hidden;
     border: 1px solid rgba(59,42,26,.08); box-shadow: 0 4px 20px rgba(59,42,26,.06);
-    transition: transform .25s, box-shadow .25s; display: flex; flex-direction: row; min-height: 260px;
+    transition: transform .25s, box-shadow .25s;
+    display: grid; grid-template-columns: 40% 60%; min-height: 440px;
   }
-  .ck-meal-card.reverse { flex-direction: row-reverse; }
+  /* reverse alternating cards: swap column order */
+  .ck-meal-card.reverse { grid-template-columns: 60% 40%; }
+  .ck-meal-card.reverse .ck-meal-img { order: 2; }
+  .ck-meal-card.reverse .ck-meal-body { order: 1; }
   .ck-meal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(59,42,26,.12); }
   .ck-meal-img {
-    width: 260px; flex-shrink: 0; overflow: hidden; background: var(--beige);
+    width: 100%; min-height: 440px; overflow: hidden; background: var(--beige);
     display: flex; align-items: center; justify-content: center; font-size: 3.5rem;
   }
   .ck-meal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .ck-meal-body { flex: 1; padding: 1.6rem; display: flex; flex-direction: column; min-width: 0; }
+  .ck-meal-body { padding: 2rem 2.2rem; display: flex; flex-direction: column; min-width: 0; overflow-y: auto; }
   .ck-meal-name {
     font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600;
     color: var(--brown-dark); margin: 0 0 .4rem; line-height: 1.15;
@@ -264,9 +268,15 @@
   .ck-stock-name { font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); margin: 0 0 2px; }
   .ck-stock-tip { font-family: 'Jost', sans-serif; font-size: 0.75rem; color: rgba(255,252,248,0.55); line-height: 1.45; margin: 0; }
   .ck-stock-price { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-top: 3px; display: block; }
-  @media (max-width: 700px) {
-    .ck-meal-card, .ck-meal-card.reverse { flex-direction: column; }
-    .ck-meal-img { width: 100%; height: 200px; }
+  @media (max-width: 768px) {
+    .ck-meal-card,
+    .ck-meal-card.reverse {
+      grid-template-columns: 1fr !important;
+    }
+    .ck-meal-card.reverse .ck-meal-img { order: 0; }
+    .ck-meal-card.reverse .ck-meal-body { order: 0; }
+    .ck-meal-img { min-height: 240px !important; height: 240px; }
+    .ck-meal-body { padding: 1.4rem 1.2rem; }
   }
   @media (max-width: 768px) {
     .ck-hero { min-height: 100svh; padding: 60px 20px; }
@@ -274,6 +284,13 @@
     .ck-stats { gap: 20px; }
   }
   @media (min-width: 769px) { .ck-hero { min-height: 70vh; } }
+  .ck-stew-guide-note {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: rgba(196,154,60,0.07); border: 1px solid rgba(196,154,60,0.25);
+    border-radius: 10px; padding: 0.6rem 0.9rem; margin-bottom: 0.75rem;
+    font-family: 'Jost', sans-serif; font-size: 0.9rem; color: var(--text-mid); line-height: 1.5;
+  }
+  .ck-stew-guide-note strong { color: var(--brown-dark); }
 </style>
 {% endblock %}
 
@@ -289,7 +306,7 @@
         <h1>Eat Well, Even on a<br><em>Student Budget.</em></h1>
         <p class="ck-hero-desc">
           Search by what you can spend, by what's already in your kitchen,
-          or both — and never eat the same thing two days in a row.
+          or both and never eat the same thing two days in a row.
         </p>
         <div class="ck-stats">
           <div>
@@ -412,7 +429,7 @@
 
             <!-- Tier badge -->
             {% if entry.tier_label == 'ingredients_unlock' %}
-            <span class="ck-tier-badge ingredients-unlock">Your ingredients unlock this!</span>
+            <span class="ck-tier-badge ingredients-unlock">✨ Your ingredients unlock this!</span>
             {% elif entry.tier_label == 'within_budget_match' or entry.tier_label == 'full_match' or entry.tier_label == 'most_match' %}
             <span class="ck-tier-badge within-budget-match">✓ Matches your ingredients</span>
             {% elif entry.tier_label == 'budget_only' %}
@@ -498,6 +515,12 @@
               </span>
               {% endif %}
             </p>
+            {% if meal.comrade_food %}
+            <div class="ck-stew-guide-note">
+              <i class="bi bi-info-circle" style="color:var(--gold);flex-shrink:0;margin-top:1px;"></i>
+              <span> Click <strong>MORE ON..</strong> at the bottom to explore full recipes, images, and cooking steps for each stew option.</span>
+            </div>
+            {% endif %}
             <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
               {% for s in entry.all_stews %}
               <div class="ck-stew-row
@@ -717,7 +740,7 @@
       <div class="ck-stock-grid">
         {% for s in stock_items %}
         <div class="ck-stock-card">
-          <div class="ck-stock-icon">🛒</div>
+          <div class="ck-stock-icon"></div>
           <div>
             <p class="ck-stock-name">{{ s.item }}
               <small style="font-weight:400;opacity:.6;font-size:.75rem;">({{ s.qty }})</small>
@@ -780,7 +803,6 @@ function setMode(tab) {
     ingredientsField.style.display = '';
   }
 }
-
 
 document.getElementById('ck-form').addEventListener('submit', function () {
   const mode             = document.getElementById('ck-mode-input').value;
