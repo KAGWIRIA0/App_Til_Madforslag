@@ -163,7 +163,6 @@
     transition: transform .25s, box-shadow .25s;
     display: grid; grid-template-columns: 40% 60%; min-height: 440px;
   }
-  /* reverse alternating cards: swap column order */
   .ck-meal-card.reverse { grid-template-columns: 60% 40%; }
   .ck-meal-card.reverse .ck-meal-img { order: 2; }
   .ck-meal-card.reverse .ck-meal-body { order: 1; }
@@ -247,16 +246,38 @@
     padding: 0.5rem 0.85rem; border-radius: 10px; background: var(--cream);
     border: 1px solid rgba(196,154,60,0.2); transition: background 0.15s;
   }
-  /* Greyed-out: eaten recently */
   .ck-stew-faded {
     background: rgba(59,42,26,0.04) !important;
     border-color: rgba(59,42,26,0.1) !important;
     opacity: 0.45;
   }
-  /* Highlighted: user has the ingredients for this stew */
   .ck-stew-highlight {
     background: rgba(196,154,60,0.09) !important;
     border-color: rgba(196,154,60,0.45) !important;
+  }
+  /* Top-pick stew: bolder gold border */
+  .ck-stew-top-pick {
+    background: rgba(196,154,60,0.13) !important;
+    border: 2px solid var(--gold) !important;
+  }
+  /* Budget tick badge */
+  .ck-budget-tick {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 700;
+    color: #15803d; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 50px; padding: 2px 8px; white-space: nowrap;
+  }
+  .ck-budget-over {
+    display: inline-flex; align-items: center;
+    font-family: 'Jost', sans-serif; font-size: 0.63rem;
+    color: var(--text-mid); opacity: 0.55; white-space: nowrap;
+  }
+  /* Base meal budget tick (shown next to the price) */
+  .ck-base-tick {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'Jost', sans-serif; font-size: 0.68rem; font-weight: 700;
+    color: #15803d; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 50px; padding: 3px 10px;
   }
 
   .ck-stock-card {
@@ -342,7 +363,7 @@
                 data-mode="both" onclick="setMode(this)">Both</button>
             </div>
 
-            <!-- Budget field (hidden when not needed) -->
+            <!-- Budget field -->
             <div id="field-budget" {% if search_mode == 'ingredients' %}style="display:none;"{% endif %}>
               <label class="ck-label" for="input-budget">Your budget (Ksh)</label>
               <input type="number" name="budget" id="input-budget" class="ck-input"
@@ -351,7 +372,7 @@
                 min="0">
             </div>
 
-            <!-- Ingredients field (hidden when not needed) -->
+            <!-- Ingredients field -->
             <div id="field-ingredients" {% if search_mode == 'budget' or not search_mode %}style="display:none;"{% endif %}>
               <label class="ck-label" for="input-ingredients">What do you already have?</label>
               <input type="text" name="ingredients" id="input-ingredients" class="ck-input"
@@ -368,7 +389,7 @@
               placeholder="e.g. Rice and Beans, Ugali and Sukuma…"
               value="{{ recent_food|default:'' }}">
             <p style="font-family:'Jost',sans-serif;font-size:.72rem;color:var(--text-mid);margin-top:-10px;margin-bottom:14px;line-height:1.5;">
-              Use <strong>"Rice and Beans"</strong> to exclude that specific combo, or just <strong>"Rice"</strong> to suggest a different stew for Rice today.
+              Use <strong>"Rice and Beans"</strong> to exclude that specific combo only, or just <strong>"Rice"</strong> to avoid Rice entirely today.
             </p>
 
             <button type="submit" class="ck-btn">Find My Meal →</button>
@@ -448,7 +469,7 @@
             <h3 class="ck-meal-name">{{ meal.name }}</h3>
             <p class="ck-meal-desc">{{ meal.description }}</p>
 
-            <!-- Price row -->
+            <!-- Price row with budget tick for base meal -->
             <div class="ck-meal-meta">
               {% if entry.savings > 0 %}
               <span style="font-family:'Jost',sans-serif;font-size:.82rem;text-decoration:line-through;opacity:.5;color:var(--text-mid);">
@@ -458,11 +479,15 @@
               {% else %}
               <span class="ck-meal-meta-price">Ksh {{ meal.total_cost_ksh }}</span>
               {% endif %}
+              {# SCENARIO 1: Tick when base meal itself is within budget (no stew needed) #}
+              {% if budget_int and entry.base_within_budget %}
+              <span class="ck-base-tick">✓ Within Ksh {{ budget_int }}</span>
+              {% endif %}
             </div>
 
             {% if entry.savings > 0 %}
             <p class="ck-savings-badge">
-              You save Ksh {{ entry.savings }} — you already have some ingredients!
+              💰 You save Ksh {{ entry.savings }} — you already have some ingredients!
             </p>
             {% endif %}
 
@@ -511,42 +536,66 @@
               Eat it with
               {% if ingredients_input %}
               <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">
-                — highlighted stews match your ingredients
+                — ⭐ marks your top pick &nbsp;·&nbsp; ★ you have ingredients for it
+              </span>
+              {% endif %}
+              {% if budget_int %}
+              <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">
+                — ✓ within Ksh {{ budget_int }}
               </span>
               {% endif %}
             </p>
+
             {% if meal.comrade_food %}
             <div class="ck-stew-guide-note">
               <i class="bi bi-info-circle" style="color:var(--gold);flex-shrink:0;margin-top:1px;"></i>
-              <span> Click <strong>MORE ON..</strong> at the bottom to explore full recipes, images, and cooking steps for each stew option.</span>
+              <span> Click <strong>MORE ON..</strong> below to see full recipes, images, and cooking steps for each stew.</span>
             </div>
             {% endif %}
+
             <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
               {% for s in entry.all_stews %}
               <div class="ck-stew-row
                 {% if s.recently_eaten %}ck-stew-faded
+                {% elif s.top_pick %}ck-stew-top-pick
                 {% elif s.user_has_ingredients %}ck-stew-highlight
                 {% endif %}">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
-                  {% if s.user_has_ingredients and not s.recently_eaten %}
+                  {# Top pick star (only when ingredient mode is active) #}
+                  {% if s.top_pick and ingredients_input %}
+                  <span style="color:var(--gold);font-size:0.85rem;font-weight:700;" title="Top pick based on your ingredients">⭐</span>
+                  {% elif s.user_has_ingredients and not s.recently_eaten %}
                   <span style="color:var(--gold);font-size:0.8rem;" title="You have ingredients for this">★</span>
                   {% endif %}
-                  <span style="font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:{% if s.user_has_ingredients and not s.recently_eaten %}600{% else %}500{% endif %};color:var(--text-dark);">
-                    {{ s.stew.name }}
-                  </span>
-                  {% if s.recently_eaten %}
-                  <span style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;flex-shrink:0;">
-                    had recently
-                  </span>
-                  {% endif %}
+                  <div style="min-width:0;">
+                    <span style="font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:{% if s.top_pick or s.user_has_ingredients and not s.recently_eaten %}600{% else %}500{% endif %};color:var(--text-dark);">
+                      {{ s.stew.name }}
+                    </span>
+                    {% if s.top_pick and ingredients_input %}
+                    <span style="font-family:'Jost',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-left:5px;">Top Pick</span>
+                    {% endif %}
+                    {% if s.recently_eaten %}
+                    <span style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;display:block;">
+                      had recently
+                    </span>
+                    {% endif %}
+                  </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
+                <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;">
                   <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--text-mid);">
                     +Ksh {{ s.stew_cost|floatformat:0 }}
                   </span>
                   <span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);">
                     Ksh {{ s.total_cost|floatformat:0 }}
                   </span>
+                  {# SCENARIO 1: budget tick per stew combo #}
+                  {% if budget_int %}
+                    {% if s.stew_affordable and not s.recently_eaten %}
+                    <span class="ck-budget-tick">✓</span>
+                    {% elif not s.stew_affordable %}
+                    <span class="ck-budget-over">over</span>
+                    {% endif %}
+                  {% endif %}
                 </div>
               </div>
               {% endfor %}
@@ -556,7 +605,9 @@
             <!-- Card actions -->
             <div class="ck-card-actions">
               {% if meal.comrade_food %}
-              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-collapse-btn">
+              {# Pass search context to detail page so it can show top-pick info #}
+              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}?ingredients={{ ingredients_input|urlencode }}&budget={{ budget }}&recent={{ recent_food|urlencode }}&mode={{ search_mode }}"
+                 class="ck-collapse-btn">
                 MORE ON..
               </a>
               {% endif %}
@@ -775,7 +826,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function setMode(tab) {
-  // Deactivate all tabs
   document.querySelectorAll('.ck-mode-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
 
@@ -790,15 +840,12 @@ function setMode(tab) {
   if (mode === 'budget') {
     budgetField.style.display      = '';
     ingredientsField.style.display = 'none';
-    // Clear ingredients so it is never submitted in budget mode
     if (ingredientsInput) ingredientsInput.value = '';
   } else if (mode === 'ingredients') {
     budgetField.style.display      = 'none';
     ingredientsField.style.display = '';
-    // Clear budget so it is never submitted in ingredients mode
     if (budgetInput) budgetInput.value = '';
   } else {
-    // Both — show everything, keep whatever the user typed
     budgetField.style.display      = '';
     ingredientsField.style.display = '';
   }
