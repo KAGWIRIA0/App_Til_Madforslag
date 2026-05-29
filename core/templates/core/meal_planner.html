@@ -1,8 +1,6 @@
 {% load static %}
 
-
 <style>
-  /* Outer box */
   .planner-section {
     padding: 4rem 0;
     border-top: 1px solid rgba(196,154,60,.15);
@@ -28,133 +26,133 @@
   }
   .mp-week-btn:hover { background: var(--gold); color: var(--white); }
 
-  /* Grid */
-  .mp-grid {
+  /* Row-based table */
+  .mp-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid rgba(196,154,60,.15); }
+  .mp-rtable {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: .4rem;
+    grid-template-columns: 76px repeat(7, minmax(118px, 1fr));
+    min-width: 680px;
   }
-  @media (max-width: 960px) { .mp-grid { grid-template-columns: repeat(4, minmax(148px,1fr)); } }
-  @media (max-width: 540px) { .mp-grid { grid-template-columns: repeat(2, minmax(148px,1fr)); } }
 
-  /* Day card */
-  .mp-day {
-    background: var(--cream);
-    border-radius: 18px;
-    padding: 1.1rem 1rem;
-    border: 1.5px solid transparent;
-    min-width: 130px;
-    transition: border-color .2s;
+  /* Universal cell border */
+  .mp-rc {
+    border-right: 1px solid rgba(196,154,60,.1);
+    border-bottom: 1px solid rgba(196,154,60,.1);
   }
-  .mp-day.is-today {
-    border-color: var(--gold);
-    background: rgba(196,154,60,.06);
+  .mp-rc:nth-child(8n)   { border-right: none; }
+  .mp-rc:nth-child(n+25) { border-bottom: none; }
+
+  /* Header row */
+  .mp-rth { padding: 10px 8px; background: rgba(196,154,60,.05); text-align: center; }
+  .mp-rth-corner { background: rgba(196,154,60,.05); }
+  .mp-rth.is-today { background: rgba(196,154,60,.1); }
+  .mp-rth-name {
+    font-family: 'Jost', sans-serif; font-size: .65rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 3px;
   }
-  .mp-day-name {
-    font-family: 'Jost', sans-serif;
-    font-size: .75rem; font-weight: 700;
-    letter-spacing: .14em; text-transform: uppercase;
-    color: var(--text-mid);
-  }
-  .mp-day-date {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.75rem; font-weight: 700;
+  .mp-rth-date {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 700;
     color: var(--text-dark); line-height: 1;
-    margin: 3px 0 12px;
   }
-  .mp-day.is-today .mp-day-date { color: var(--gold); }
+  .mp-rth.is-today .mp-rth-date { color: var(--gold); }
+  .mp-today-pip {
+    font-family: 'Jost', sans-serif; font-size: .55rem; font-weight: 800;
+    letter-spacing: .1em; color: var(--gold); margin-top: 2px;
+  }
 
-  /* Slot */
-  .mp-slot { margin-bottom: 9px; }
-  .mp-slot-label {
-    font-family: 'Jost', sans-serif;
-    font-size: .7rem; font-weight: 700;
-    letter-spacing: .1em; text-transform: uppercase;
-    color: var(--text-mid); opacity: .75;
-    display: flex; align-items: center; gap: 5px;
-    margin-bottom: 4px;
+  /* Row label */
+  .mp-row-label {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 10px 4px; gap: 6px;
+    background: rgba(196,154,60,.03);
   }
-  .mp-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .mp-rl-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .mp-rl-text {
+    font-family: 'Jost', sans-serif; font-size: .6rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--text-mid);
+    writing-mode: vertical-rl; transform: rotate(180deg);
+  }
+
+  /* Day cell */
+  .mp-rcell {
+    padding: 7px 7px 6px;
+    display: flex; flex-direction: column; gap: 4px; min-height: 72px;
+  }
+  .mp-rcell.is-today { background: rgba(196,154,60,.04); }
+
+  /* Meal pill */
+  .mp-pill {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--white);
+    border: 1.5px solid rgba(196,154,60,.22);
+    border-radius: 8px; padding: 4px 5px 4px 8px;
+    cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    position: relative; min-height: 28px;
+  }
+  .mp-pill:hover { border-color: var(--gold); box-shadow: 0 2px 10px rgba(196,154,60,.12); }
+  .mp-pill-name {
+    font-family: 'Jost', sans-serif; font-size: .82rem; font-weight: 600;
+    color: var(--text-dark); flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mp-pill-del {
+    background: none; border: none; color: rgba(128,100,70,.3);
+    font-size: .82rem; cursor: pointer; padding: 0 2px; line-height: 1;
+    transition: color .15s; flex-shrink: 0;
+  }
+  .mp-pill-del:hover { color: #c0392b; }
 
   /* Add button */
-  .mp-add-btn {
-    width: 100%;
-    border: 1.5px dashed rgba(196,154,60,.35);
-    background: transparent; border-radius: 10px;
-    padding: 7px 10px;
-    font-family: 'Jost', sans-serif; font-size: .82rem;
-    color: rgba(196,154,60,.65); cursor: pointer;
-    text-align: left; display: flex; align-items: center; gap: 6px;
-    transition: all .2s;
+  .mp-cell-add {
+    display: flex; align-items: center; gap: 3px;
+    background: none; border: 1.5px dashed rgba(196,154,60,.28);
+    border-radius: 7px; padding: 3px 8px;
+    font-family: 'Jost', sans-serif; font-size: .74rem;
+    color: rgba(196,154,60,.55); cursor: pointer; width: 100%; transition: all .2s;
   }
-  .mp-add-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,154,60,.04); }
-
-  /* Meal chip */
-  .mp-chip {
-    width: 100%; background: var(--white);
-    border: 1.5px solid rgba(196,154,60,.22);
-    border-radius: 11px; padding: 7px 9px;
-    display: flex; align-items: flex-start; gap: 5px;
-    cursor: pointer; transition: all .2s;
-    position: relative;
-  }
-  .mp-chip:hover { border-color: var(--gold); box-shadow: 0 4px 18px rgba(196,154,60,.12); }
-  .mp-chip-inner { flex: 1; min-width: 0; }
-  .mp-chip-name {
-    font-family: 'Jost', sans-serif; font-size: .88rem; font-weight: 600;
-    color: var(--text-dark);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
-  }
-  .mp-chip-links { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
-  .mp-link {
-    font-family: 'Jost', sans-serif; font-size: .66rem; font-weight: 600;
-    color: var(--gold); text-decoration: none;
-    padding: 2px 7px; border: 1px solid rgba(196,154,60,.32); border-radius: 50px;
-    display: inline-flex; align-items: center; gap: 3px;
-    transition: all .15s; white-space: nowrap;
-  }
-  .mp-link:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
-  .mp-link.comrade { color: var(--brown-dark); border-color: rgba(44,26,14,.22); }
-  .mp-link.comrade:hover { background: var(--brown-dark); color: var(--white); border-color: var(--brown-dark); }
-
-  /* Delete button */
-  .mp-del-btn {
-    background: none; border: none; cursor: pointer;
-    color: rgba(128,100,70,.3); font-size: .9rem;
-    padding: 0; transition: color .15s; flex-shrink: 0; margin-top: 1px;
-  }
-  .mp-del-btn:hover { color: #c0392b; }
+  .mp-cell-add:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,154,60,.04); }
 
   /* Inline delete confirm */
   .mp-del-confirm {
-    position: absolute; inset: 0;
-    background: rgba(255,252,248,.96);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    z-index: 10;
-    animation: mp-fadein .15s ease;
+    position: absolute; inset: 0; background: rgba(255,252,248,.97);
+    border-radius: 7px; display: flex; align-items: center;
+    justify-content: center; gap: 5px; z-index: 10;
+    animation: mpanim .12s ease;
   }
-  @keyframes mp-fadein { from { opacity:0; } to { opacity:1; } }
-  .mp-del-confirm-msg {
-    font-family: 'Jost', sans-serif; font-size: .78rem;
-    font-weight: 600; color: var(--text-dark);
+  @keyframes mpanim { from { opacity:0; } to { opacity:1; } }
+  .mp-del-msg { font-family:'Jost',sans-serif; font-size:.7rem; font-weight:600; color:var(--text-dark); }
+  .mp-del-y { background:#c0392b; color:#fff; border:none; border-radius:50px; padding:2px 9px; font-family:'Jost',sans-serif; font-size:.68rem; font-weight:600; cursor:pointer; }
+  .mp-del-n { background:var(--cream); color:var(--text-mid); border:1px solid rgba(128,100,70,.25); border-radius:50px; padding:2px 7px; font-family:'Jost',sans-serif; font-size:.68rem; font-weight:600; cursor:pointer; }
+
+  /* Popover */
+  #mpPop {
+    display: none; position: fixed;
+    background: var(--white); border: 1.5px solid rgba(196,154,60,.28);
+    border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 8px 36px rgba(59,42,26,.16);
+    z-index: 800; width: 210px;
   }
-  .mp-del-yes {
-    background: #c0392b; color: #fff; border: none;
-    border-radius: 50px; padding: 4px 12px;
+  #mpPopName {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700;
+    color: var(--brown-dark); margin-bottom: 9px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mp-pop-links { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+  .mp-pop-link {
+    font-family: 'Jost', sans-serif; font-size: .78rem; font-weight: 600;
+    color: var(--gold); text-decoration: none;
+    padding: 5px 12px; border: 1px solid rgba(196,154,60,.3);
+    border-radius: 50px; text-align: center; transition: all .15s;
+  }
+  .mp-pop-link:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
+  .mp-pop-edit {
+    width: 100%; background: rgba(59,42,26,.06); border: none;
+    border-radius: 50px; padding: 5px 12px;
     font-family: 'Jost', sans-serif; font-size: .74rem; font-weight: 600;
-    cursor: pointer; transition: background .15s;
+    color: var(--text-mid); cursor: pointer; transition: background .15s;
   }
-  .mp-del-yes:hover { background: #a93226; }
-  .mp-del-no {
-    background: var(--cream); color: var(--text-mid);
-    border: 1px solid rgba(128,100,70,.25);
-    border-radius: 50px; padding: 4px 10px;
-    font-family: 'Jost', sans-serif; font-size: .74rem; font-weight: 600;
-    cursor: pointer;
-  }
+  .mp-pop-edit:hover { background: rgba(59,42,26,.12); }
 
   /* Legend */
   .mp-legend {
@@ -164,7 +162,7 @@
     font-family: 'Jost', sans-serif; font-size: .8rem; color: var(--text-mid);
   }
   .mp-legend-item { display: flex; align-items: center; gap: 6px; }
-
+  .mp-ldot { width: 6px; height: 6px; border-radius: 50%; }
   .mp-clear-btn {
     font-family: 'Jost', sans-serif; font-size: .75rem;
     background: none; border: none; cursor: pointer;
@@ -172,44 +170,31 @@
   }
   .mp-clear-btn:hover { opacity: 1; }
 
-  /* MODAL */
-  #mpOverlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(26,18,9,.48); z-index: 500;
-  }
+  /* Modal */
+  #mpOverlay { display:none; position:fixed; inset:0; background:rgba(26,18,9,.48); z-index:500; }
   #mpModal {
-    display: none; position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 600; padding: 1rem;
-    justify-content: center;
+    display:none; position:fixed; bottom:0; left:0; right:0;
+    z-index:600; padding:1rem; justify-content:center;
   }
   .mp-modal-box {
-    background: var(--white);
-    border-radius: 26px 26px 18px 18px;
-    padding: 2.2rem 2rem 1.8rem;
-    width: 100%; max-width: 500px;
-    box-shadow: 0 -10px 56px rgba(26,18,9,.2);
-    border: 1px solid rgba(196,154,60,.18);
+    background:var(--white); border-radius:26px 26px 18px 18px;
+    padding:2.2rem 2rem 1.8rem; width:100%; max-width:500px;
+    box-shadow:0 -10px 56px rgba(26,18,9,.2); border:1px solid rgba(196,154,60,.18);
   }
   .mp-tab {
-    font-family: 'Jost', sans-serif; font-size: .85rem; font-weight: 600;
-    padding: 7px 16px; border-radius: 50px;
-    border: 1.5px solid rgba(196,154,60,.32);
-    background: transparent; color: var(--text-mid);
-    cursor: pointer; transition: all .2s;
+    font-family:'Jost',sans-serif; font-size:.85rem; font-weight:600;
+    padding:7px 16px; border-radius:50px;
+    border:1.5px solid rgba(196,154,60,.32);
+    background:transparent; color:var(--text-mid); cursor:pointer; transition:all .2s;
   }
-  .mp-tab.active { background: var(--gold); border-color: var(--gold); color: var(--white); }
+  .mp-tab.active { background:var(--gold); border-color:var(--gold); color:var(--white); }
 
-  /* Clear-week confirm mini modal */
+  /* Clear-week confirm */
   #mpClearConfirm {
-    display: none; position: fixed;
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-    background: var(--white); border-radius: 20px;
-    padding: 2rem 2rem 1.6rem;
-    width: 320px; max-width: 90vw;
-    box-shadow: 0 12px 60px rgba(26,18,9,.22);
-    border: 1px solid rgba(196,154,60,.18);
-    z-index: 700; text-align: center;
+    display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:var(--white); border-radius:20px; padding:2rem 2rem 1.6rem;
+    width:320px; max-width:90vw; box-shadow:0 12px 60px rgba(26,18,9,.22);
+    border:1px solid rgba(196,154,60,.18); z-index:700; text-align:center;
   }
 </style>
 
@@ -225,7 +210,8 @@
           <p class="section-label"><i class="bi bi-calendar3"></i> Weekly Planner</p>
           <h2 class="section-heading" style="font-size:clamp(2rem,4.5vw,3rem);margin-top:.4rem;">Your Meal Calendar</h2>
           <p class="section-subheading mt-1" style="font-size:.95rem;">
-            Plan each day. Every saved meal links to <em>Browse</em>, <em>Find</em> and <em>Comrade Kitchen/ Low Cost Meals</em>.
+            Plan each day. Add as many items per meal slot as you like.
+            Click any saved meal to see Browse &middot; Find &middot; Comrade links.
           </p>
         </div>
         <div class="d-flex flex-column align-items-end gap-2">
@@ -240,37 +226,47 @@
         </div>
       </div>
 
-      <!-- Calendar grid -->
-      <div class="mp-grid" id="mpGrid" role="grid" aria-label="Weekly meal planner"></div>
+      <!-- Row-based grid (JS renders into #mpGrid) -->
+      <div class="mp-table-wrap">
+        <div class="mp-rtable" id="mpGrid" role="grid" aria-label="Weekly meal planner"></div>
+      </div>
 
       <!-- Legend -->
       <div class="mp-legend">
-        <div class="mp-legend-item"><div class="mp-dot" style="background:rgba(196,154,60,.75)"></div>Breakfast</div>
-        <div class="mp-legend-item"><div class="mp-dot" style="background:#8B6347"></div>Lunch</div>
-        <div class="mp-legend-item"><div class="mp-dot" style="background:#3B2A1A"></div>Dinner</div>
-        <div style="margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-          <span  style="cursor:default;">Browse,</span>
-          <span  style="cursor:default;">Find,</span>
-          <span  style="cursor:default;"> and Comrade(Low cost meals)</span>
-          <span style="font-size:.75rem;color:var(--text-mid);">appear on saved meals</span>
+        <div class="mp-legend-item"><div class="mp-ldot" style="background:rgba(196,154,60,.75)"></div>Breakfast</div>
+        <div class="mp-legend-item"><div class="mp-ldot" style="background:#8B6347"></div>Lunch</div>
+        <div class="mp-legend-item"><div class="mp-ldot" style="background:#3B2A1A"></div>Dinner</div>
+        <div style="margin-left:auto;font-size:.78rem;color:var(--text-mid);">
+          Click a meal to open Browse &middot; Find &middot; Comrade links
         </div>
       </div>
 
-    </div><!-- /.planner-box -->
+    </div>
   </div>
 </section>
 
 
-<!-- MEAL ENTRY MODAL -->
+<!-- POPOVER -->
+<div id="mpPop">
+  <div id="mpPopName"></div>
+  <div class="mp-pop-links">
+    <a id="mpPopBrowse"  class="mp-pop-link" target="_blank">Browse</a>
+    <a id="mpPopFind"    class="mp-pop-link" target="_blank">Find</a>
+    <a id="mpPopComrade" class="mp-pop-link" target="_blank">Comrade</a>
+  </div>
+  <button id="mpPopEdit" class="mp-pop-edit">Edit name</button>
+</div>
+
+
+<!-- ADD / EDIT MODAL -->
 <div id="mpOverlay" onclick="mpClose()"></div>
 <div id="mpModal">
   <div class="mp-modal-box">
-
     <div class="d-flex justify-content-between align-items-start mb-3">
       <div>
         <p style="font-family:'Jost',sans-serif;font-size:.7rem;font-weight:700;
                   letter-spacing:.14em;text-transform:uppercase;color:var(--text-mid);margin:0 0 3px;">
-          Add / Edit meal
+          <span id="mpModalAction">Add meal</span>
         </p>
         <h3 id="mpModalDay"
           style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;
@@ -290,13 +286,13 @@
 
     <input type="text" id="mpInput" class="dc-input"
       style="font-size:1rem;"
-      placeholder="e.g. Ugali and Sukuma, Githeri, Pilau…"
+      placeholder="e.g. Tea, Sweet Potatoes, Ugali and Sukuma..."
       autocomplete="off"
       onkeydown="if(event.key==='Enter') mpSave()">
 
-    <p style="font-family:'Jost',sans-serif;font-size:.78rem;color:var(--text-mid);margin-top:.4rem;line-height:1.6;">
-      Type the meal name. The links will search by the <strong>main dish</strong> and
-      <strong>side/stew</strong> separately so they always find a match.
+    <p style="font-family:'Jost',sans-serif;font-size:.78rem;color:var(--text-mid);
+              margin-top:.4rem;line-height:1.6;">
+      One item at a time &mdash; save, then click <strong>+ Add</strong> again to add another.
     </p>
 
     <div class="d-flex gap-2 mt-3">
@@ -309,74 +305,86 @@
         Cancel
       </button>
     </div>
-
   </div>
 </div>
 
 
 <!-- CLEAR-WEEK CONFIRM -->
 <div id="mpClearConfirm">
-  <div style="font-size:2rem;margin-bottom:.6rem;">🗑️</div>
+  <div style="font-size:2rem;margin-bottom:.6rem;">&#128465;</div>
   <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;
              color:var(--text-dark);margin:0 0 .4rem;">Clear this week?</h4>
   <p style="font-family:'Jost',sans-serif;font-size:.85rem;color:var(--text-mid);
             margin:0 0 1.4rem;line-height:1.6;">
-    All planned meals for this week will be removed. This can't be undone.
+    All planned meals for this week will be removed. This cannot be undone.
   </p>
   <div style="display:flex;gap:10px;justify-content:center;">
     <button onclick="mpClearConfirmed()"
       style="background:#c0392b;color:#fff;border:none;border-radius:50px;
              padding:9px 22px;font-family:'Jost',sans-serif;font-size:.88rem;
-             font-weight:600;cursor:pointer;">
-      Yes, clear it
-    </button>
+             font-weight:600;cursor:pointer;">Yes, clear it</button>
     <button onclick="mpHideClear()"
       style="background:var(--cream);color:var(--text-mid);
              border:1px solid rgba(128,100,70,.25);border-radius:50px;
              padding:9px 18px;font-family:'Jost',sans-serif;font-size:.88rem;
-             font-weight:600;cursor:pointer;">
-      Cancel
-    </button>
+             font-weight:600;cursor:pointer;">Cancel</button>
   </div>
 </div>
 
 
 <script>
 (function () {
-  /* Storage key */
-  const SK = 'dishcraft_mp_v4';
+  const SK = 'dishcraft_mp_v5';
 
-  /* Django URLs (resolved server-side) */
   const U_BROWSE  = "{% url 'browse' %}";
   const U_FIND    = "{% url 'find_dishes' %}";
   const U_COMRADE = "{% url 'comrade_kitchen' %}";
 
-  /* Config */
-  const DAYS  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const SLOTS = ['breakfast','lunch','dinner'];
-  const SLOT_LABEL = {breakfast:'Breakfast', lunch:'Lunch', dinner:'Dinner'};
+  const DAYS       = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const SLOTS      = ['breakfast','lunch','dinner'];
+  const SLOT_LABEL = { breakfast:'Breakfast', lunch:'Lunch', dinner:'Dinner' };
   const DOT_COLOR  = {
-    breakfast:'rgba(196,154,60,.75)',
-    lunch:'#8B6347',
-    dinner:'#3B2A1A'
+    breakfast: 'rgba(196,154,60,.75)',
+    lunch:     '#8B6347',
+    dinner:    '#3B2A1A',
   };
 
-  /* State */
-  let weekOffset = 0, activeDay = null, activeSlot = 'breakfast';
+  let weekOffset  = 0;
+  let activeDay   = null;
+  let activeSlot  = 'breakfast';
+  let activeIndex = null;
+  let activePop   = null;
 
-  /* Storage helpers */
-  const load = () => { try { return JSON.parse(localStorage.getItem(SK)||'{}'); } catch(e){ return {}; } };
+  /* Storage */
+  const load    = () => { try { return JSON.parse(localStorage.getItem(SK)||'{}'); } catch(e){ return {}; } };
   const persist = d => { try { localStorage.setItem(SK, JSON.stringify(d)); } catch(e){} };
-  const getMeal = (d,ds,s) => (d[ds]||{})[s]||'';
-  const setMeal = (d,ds,s,v) => { if(!d[ds])d[ds]={}; d[ds][s]=v; persist(d); };
-  const delMeal = (d,ds,s) => {
-    if(d[ds]){ delete d[ds][s]; if(!Object.keys(d[ds]).length) delete d[ds]; }
+
+  function getMeals(d, ds, slot) {
+    const v = (d[ds]||{})[slot];
+    if (!v) return [];
+    return Array.isArray(v) ? v : [v];
+  }
+  function addMeal(d, ds, slot, name) {
+    if (!d[ds]) d[ds] = {};
+    const a = getMeals(d, ds, slot); a.push(name);
+    d[ds][slot] = a; persist(d);
+  }
+  function editMealAt(d, ds, slot, idx, name) {
+    if (!d[ds]) d[ds] = {};
+    const a = getMeals(d, ds, slot); a[idx] = name;
+    d[ds][slot] = a; persist(d);
+  }
+  function delMealAt(d, ds, slot, idx) {
+    if (!d[ds]) return;
+    const a = getMeals(d, ds, slot); a.splice(idx, 1);
+    if (a.length) { d[ds][slot] = a; }
+    else { delete d[ds][slot]; if (!Object.keys(d[ds]).length) delete d[ds]; }
     persist(d);
-  };
+  }
 
   /* Date helpers */
-  const toISO  = dt => dt.toISOString().slice(0,10);
-  const isToday = ds => toISO(new Date())===ds;
+  const toISO    = dt => dt.toISOString().slice(0,10);
+  const isToday  = ds => toISO(new Date()) === ds;
   const getMonday = off => {
     const n=new Date(), day=n.getDay()||7, m=new Date(n);
     m.setDate(n.getDate()-(day-1)+off*7); m.setHours(0,0,0,0); return m;
@@ -384,38 +392,19 @@
   const fmtRange = m => {
     const e=new Date(m); e.setDate(m.getDate()+6);
     const o={day:'numeric',month:'short'};
-    return m.toLocaleDateString('en-GB',o)+' — '+e.toLocaleDateString('en-GB',{...o,year:'numeric'});
+    return m.toLocaleDateString('en-GB',o)+' - '+e.toLocaleDateString('en-GB',{...o,year:'numeric'});
   };
 
-  const SEPARATORS = /\s+and\s+|\s*&\s*|\s+with\s+|\s+plus\s+|\s*,\s*/i;
+  /* URL builders */
+  const SEP = /\s+and\s+|\s*&\s*|\s+with\s+|\s+plus\s+|\s*,\s*/i;
+  const pts  = n => n.split(SEP).map(p=>p.trim()).filter(Boolean);
+  const browseUrl  = n => U_BROWSE  + '?q='          + encodeURIComponent(pts(n).join(' '));
+  const findUrl    = n => U_FIND    + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&query_type=ingredients';
+  const comradeUrl = n => U_COMRADE + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&mode=ingredients';
 
-  function parseParts(name) {
-    return name.split(SEPARATORS).map(p=>p.trim()).filter(Boolean);
-  }
+  const mk = (tag, cls) => { const e=document.createElement(tag); if(cls) e.className=cls; return e; };
 
-  function browseUrl(name) {
-    const parts = parseParts(name);
-    /* Browse view takes a single ?q= — use all parts joined by space so
-       the ILIKE search picks up dishes whose name contains any of them. */
-    const q = parts.join(' ');
-    return U_BROWSE + '?q=' + encodeURIComponent(q);
-  }
-
-  function findUrl(name) {
-    /* find_dishes splits ?ingredients by comma and scores each dish.
-       Passing each parsed word as a separate ingredient gives the best match. */
-    const parts = parseParts(name);
-    return U_FIND + '?ingredients=' + encodeURIComponent(parts.join(','))
-         + '&query_type=ingredients';
-  }
-
-  function comradeUrl(name) {
-    const parts = parseParts(name);
-    return U_COMRADE + '?ingredients=' + encodeURIComponent(parts.join(','))
-         + '&mode=ingredients';
-  }
-
-  /* Render grid */
+  /* RENDER - row-based grid */
   function render() {
     document.getElementById('mpWeekLabel').textContent = fmtRange(getMonday(weekOffset));
     const data = load();
@@ -423,102 +412,146 @@
     grid.innerHTML = '';
     const mon = getMonday(weekOffset);
 
-    for (let i = 0; i < 7; i++) {
-      const dt  = new Date(mon); dt.setDate(mon.getDate()+i);
-      const ds  = toISO(dt);
-      const tod = isToday(ds);
+    const days = Array.from({length:7}, (_,i) => {
+      const dt = new Date(mon); dt.setDate(mon.getDate()+i);
+      const ds = toISO(dt);
+      return { dt, ds, today: isToday(ds) };
+    });
 
-      const card = document.createElement('div');
-      card.className = 'mp-day' + (tod ? ' is-today' : '');
+    /* Header row: corner + 7 day headers */
+    grid.appendChild(mk('div', 'mp-rc mp-rth mp-rth-corner'));
 
-      card.innerHTML =
-        `<div class="mp-day-name">${DAYS[i]}` +
-        (tod ? ` <span style="color:var(--gold);font-size:.58rem;font-weight:800;letter-spacing:.08em;">TODAY</span>` : '') +
-        `</div>` +
-        `<div class="mp-day-date">${dt.getDate()} ` +
-        `<span style="font-size:1.1rem;font-weight:400;color:var(--text-mid);">`+
-        `${dt.toLocaleDateString('en-GB',{month:'short'})}</span></div>`;
+    days.forEach(({ dt, today }) => {
+      const th = mk('div', 'mp-rc mp-rth' + (today ? ' is-today' : ''));
+      const dayName = DAYS[(dt.getDay()+6)%7];
+      const mo = dt.toLocaleDateString('en-GB', {month:'short'});
+      th.innerHTML =
+        '<div class="mp-rth-name">' + dayName + '</div>' +
+        '<div class="mp-rth-date">' + dt.getDate() +
+          '<span style="font-size:.78rem;font-weight:400;color:var(--text-mid);"> ' + mo + '</span>' +
+        '</div>' +
+        (today ? '<div class="mp-today-pip">TODAY</div>' : '');
+      grid.appendChild(th);
+    });
 
-      SLOTS.forEach(slot => {
-        const meal = getMeal(data, ds, slot);
-        const wrap = document.createElement('div');
-        wrap.className = 'mp-slot';
-        wrap.innerHTML =
-          `<div class="mp-slot-label">` +
-          `<span class="mp-dot" style="background:${DOT_COLOR[slot]}"></span>` +
-          SLOT_LABEL[slot] + `</div>`;
+    /* Slot rows: row label + 7 day cells */
+    SLOTS.forEach(slot => {
 
-        if (meal) {
-          const chip = document.createElement('div');
-          chip.className = 'mp-chip';
-          chip.title = 'Click to edit';
-          chip.innerHTML =
-            `<div class="mp-chip-inner">` +
-              `<span class="mp-chip-name" title="${meal}">${meal}</span>` +
-              `<div class="mp-chip-links">` +
-                `<a href="${browseUrl(meal)}"  class="mp-link"         title="Search dish library">📖 Browse</a>` +
-                `<a href="${findUrl(meal)}"    class="mp-link"         title="Smart ingredient search">🔍 Find</a>` +
-                `<a href="${comradeUrl(meal)}" class="mp-link comrade" title="Low-cost meals">🍲 Comrade</a>` +
-              `</div>` +
-            `</div>` +
-            `<button class="mp-del-btn" title="Remove meal">&#x2715;</button>`;
+      /* Row label */
+      const lbl = mk('div', 'mp-rc mp-row-label');
+      lbl.innerHTML =
+        '<div class="mp-rl-dot" style="background:' + DOT_COLOR[slot] + '"></div>' +
+        '<span class="mp-rl-text">' + SLOT_LABEL[slot] + '</span>';
+      grid.appendChild(lbl);
 
-          /* Delete — show inline confirm */
-          chip.querySelector('.mp-del-btn').addEventListener('click', e => {
+      /* Day cells */
+      days.forEach(({ ds, today }) => {
+        const meals = getMeals(data, ds, slot);
+        const cell  = mk('div', 'mp-rc mp-rcell' + (today ? ' is-today' : ''));
+
+        meals.forEach((meal, idx) => {
+          const pill     = mk('div', 'mp-pill');
+          const nameSpan = mk('span', 'mp-pill-name');
+          nameSpan.title = meal;
+          nameSpan.textContent = meal;
+
+          const delBtn = mk('button', 'mp-pill-del');
+          delBtn.title = 'Remove';
+          delBtn.innerHTML = '&#x2715;';
+
+          pill.appendChild(nameSpan);
+          pill.appendChild(delBtn);
+
+          /* Click meal name -> popover */
+          nameSpan.addEventListener('click', e => {
             e.stopPropagation();
-            if (chip.querySelector('.mp-del-confirm')) return; // already open
-
-            const confirm = document.createElement('div');
-            confirm.className = 'mp-del-confirm';
-            confirm.innerHTML =
-              `<span class="mp-del-confirm-msg">Remove meal?</span>` +
-              `<button class="mp-del-yes">Yes</button>` +
-              `<button class="mp-del-no">No</button>`;
-
-            confirm.querySelector('.mp-del-yes').addEventListener('click', ev => {
-              ev.stopPropagation();
-              const d = load(); delMeal(d, ds, slot); render();
-            });
-            confirm.querySelector('.mp-del-no').addEventListener('click', ev => {
-              ev.stopPropagation();
-              confirm.remove();
-            });
-            chip.style.position = 'relative';
-            chip.appendChild(confirm);
+            showPop(pill, meal, ds, slot, idx);
           });
 
-          /* Edit on chip body click */
-          chip.addEventListener('click', e => {
-            if (!e.target.closest('.mp-del-btn') &&
-                !e.target.closest('.mp-link') &&
-                !e.target.closest('.mp-del-confirm')) {
-              openModal(ds, slot, meal);
-            }
+          /* Delete -> inline confirm */
+          delBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            hidePop();
+            if (pill.querySelector('.mp-del-confirm')) return;
+            const conf = mk('div', 'mp-del-confirm');
+            conf.innerHTML =
+              '<span class="mp-del-msg">Remove?</span>' +
+              '<button class="mp-del-y">Yes</button>' +
+              '<button class="mp-del-n">No</button>';
+            conf.querySelector('.mp-del-y').addEventListener('click', ev => {
+              ev.stopPropagation();
+              delMealAt(load(), ds, slot, idx); render();
+            });
+            conf.querySelector('.mp-del-n').addEventListener('click', ev => {
+              ev.stopPropagation(); conf.remove();
+            });
+            pill.appendChild(conf);
           });
 
-          wrap.appendChild(chip);
-        } else {
-          const btn = document.createElement('button');
-          btn.className = 'mp-add-btn';
-          btn.innerHTML = '<span style="font-size:1.05rem;font-weight:300;line-height:1;">+</span> Add meal';
-          btn.onclick = () => openModal(ds, slot, '');
-          wrap.appendChild(btn);
-        }
+          cell.appendChild(pill);
+        });
 
-        card.appendChild(wrap);
+        /* + Add button */
+        const addBtn = mk('button', 'mp-cell-add');
+        addBtn.innerHTML = '<span style="font-size:.9rem;font-weight:300;line-height:1;">+</span> Add';
+        addBtn.addEventListener('click', () => openModal(ds, slot, '', null));
+        cell.appendChild(addBtn);
+
+        grid.appendChild(cell);
       });
-
-      grid.appendChild(card);
-    }
+    });
   }
 
-  /* Modal open/close */
-  function openModal(ds, slot, existing) {
-    activeDay  = ds; activeSlot = slot;
-    const dt   = new Date(ds + 'T00:00:00');
+  /* POPOVER */
+  function showPop(pillEl, meal, ds, slot, idx) {
+    hidePop();
+    activePop = { ds, slot, idx, meal };
+    const pop = document.getElementById('mpPop');
+    document.getElementById('mpPopName').textContent    = meal;
+    document.getElementById('mpPopBrowse').href         = browseUrl(meal);
+    document.getElementById('mpPopFind').href           = findUrl(meal);
+    document.getElementById('mpPopComrade').href        = comradeUrl(meal);
+    pop.style.visibility = 'hidden';
+    pop.style.display    = 'block';
+    const r  = pillEl.getBoundingClientRect();
+    const pw = pop.offsetWidth;
+    const ph = pop.offsetHeight;
+    let left = r.left;
+    let top  = r.bottom + 6;
+    if (left + pw > window.innerWidth - 8)  left = window.innerWidth - pw - 8;
+    if (top  + ph > window.innerHeight - 8) top  = r.top - ph - 6;
+    pop.style.left       = Math.max(8, left) + 'px';
+    pop.style.top        = Math.max(8, top)  + 'px';
+    pop.style.visibility = 'visible';
+  }
+
+  function hidePop() {
+    document.getElementById('mpPop').style.display = 'none';
+    activePop = null;
+  }
+
+  document.getElementById('mpPopEdit').addEventListener('click', () => {
+    if (!activePop) return;
+    const { ds, slot, idx, meal } = activePop;
+    hidePop();
+    openModal(ds, slot, meal, idx);
+  });
+
+  document.addEventListener('click', e => {
+    const pop = document.getElementById('mpPop');
+    if (pop.style.display !== 'none' && !pop.contains(e.target)) hidePop();
+  });
+
+  /* MODAL */
+  function openModal(ds, slot, existing, idx) {
+    activeDay = ds; activeSlot = slot; activeIndex = idx;
+    const dt = new Date(ds + 'T00:00:00');
     document.getElementById('mpModalDay').textContent =
       dt.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
-    document.querySelectorAll('.mp-tab').forEach(b => b.classList.toggle('active', b.dataset.s===slot));
+    document.getElementById('mpModalAction').textContent =
+      (idx !== null && idx !== undefined) ? 'Edit meal' : 'Add meal';
+    document.querySelectorAll('.mp-tab').forEach(b =>
+      b.classList.toggle('active', b.dataset.s === slot));
     document.getElementById('mpInput').value = existing || '';
     document.getElementById('mpModal').style.display   = 'flex';
     document.getElementById('mpOverlay').style.display = 'block';
@@ -530,28 +563,34 @@
     document.getElementById('mpModal').style.display   = 'none';
     document.getElementById('mpOverlay').style.display = 'none';
     document.body.style.overflow = '';
-    activeDay = null;
+    activeDay = null; activeIndex = null;
   };
   window.mpSlot = s => {
     activeSlot = s;
-    document.querySelectorAll('.mp-tab').forEach(b => b.classList.toggle('active', b.dataset.s===s));
+    document.querySelectorAll('.mp-tab').forEach(b =>
+      b.classList.toggle('active', b.dataset.s === s));
     document.getElementById('mpInput').focus();
   };
   window.mpSave = () => {
     const name = document.getElementById('mpInput').value.trim();
     if (!name || !activeDay) return;
-    const d = load(); setMeal(d, activeDay, activeSlot, name);
+    const d = load();
+    if (activeIndex !== null && activeIndex !== undefined) {
+      editMealAt(d, activeDay, activeSlot, activeIndex, name);
+    } else {
+      addMeal(d, activeDay, activeSlot, name);
+    }
     window.mpClose(); render();
   };
 
-  /* ── Clear-week confirm ── */
+  /* Clear-week */
   window.mpAskClear = () => {
     document.getElementById('mpClearConfirm').style.display = 'block';
-    document.getElementById('mpOverlay').style.display = 'block';
+    document.getElementById('mpOverlay').style.display      = 'block';
   };
   window.mpHideClear = () => {
     document.getElementById('mpClearConfirm').style.display = 'none';
-    document.getElementById('mpOverlay').style.display = 'none';
+    document.getElementById('mpOverlay').style.display      = 'none';
   };
   window.mpClearConfirmed = () => {
     const mon = getMonday(weekOffset), d = load();
@@ -561,10 +600,12 @@
     persist(d); window.mpHideClear(); render();
   };
 
-  /* ── Navigation ── */
+  /* Navigation */
   document.getElementById('mpPrev').addEventListener('click', () => { weekOffset--; render(); });
   document.getElementById('mpNext').addEventListener('click', () => { weekOffset++; render(); });
-  document.addEventListener('keydown', e => { if (e.key==='Escape') { window.mpClose(); window.mpHideClear(); } });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { window.mpClose(); window.mpHideClear(); hidePop(); }
+  });
 
   render();
 })();
