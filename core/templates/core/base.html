@@ -230,12 +230,12 @@
     }
 
     .dish-card-desc {
-  font-family: 'Jost', sans-serif;
-  font-size: 0.95rem;
-  color: var(--text-mid);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
 
     .dish-meta {
       display: flex;
@@ -354,7 +354,7 @@
       box-shadow: 0 2px 8px rgba(59, 42, 26, 0.12);
     }
 
-    /* ── UTILITIES ── */
+    /* UTILITIES  */
     .divider-gold {
       height: 2px;
       background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
@@ -375,7 +375,7 @@
       border-radius: 50px;
     }
 
-    /* ── ANIMATIONS ── */
+    /* ANIMATIONS */
     @keyframes fadeUp {
       from {
         opacity: 0;
@@ -412,12 +412,38 @@
       opacity: 0;
     }
 
-    /* ── RESPONSIVE ── */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
-      .section-heading {
-        font-size: 2.2rem;
+      h1, h2, h3, .section-heading {
+        font-size: clamp(1.8rem, 7vw, 2.5rem) !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        hyphens: auto;
+      }
+    
+      p, .section-subheading, .dish-card-desc {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .container, .row, [class*="col-"] {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+      }
+
+      .btn-gold, .btn-outline-dark-custom, .btn-brown {
+        padding: 0.6rem 1.5rem !important;
+        font-size: 0.8rem !important;
+        width: 100% !important; 
+        text-align: center;
+      }
+
+      .d-flex:not(.navbar-brand):not(.dish-meta) {
+        flex-direction: column !important;
+        gap: 12px !important;
       }
     }
+
   </style>
 
   {% block extra_css %}{% endblock %}
