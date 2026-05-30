@@ -3,18 +3,22 @@
 
 {% block extra_css %}
 <style>
-
-  /* ===== PAGE WRAPPER ===== */
+  /* PAGE WRAPPER */
   .sk-page {
     background: var(--cream);
     min-height: 100vh;
     padding: 0 0 80px;
   }
 
-  /* ===== HEADER — mirrors gym-header exactly ===== */
+  /* HEADER — mirrors gym-header exactly */
   .sk-header {
     padding: 36px 0 0;
     background: var(--cream);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .sk-header-eyebrow {
@@ -52,20 +56,30 @@
     line-height: 1.75;
   }
 
-  /* ===== SECTION TOGGLE PILLS (Skin / Wellness) ===== */
+  /* SECTION TOGGLE PILLS (Skin / Wellness) */
   .sk-section-toggle {
-    display: inline-flex;
+    display: flex;
     background: var(--beige);
+    background-color: #eaddcd;
     border-radius: 50px;
-    padding: 4px;
-    gap: 0;
+    box-sizing: border-box;
+    gap: 15px;
     margin-bottom: 28px;
-    border: 1px solid rgba(59,42,26,0.1);
+    border: 1px solid rgba(59, 42, 26, 0.1);
     overflow-x: auto;
     scrollbar-width: none;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 103%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 8px 16px;
   }
 
-  .sk-section-toggle::-webkit-scrollbar { display: none; }
+  .sk-section-toggle::-webkit-scrollbar {
+    display: none;
+  }
 
   .sk-toggle-pill {
     display: inline-flex;
@@ -91,30 +105,43 @@
   .sk-toggle-pill.active {
     background: var(--white);
     color: var(--brown-dark);
-    box-shadow: 0 2px 10px rgba(59,42,26,0.12);
+    box-shadow: 0 2px 10px rgba(59, 42, 26, 0.12);
   }
 
-  .sk-toggle-pill.inactive:hover { color: var(--brown-dark); }
+  .sk-toggle-pill.inactive:hover {
+    color: var(--brown-dark);
+  }
 
-  /* ===== DIVIDER — mirrors gym-divider ===== */
+  .sk-no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #766e65;
+    font-size: 16px;
+    font-style: italic;
+  }
+
+
+  /* DIVIDER — mirrors gym-divider */
   .sk-divider {
     font-family: 'Jost', sans-serif;
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
+    text-align: center;
     color: var(--text-mid);
+    margin-bottom: 16px;
     opacity: 0.55;
     margin: 6px 0 18px;
     display: block;
   }
 
-  /* ===== SEARCH BAR — mirrors gym-search-bar ===== */
+  /* SEARCH BAR — mirrors gym-search-bar */
   .sk-search-bar {
     display: flex;
     align-items: center;
     background: var(--white);
-    border: 1.5px solid rgba(59,42,26,0.15);
+    border: 1.5px solid rgba(59, 42, 26, 0.15);
     border-radius: 12px;
     padding: 10px 14px;
     gap: 10px;
@@ -124,7 +151,7 @@
 
   .sk-search-bar:focus-within {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(196,154,60,0.1);
+    box-shadow: 0 0 0 3px rgba(196, 154, 60, 0.1);
   }
 
   .sk-search-bar i {
@@ -144,9 +171,12 @@
     color: var(--text-dark);
   }
 
-  .sk-search-input::placeholder { color: var(--text-mid); opacity: 0.5; }
+  .sk-search-input::placeholder {
+    color: var(--text-mid);
+    opacity: 0.5;
+  }
 
-  /* ===== CATEGORY PILLS — mirrors gym cat-pill ===== */
+  /* CATEGORY PILLS — mirrors gym cat-pill */
   .sk-category-row {
     display: flex;
     gap: 8px;
@@ -157,7 +187,7 @@
   .sk-cat-pill {
     padding: 0.5rem 1.2rem;
     border-radius: 50px;
-    border: 1.5px solid rgba(59,42,26,0.15);
+    border: 1.5px solid rgba(59, 42, 26, 0.15);
     text-decoration: none;
     color: var(--text-mid);
     font-family: 'Jost', sans-serif;
@@ -169,10 +199,13 @@
     transition: all 0.2s;
     white-space: nowrap;
     cursor: pointer;
-    border: 1.5px solid rgba(59,42,26,0.15);
+    border: 1.5px solid rgba(59, 42, 26, 0.15);
   }
 
-  .sk-cat-pill:hover { border-color: var(--gold); color: var(--brown-dark); }
+  .sk-cat-pill:hover {
+    border-color: var(--gold);
+    color: var(--brown-dark);
+  }
 
   .sk-cat-pill.active {
     background: var(--brown-dark);
@@ -180,7 +213,7 @@
     border-color: var(--brown-dark);
   }
 
-  /* ===== FOOD CARDS LIST — mirrors gym-foods-list ===== */
+  /* FOOD CARDS LIST — mirrors gym-foods-list */
   .sk-foods-list {
     display: flex;
     flex-direction: column;
@@ -191,14 +224,14 @@
     background: var(--white);
     border-radius: 18px;
     overflow: hidden;
-    border: 1px solid rgba(59,42,26,0.08);
-    box-shadow: 0 2px 12px rgba(59,42,26,0.07);
+    border: 1px solid rgba(59, 42, 26, 0.08);
+    box-shadow: 0 2px 12px rgba(59, 42, 26, 0.07);
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
   .sk-food-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(59,42,26,0.13);
+    box-shadow: 0 8px 28px rgba(59, 42, 26, 0.13);
   }
 
   /* Accent top bar */
@@ -223,7 +256,9 @@
     transition: transform 0.4s ease;
   }
 
-  .sk-food-card:hover .sk-card-image img { transform: scale(1.04); }
+  .sk-food-card:hover .sk-card-image img {
+    transform: scale(1.04);
+  }
 
   .sk-card-emoji-placeholder {
     height: 100%;
@@ -237,7 +272,8 @@
   /* Featured badge */
   .sk-featured-badge {
     position: absolute;
-    top: 12px; right: 12px;
+    top: 12px;
+    right: 12px;
     background: var(--brown-dark);
     color: var(--cream);
     font-family: 'Jost', sans-serif;
@@ -251,7 +287,9 @@
   }
 
   /* Card body */
-  .sk-card-body { padding: 20px 22px 18px; }
+  .sk-card-body {
+    padding: 20px 22px 18px;
+  }
 
   .sk-card-meta-row {
     display: flex;
@@ -341,7 +379,9 @@
     transition: opacity 0.2s;
   }
 
-  .sk-how-toggle:hover { opacity: 0.7; }
+  .sk-how-toggle:hover {
+    opacity: 0.7;
+  }
 
   .sk-how-text {
     display: none;
@@ -349,7 +389,7 @@
     font-size: 0.88rem;
     color: var(--text-mid);
     line-height: 1.65;
-    background: rgba(196,154,60,0.06);
+    background: rgba(196, 154, 60, 0.06);
     border-left: 3px solid var(--gold);
     padding: 10px 12px;
     border-radius: 0 8px 8px 0;
@@ -368,47 +408,140 @@
     text-transform: uppercase;
     padding: 4px 12px;
     border-radius: 50px;
-    background: rgba(196,154,60,0.1);
+    background: rgba(196, 154, 60, 0.1);
     color: var(--brown-dark);
-    border: 1px solid rgba(196,154,60,0.25);
+    border: 1px solid rgba(196, 154, 60, 0.25);
     margin-top: 4px;
   }
 
   /* Skin categories */
-  [data-cat="glow"]        .sk-card-accent { background: linear-gradient(90deg,#e8924a,#c87032,transparent); }
-  [data-cat="glow"]        .sk-card-category { color: #c87032; }
-  [data-cat="hydration"]   .sk-card-accent { background: linear-gradient(90deg,#5a9ea8,#3a7e88,transparent); }
-  [data-cat="hydration"]   .sk-card-category { color: #3a7e88; }
-  [data-cat="clearer"]     .sk-card-accent { background: linear-gradient(90deg,#ba9fcb;,#c39bdc;,transparent); }
-  [data-cat="clearer"]     .sk-card-category { color: #c39bdc;; }
-  [data-cat="aging"]       .sk-card-accent { background: linear-gradient(90deg,#9a6ab8,#7a4a98,transparent); }
-  [data-cat="aging"]       .sk-card-category { color: #7a4a98; }
-  [data-cat="firm"]        .sk-card-accent { background: linear-gradient(90deg,var(--gold-light),var(--gold),transparent); }
-  [data-cat="detox"]       .sk-card-accent { background: linear-gradient(90deg,#905f8c,#81519e;,transparent); }
-  [data-cat="detox"]       .sk-card-category { color: #81519e; }
-  [data-cat="brightening"] .sk-card-accent { background: linear-gradient(90deg,#d4a830,#b07c1a,transparent); }
-  [data-cat="brightening"] .sk-card-category { color: #b07c1a; }
-  [data-cat="sensitive"]   .sk-card-accent { background: linear-gradient(90deg,#e07898,#b84a6a,transparent); }
-  [data-cat="sensitive"]   .sk-card-category { color: #b84a6a; }
-  /* Wellness categories */
-  [data-cat="immunity"]    .sk-card-accent { background: linear-gradient(90deg,#e8924a,#c87032,transparent); }
-  [data-cat="immunity"]    .sk-card-category { color: #c87032; }
-  [data-cat="energy"]      .sk-card-accent { background: linear-gradient(90deg,#d4a830,#b07c1a,transparent); }
-  [data-cat="energy"]      .sk-card-category { color: #b07c1a; }
-  [data-cat="gut"]         .sk-card-accent { background: linear-gradient(90deg,#a99c35,#cbc321,transparent); }
-  [data-cat="gut"]         .sk-card-category { color: #cbc321; }
-  [data-cat="sleep"]       .sk-card-accent { background: linear-gradient(90deg,#a973ca,#aa5cdb,transparent); }
-  [data-cat="sleep"]       .sk-card-category { color: #aa5cdb; }
-  [data-cat="stress"]      .sk-card-accent { background: linear-gradient(90deg,#c271b5,#bc4da9,transparent); }
-  [data-cat="stress"]      .sk-card-category { color: #bc4da9; }
-  [data-cat="brain"]       .sk-card-accent { background: linear-gradient(90deg,#d09eda,#d25ddb,transparent); }
-  [data-cat="brain"]       .sk-card-category { color: #d25ddb; }
-  [data-cat="weight"]      .sk-card-accent { background: linear-gradient(90deg,#e07898,#b84a6a,transparent); }
-  [data-cat="weight"]      .sk-card-category { color: #b84a6a; }
-  [data-cat="hormones"]    .sk-card-accent { background: linear-gradient(90deg,var(--gold-light),var(--gold),transparent); }
+  [data-cat="glow"] .sk-card-accent {
+    background: linear-gradient(90deg, #e8924a, #c87032, transparent);
+  }
 
-  /* ===== EMPTY STATE ===== */
-  .sk-empty { text-align: center; padding: 60px 20px; }
+  [data-cat="glow"] .sk-card-category {
+    color: #c87032;
+  }
+
+  [data-cat="hydration"] .sk-card-accent {
+    background: linear-gradient(90deg, #5a9ea8, #3a7e88, transparent);
+  }
+
+  [data-cat="hydration"] .sk-card-category {
+    color: #3a7e88;
+  }
+
+  [data-cat="clearer"] .sk-card-accent {
+    background: linear-gradient(90deg, #ba9fcb; , #c39bdc; , transparent);
+  }
+
+  [data-cat="clearer"] .sk-card-category {
+    color: #c39bdc;
+    ;
+  }
+
+  [data-cat="aging"] .sk-card-accent {
+    background: linear-gradient(90deg, #9a6ab8, #7a4a98, transparent);
+  }
+
+  [data-cat="aging"] .sk-card-category {
+    color: #7a4a98;
+  }
+
+  [data-cat="firm"] .sk-card-accent {
+    background: linear-gradient(90deg, var(--gold-light), var(--gold), transparent);
+  }
+
+  [data-cat="detox"] .sk-card-accent {
+    background: linear-gradient(90deg, #905f8c, #81519e; , transparent);
+  }
+
+  [data-cat="detox"] .sk-card-category {
+    color: #81519e;
+  }
+
+  [data-cat="brightening"] .sk-card-accent {
+    background: linear-gradient(90deg, #d4a830, #b07c1a, transparent);
+  }
+
+  [data-cat="brightening"] .sk-card-category {
+    color: #b07c1a;
+  }
+
+  [data-cat="sensitive"] .sk-card-accent {
+    background: linear-gradient(90deg, #e07898, #b84a6a, transparent);
+  }
+
+  [data-cat="sensitive"] .sk-card-category {
+    color: #b84a6a;
+  }
+
+  /* Wellness categories */
+  [data-cat="immunity"] .sk-card-accent {
+    background: linear-gradient(90deg, #e8924a, #c87032, transparent);
+  }
+
+  [data-cat="immunity"] .sk-card-category {
+    color: #c87032;
+  }
+
+  [data-cat="energy"] .sk-card-accent {
+    background: linear-gradient(90deg, #d4a830, #b07c1a, transparent);
+  }
+
+  [data-cat="energy"] .sk-card-category {
+    color: #b07c1a;
+  }
+
+  [data-cat="gut"] .sk-card-accent {
+    background: linear-gradient(90deg, #a99c35, #cbc321, transparent);
+  }
+
+  [data-cat="gut"] .sk-card-category {
+    color: #cbc321;
+  }
+
+  [data-cat="sleep"] .sk-card-accent {
+    background: linear-gradient(90deg, #a973ca, #aa5cdb, transparent);
+  }
+
+  [data-cat="sleep"] .sk-card-category {
+    color: #aa5cdb;
+  }
+
+  [data-cat="stress"] .sk-card-accent {
+    background: linear-gradient(90deg, #c271b5, #bc4da9, transparent);
+  }
+
+  [data-cat="stress"] .sk-card-category {
+    color: #bc4da9;
+  }
+
+  [data-cat="brain"] .sk-card-accent {
+    background: linear-gradient(90deg, #d09eda, #d25ddb, transparent);
+  }
+
+  [data-cat="brain"] .sk-card-category {
+    color: #d25ddb;
+  }
+
+  [data-cat="weight"] .sk-card-accent {
+    background: linear-gradient(90deg, #e07898, #b84a6a, transparent);
+  }
+
+  [data-cat="weight"] .sk-card-category {
+    color: #b84a6a;
+  }
+
+  [data-cat="hormones"] .sk-card-accent {
+    background: linear-gradient(90deg, var(--gold-light), var(--gold), transparent);
+  }
+
+  /* EMPTY STATE  */
+  .sk-empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
 
   .sk-empty p {
     font-family: 'Cormorant Garamond', serif;
@@ -417,7 +550,7 @@
     margin-bottom: 16px;
   }
 
-  /* ===== CLOSING BANNER ===== */
+  /*  CLOSING BANNER  */
   .sk-banner {
     background: var(--brown-dark);
     padding: 80px 0;
@@ -431,7 +564,7 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(ellipse 60% 70% at 50% 50%,
-      rgba(196,154,60,0.1) 0%, transparent 70%);
+        rgba(196, 154, 60, 0.1) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -446,18 +579,21 @@
     line-height: 1.3;
   }
 
-  .sk-banner-quote em { font-style: normal; color: var(--gold-light); }
+  .sk-banner-quote em {
+    font-style: normal;
+    color: var(--gold-light);
+  }
 
   .sk-banner-sub {
     font-family: 'Jost', sans-serif;
     font-size: 0.82rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: rgba(255,252,248,0.4);
+    color: rgba(255, 252, 248, 0.4);
     position: relative;
   }
 
-  /* ===== RESPONSIVE ===== */
+  /* RESPONSIVE  */
   @media (min-width: 860px) {
     .sk-foods-list {
       display: grid;
@@ -467,14 +603,39 @@
   }
 
   @media (min-width: 1200px) {
-    .sk-foods-list { grid-template-columns: repeat(3, 1fr); }
+    .sk-foods-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   @media (max-width: 600px) {
-    .sk-toggle-pill { padding: 9px 14px; font-size: 0.75rem; }
-    .sk-card-body { padding: 16px 16px 14px; }
-    .sk-card-name { font-size: 1.35rem; }
-    .sk-cat-pill { font-size: 0.75rem; padding: 0.45rem 0.9rem; }
+    .sk-card-body {
+      padding: 16px 16px 14px;
+    }
+
+    .sk-card-name {
+      font-size: 1.35rem;
+    }
+
+    .sk-cat-pill {
+      font-size: 0.75rem;
+      padding: 0.45rem 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sk-section-toggle {
+      padding: 6px 8px;
+      gap: 4px;
+    }
+
+    .sk-toggle-pill {
+      font-size: 11px;
+      padding: 8px 12px;
+      letter-spacing: 0px;
+      text-align: center;
+      flex: 1;
+    }
   }
 </style>
 {% endblock %}
@@ -487,42 +648,39 @@
 
     <!-- ── HEADER ── -->
     <div class="sk-header">
-      <p class="sk-header-eyebrow">
-        <i class=""></i> Skin &amp; Wellness
-      </p>
       <h1 class="sk-header-title">
         {% if active_section == 'wellness' %}
-          Eat to <em>Thrive</em>
+        Eat to <em>Thrive</em>
         {% else %}
-          Eat for Your <em>Glow</em>
+        Eat for Your <em>Glow</em>
         {% endif %}
       </h1>
       <p class="sk-header-sub">
         {% if active_section == 'wellness' %}
-          Foods that nourish your body from the inside.Boosting immunity, energy, sleep and more.
+        Foods that nourish your body from the inside.Boosting immunity, energy, sleep and more.
         {% else %}
-          The most powerful skincare routine starts in your kitchen. Feed your skin what it needs.
+        The most powerful skincare routine starts in your kitchen. Feed your skin what it needs.
         {% endif %}
       </p>
     </div>
 
-    <!-- ── SECTION TOGGLE: Skin / Wellness ── -->
+    <!-- SECTION TOGGLE: Skin / Wellness -->
     <div class="sk-section-toggle">
       <a href="?section=skin"
-         class="sk-toggle-pill {% if active_section != 'wellness' %}active{% else %}inactive{% endif %}">
-        ✨ For Your Skin 
+        class="sk-toggle-pill {% if active_section != 'wellness' %}active{% else %}inactive{% endif %}">
+        For Your Skin
       </a>
       <a href="?section=wellness"
-         class="sk-toggle-pill {% if active_section == 'wellness' %}active{% else %}inactive{% endif %}">
-        🤎 Health and Wellness
+        class="sk-toggle-pill {% if active_section == 'wellness' %}active{% else %}inactive{% endif %}">
+        Health and Wellness
       </a>
     </div>
 
     <span class="sk-divider">
       {% if active_section == 'wellness' %}
-        Nourish your body. Feel better every day.
+      Nourish your body. Feel better every day.
       {% else %}
-        Feed your skin. Glow naturally.
+      Feed your skin. Glow naturally.
       {% endif %}
     </span>
 
@@ -530,176 +688,178 @@
     <div class="sk-search-bar">
       <i class="bi bi-search"></i>
       <input type="text" id="skSearchInput"
-             placeholder="{% if active_section == 'wellness' %}Search wellness foods...{% else %}Search skin foods...{% endif %}"
-             class="sk-search-input"
-             oninput="skSearch(this.value)">
+        placeholder="{% if active_section == 'wellness' %}Search wellness foods...{% else %}Search skin foods...{% endif %}"
+        class="sk-search-input" oninput="skSearch(this.value)">
     </div>
 
-    <!-- ── CATEGORY PILLS ── -->
+    <!-- CATEGORY PILLS -->
     <div class="sk-category-row" id="skCategoryRow">
       <button class="sk-cat-pill active" onclick="skFilter('all', this)">All</button>
       {% if active_section == 'wellness' %}
-        {% for value, label in wellness_cats %}
-        <button class="sk-cat-pill" onclick="skFilter('{{ value }}', this)">{{ label }}</button>
-        {% endfor %}
+      {% for value, label in wellness_cats %}
+      <button class="sk-cat-pill" onclick="skFilter('{{ value }}', this)">{{ label }}</button>
+      {% endfor %}
       {% else %}
-        {% for value, label in categories %}
-        <button class="sk-cat-pill" onclick="skFilter('{{ value }}', this)">{{ label }}</button>
-        {% endfor %}
+      {% for value, label in categories %}
+      <button class="sk-cat-pill" onclick="skFilter('{{ value }}', this)">{{ label }}</button>
+      {% endfor %}
       {% endif %}
     </div>
 
-    <!-- ── SKIN FOODS ── -->
+    <!-- SKIN FOODS -->
     {% if active_section != 'wellness' %}
 
-      {% if grouped_foods %}
-      <div class="sk-foods-list" id="skFoodsList">
-        {% for category_key, foods in grouped_foods.items %}
-          {% for food in foods %}
-          <div class="sk-food-card" data-cat="{{ category_key }}"
-               data-name="{{ food.name|lower }}"
-               data-nutrient="{{ food.key_nutrient|lower }}">
+    {% if grouped_foods %}
+    <div class="sk-foods-list" id="skFoodsList">
+      {% for category_key, foods in grouped_foods.items %}
+      {% for food in foods %}
+      <div class="sk-food-card" data-cat="{{ category_key }}" data-name="{{ food.name|lower }}"
+        data-nutrient="{{ food.key_nutrient|lower }}">
 
-            <div class="sk-card-accent"></div>
+        <div class="sk-card-accent"></div>
 
-            <div class="sk-card-image">
-              {% if food.is_featured %}
-              <span class="sk-featured-badge">⭐ Featured</span>
-              {% endif %}
-              {% if food.image %}
-                <img src="{{ food.image.url }}" alt="{{ food.name }}">
-              {% else %}
-                <div class="sk-card-emoji-placeholder">{{ food.emoji }}</div>
-              {% endif %}
-            </div>
+        <div class="sk-card-image">
+          {% if food.is_featured %}
+          <span class="sk-featured-badge">⭐ Featured</span>
+          {% endif %}
+          {% if food.image %}
+          <img src="{{ food.image.url }}" alt="{{ food.name }}">
+          {% else %}
+          <div class="sk-card-emoji-placeholder">{{ food.emoji }}</div>
+          {% endif %}
+        </div>
 
-            <div class="sk-card-body">
-              <div class="sk-card-meta-row">
-                <h3 class="sk-card-name">{{ food.name }}</h3>
-                <span class="sk-card-category">
-                  {% for value, label in categories %}
-                    {% if value == category_key %}{{ label }}{% endif %}
-                  {% endfor %}
-                </span>
-              </div>
-
-              {% if food.benefit_summary %}
-              <p class="sk-card-summary">{{ food.benefit_summary }}</p>
-              {% endif %}
-
-              <p class="sk-card-desc">{{ food.description }}</p>
-
-              <div class="sk-nutrient-row">
-                <span class="sk-nutrient-label">Key Nutrient</span>
-                <span class="sk-nutrient-value">{{ food.key_nutrient }}</span>
-              </div>
-
-              {% if food.how_to_use %}
-              <button class="sk-how-toggle" onclick="toggleHow(this)">
-                <span>▸ How to use</span>
-              </button>
-              <p class="sk-how-text">{{ food.how_to_use }}</p>
-              {% endif %}
-
-              <span class="sk-tag">🧬 {{ food.key_nutrient }}</span>
-            </div>
+        <div class="sk-card-body">
+          <div class="sk-card-meta-row">
+            <h3 class="sk-card-name">{{ food.name }}</h3>
+            <span class="sk-card-category">
+              {% for value, label in categories %}
+              {% if value == category_key %}{{ label }}{% endif %}
+              {% endfor %}
+            </span>
           </div>
-          {% endfor %}
-        {% endfor %}
-      </div>
 
-      {% else %}
-      <div class="sk-empty">
-        <p style="font-size:3rem;margin-bottom:8px;">🌿</p>
-        <p>No skin foods added yet.</p>
-        <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);">
-          Add them via Django Admin under <strong>Skin Foods</strong>.
-        </p>
+          {% if food.benefit_summary %}
+          <p class="sk-card-summary">{{ food.benefit_summary }}</p>
+          {% endif %}
+
+          <p class="sk-card-desc">{{ food.description }}</p>
+
+          <div class="sk-nutrient-row">
+            <span class="sk-nutrient-label">Key Nutrient</span>
+            <span class="sk-nutrient-value">{{ food.key_nutrient }}</span>
+          </div>
+
+          {% if food.how_to_use %}
+          <button class="sk-how-toggle" onclick="toggleHow(this)">
+            <span>▸ How to use</span>
+          </button>
+          <p class="sk-how-text">{{ food.how_to_use }}</p>
+          {% endif %}
+
+          <span class="sk-tag">🧬 {{ food.key_nutrient }}</span>
+        </div>
       </div>
-      {% endif %}
+      {% endfor %}
+      {% endfor %}
+    </div>
+    <div id="noResultsMessage" class="sk-no-results" style="display: none;">
+      <p>No {% if active_section == 'wellness' %}wellness{% else %}skin{% endif %} foods found matching that search.</p>
+    </div>
+
+    {% else %}
+    <div class="sk-empty">
+      <p style="font-size:3rem;margin-bottom:8px;">🌿</p>
+      <p>No skin foods added yet.</p>
+      <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);">
+        Add them via Django Admin under <strong>Skin Foods</strong>.
+      </p>
+    </div>
+    {% endif %}
 
     {% else %}
 
-    <!-- ── WELLNESS FOODS ── -->
-      {% if grouped_wellness %}
-      <div class="sk-foods-list" id="skFoodsList">
-        {% for category_key, foods in grouped_wellness.items %}
-          {% for food in foods %}
-          <div class="sk-food-card" data-cat="{{ category_key }}"
-               data-name="{{ food.name|lower }}"
-               data-nutrient="{{ food.key_nutrient|lower }}">
+    <!-- WELLNESS FOODS -->
+    {% if grouped_wellness %}
+    <div class="sk-foods-list" id="skFoodsList">
+      {% for category_key, foods in grouped_wellness.items %}
+      {% for food in foods %}
+      <div class="sk-food-card" data-cat="{{ category_key }}" data-name="{{ food.name|lower }}"
+        data-nutrient="{{ food.key_nutrient|lower }}">
 
-            <div class="sk-card-accent"></div>
+        <div class="sk-card-accent"></div>
 
-            <div class="sk-card-image">
-              {% if food.is_featured %}
-              <span class="sk-featured-badge">⭐ Featured</span>
-              {% endif %}
-              {% if food.image %}
-                <img src="{{ food.image.url }}" alt="{{ food.name }}">
-              {% else %}
-                <div class="sk-card-emoji-placeholder">{{ food.emoji }}</div>
-              {% endif %}
-            </div>
+        <div class="sk-card-image">
+          {% if food.is_featured %}
+          <span class="sk-featured-badge">⭐ Featured</span>
+          {% endif %}
+          {% if food.image %}
+          <img src="{{ food.image.url }}" alt="{{ food.name }}">
+          {% else %}
+          <div class="sk-card-emoji-placeholder">{{ food.emoji }}</div>
+          {% endif %}
+        </div>
 
-            <div class="sk-card-body">
-              <div class="sk-card-meta-row">
-                <h3 class="sk-card-name">{{ food.name }}</h3>
-                <span class="sk-card-category">
-                  {% for value, label in wellness_cats %}
-                    {% if value == category_key %}{{ label }}{% endif %}
-                  {% endfor %}
-                </span>
-              </div>
-
-              {% if food.benefit_summary %}
-              <p class="sk-card-summary">{{ food.benefit_summary }}</p>
-              {% endif %}
-
-              <p class="sk-card-desc">{{ food.description }}</p>
-
-              <div class="sk-nutrient-row">
-                <span class="sk-nutrient-label">Key Nutrient</span>
-                <span class="sk-nutrient-value">{{ food.key_nutrient }}</span>
-              </div>
-
-              {% if food.how_to_use %}
-              <button class="sk-how-toggle" onclick="toggleHow(this)">
-                <span>▸ How to use</span>
-              </button>
-              <p class="sk-how-text">{{ food.how_to_use }}</p>
-              {% endif %}
-
-              <span class="sk-tag">🌱 {{ food.key_nutrient }}</span>
-            </div>
+        <div class="sk-card-body">
+          <div class="sk-card-meta-row">
+            <h3 class="sk-card-name">{{ food.name }}</h3>
+            <span class="sk-card-category">
+              {% for value, label in wellness_cats %}
+              {% if value == category_key %}{{ label }}{% endif %}
+              {% endfor %}
+            </span>
           </div>
-          {% endfor %}
-        {% endfor %}
-      </div>
 
-      {% else %}
-      <div class="sk-empty">
-        <p style="font-size:3rem;margin-bottom:8px;">🤎</p>
-        <p>No wellness foods added yet.</p>
-        <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);">
-          Add them via Django Admin under <strong>Wellness Foods</strong>.
-        </p>
+          {% if food.benefit_summary %}
+          <p class="sk-card-summary">{{ food.benefit_summary }}</p>
+          {% endif %}
+
+          <p class="sk-card-desc">{{ food.description }}</p>
+
+          <div class="sk-nutrient-row">
+            <span class="sk-nutrient-label">Key Nutrient</span>
+            <span class="sk-nutrient-value">{{ food.key_nutrient }}</span>
+          </div>
+
+          {% if food.how_to_use %}
+          <button class="sk-how-toggle" onclick="toggleHow(this)">
+            <span>▸ How to use</span>
+          </button>
+          <p class="sk-how-text">{{ food.how_to_use }}</p>
+          {% endif %}
+
+          <span class="sk-tag">🌱 {{ food.key_nutrient }}</span>
+        </div>
       </div>
-      {% endif %}
+      {% endfor %}
+      {% endfor %}
+    </div>
+    <div id="noResultsMessage" class="sk-no-results" style="display: none;">
+      <p>No {% if active_section == 'wellness' %}wellness{% else %}skin{% endif %} foods found matching that search.</p>
+    </div>
+    {% else %}
+    <div class="sk-empty">
+      <p style="font-size:3rem;margin-bottom:8px;">🤎</p>
+      <p>No wellness foods added yet.</p>
+      <p style="font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-mid);">
+        Add them via Django Admin under <strong>Wellness Foods</strong>.
+      </p>
+    </div>
+    {% endif %}
 
     {% endif %}
 
   </div>
 </div>
 
-<!-- ── CLOSING BANNER ── -->
+<!-- CLOSING BANNER -->
 <div class="sk-banner">
   <div class="container">
     <p class="sk-banner-quote">
       {% if active_section == 'wellness' %}
-        "Your health is an investment,<br>not an <em>expense.</em>"
+      "Your health is an investment,<br>not an <em>expense.</em>"
       {% else %}
-        "Your skin is a reflection<br>of what you <em>feed</em> it."
+      "Your skin is a reflection<br>of what you <em>feed</em> it."
       {% endif %}
     </p>
     <p class="sk-banner-sub">DishCraft · Eat well. Glow naturally.</p>
@@ -712,7 +872,7 @@
 {% block extra_js %}
 <script>
 
-  /* ── Category filter ── */
+  /* Category filter  */
   function skFilter(category, btn) {
     document.querySelectorAll('.sk-cat-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -723,37 +883,57 @@
     });
   }
 
-  /* ── Live search ── */
+  /* Live search */
   function skSearch(query) {
     const q = query.toLowerCase().trim();
-    document.querySelectorAll('.sk-food-card').forEach(card => {
-      const name     = card.dataset.name     || '';
-      const nutrient = card.dataset.nutrient || '';
-      card.style.display = (name.includes(q) || nutrient.includes(q)) ? '' : 'none';
+    const foodCards = document.querySelectorAll('.sk-food-card');
+    let visibleCount = 0;
+
+    foodCards.forEach(card => {
+      // Read the datasets from your existing logic
+      const name = (card.dataset.name || '').toLowerCase();
+      const nutrient = (card.dataset.nutrient || '').toLowerCase();
+
+      // Check if either data attribute matches the query
+      if (name.includes(q) || nutrient.includes(q)) {
+        card.style.display = ''; // Show card
+        visibleCount++;
+      } else {
+        card.style.display = 'none'; // Hide card
+      }
     });
+
+    // Toggle the empty state message based on matches found
+    const noResultsElement = document.getElementById('noResultsMessage');
+    if (visibleCount === 0) {
+      noResultsElement.style.display = 'block';
+    } else {
+      noResultsElement.style.display = 'none';
+    }
   }
 
-  /* ── How to use toggle ── */
+
+  /* How to use toggle */
   function toggleHow(btn) {
-    const text  = btn.nextElementSibling;
+    const text = btn.nextElementSibling;
     const isOpen = text.style.display === 'block';
     text.style.display = isOpen ? 'none' : 'block';
     btn.querySelector('span').textContent = isOpen ? '▸ How to use' : '▾ How to use';
   }
 
-  /* ── Scroll reveal ── */
+  /* Scroll reveal */
   const skObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.style.opacity   = '1';
+        e.target.style.opacity = '1';
         e.target.style.transform = 'translateY(0)';
       }
     });
   }, { threshold: 0.06 });
 
   document.querySelectorAll('.sk-food-card').forEach((card, i) => {
-    card.style.opacity    = '0';
-    card.style.transform  = 'translateY(18px)';
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(18px)';
     card.style.transition = `opacity 0.45s ${i * 0.05}s, transform 0.45s ${i * 0.05}s`;
     skObs.observe(card);
   });
