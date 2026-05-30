@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>400 — Bad Request | DishCraft</title>
+  <style>
+    @import url('https://googleapis.com');
+
+    body { margin: 0; padding: 0; background: #faf7f2; }
+    .err-page { min-height: 100vh; background: #faf7f2; display: flex; align-items: center; justify-content: center; padding: 60px 20px; position: relative; overflow: hidden; box-sizing: border-box; }
+    .err-blob { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
+    .err-blob-1 { width: 480px; height: 480px; background: rgba(196,154,60,.10); top: -120px; right: -100px; animation: blobFloat 8s ease-in-out infinite; }
+    .err-blob-2 { width: 320px; height: 320px; background: rgba(59,42,26,.07); bottom: -80px; left: -60px; animation: blobFloat 10s ease-in-out infinite reverse; }
+    @keyframes blobFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.04); } }
+    .err-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cormorant Garamond', serif; font-size: clamp(180px, 28vw, 340px); font-weight: 700; color: rgba(196,154,60,.07); line-height: 1; pointer-events: none; user-select: none; white-space: nowrap; z-index: 0; }
+    .err-content { position: relative; z-index: 1; text-align: center; max-width: 600px; }
+    .err-eyebrow { font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: #c49a3c; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 12px; animation: fadeUp 0.6s ease both; }
+    .err-eyebrow::before, .err-eyebrow::after { content: ''; display: block; width: 40px; height: 1px; background: #c49a3c; opacity: 0.5; }
+    .err-dish-icon { font-size: 5rem; display: block; margin: 0 auto 1.2rem; animation: dishShake 0.5s ease-in-out infinite alternate; }
+    @keyframes dishShake { 0% { transform: translateX(-4px); } 100% { transform: translateX(4px); } }
+    .err-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 600; color: #3b2a1a; line-height: 1.1; margin: 0 0 1rem; }
+    .err-heading em { font-style: italic; color: #c49a3c; }
+    .err-desc { font-family: 'Jost', sans-serif; font-size: 1rem; font-weight: 300; color: #7a6652; line-height: 1.75; margin: 0 0 2.4rem; }
+    .err-divider { display: flex; align-items: center; gap: 14px; margin: 0 auto 2.4rem; max-width: 300px; }
+    .err-divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(196,154,60,.4), transparent); }
+    .err-divider-icon { font-size: 1.1rem; color: #c49a3c; opacity: 0.7; }
+    .err-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .err-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #3b2a1a; color: #faf7f2; text-decoration: none; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 28px; border-radius: 50px; transition: all 0.25s; border: 2px solid #3b2a1a; }
+    .err-btn-primary:hover { background: transparent; color: #3b2a1a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,42,26,.15); }
+    .err-btn-gold { display: inline-flex; align-items: center; gap: 8px; background: #c49a3c; color: #3b2a1a; text-decoration: none; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 28px; border-radius: 50px; transition: all 0.25s; border: 2px solid #c49a3c; }
+    .err-btn-gold:hover { background: transparent; color: #c49a3c; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,154,60,.2); }
+    @media (max-width: 480px) { .err-actions { flex-direction: column; align-items: center; } .err-btn-primary, .err-btn-gold { width: 100%; justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div class="err-page">
+    <div class="err-blob err-blob-1"></div>
+    <div class="err-blob err-blob-2"></div>
+    <div class="err-watermark">400</div>
+    <div class="err-content">
+      <span class="err-dish-icon">🥣</span>
+      <p class="err-eyebrow">Error 400</p>
+      <h1 class="err-heading">Bad <em>ingredients.</em></h1>
+      <p class="err-desc">The server couldn't understand the request you sent over. It might be due to broken syntax, an incorrect URL path structure, or a corrupted browser cookie.</p>
+      <div class="err-divider"><div class="err-divider-line"></div><span class="err-divider-icon">✦</span><div class="err-divider-line"></div></div>
+      <div class="err-actions">
+        <a href="/" class="err-btn-gold">← Back to Home</a>
+        <a href="/browse/" class="err-btn-primary">Browse Dishes</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

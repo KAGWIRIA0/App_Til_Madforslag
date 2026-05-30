@@ -43,7 +43,7 @@
   .mp-table-wrap {
     overflow-x: auto;
     border-radius: 16px;
-    border: 1px solid rgba(196, 154, 60, .15);
+    border: 2px solid rgba(196, 154, 60, .35);
   }
 
   .mp-rtable {
@@ -54,8 +54,8 @@
 
   /* Cell borders */
   .mp-rc {
-    border-right: 1px solid rgba(196, 154, 60, .12);
-    border-bottom: 1px solid rgba(196, 154, 60, .12);
+    border-right: 1.5px solid rgba(196, 154, 60, .28);
+    border-bottom: 1.5px solid rgba(196, 154, 60, .28);
   }
 
   .mp-rc:nth-child(8n) {
@@ -66,19 +66,20 @@
     border-bottom: none;
   }
 
-  /* ── Header row ── */
+  /* Header row */
   .mp-rth {
     padding: 14px 10px 12px;
-    background: rgba(196, 154, 60, .05);
+    background: rgba(196, 154, 60, .09);
+    border-bottom: 2px solid rgba(196, 154, 60, .35) !important;
     text-align: center;
   }
 
   .mp-rth-corner {
-    background: rgba(196, 154, 60, .05);
+    background: rgba(196, 154, 60, .09);
   }
 
   .mp-rth.is-today {
-    background: rgba(196, 154, 60, .11);
+    background: rgba(196, 154, 60, .18);
   }
 
   .mp-rth-name {
@@ -120,7 +121,8 @@
     justify-content: flex-start;
     padding: 12px 6px;
     gap: 8px;
-    background: rgba(196, 154, 60, .03);
+    background: rgba(196, 154, 60, .08);
+    border-right: 2px solid rgba(196, 154, 60, .35) !important;
   }
 
   .mp-rl-dot {
@@ -177,7 +179,7 @@
 
   .mp-pill-name {
     font-family: 'Jost', sans-serif;
-    font-size: 1rem;
+    font-size: .82rem;
     font-weight: 600;
     color: var(--text-dark);
     flex: 1;
@@ -215,7 +217,7 @@
     font-family: 'Jost', sans-serif;
     font-size: .88rem;
     font-weight: 500;
-    color: rgba(251, 173, 4, 0.717);
+    color: var(--gold); text-decoration: none;
     cursor: pointer;
     width: 100%;
     transition: all .2s;
@@ -315,11 +317,11 @@
 
   .mp-pop-link {
     font-family: 'Jost', sans-serif;
-    font-size: .9rem;
+    font-size: .82rem;
     font-weight: 600;
     color: var(--gold);
     text-decoration: none;
-    padding: 7px 14px;
+    padding: 6px 14px;
     border: 1px solid rgba(196, 154, 60, .32);
     border-radius: 50px;
     text-align: center;
@@ -334,14 +336,14 @@
   }
 
   .mp-pop-link.comrade {
-    color: var(--brown-dark);
-    border-color: rgba(44, 26, 14, .22);
+    color: var(--gold);
+    border-color: rgba(196, 154, 60, .32);
   }
 
   .mp-pop-link.comrade:hover {
-    background: var(--brown-dark);
+    background: var(--gold);
     color: var(--white);
-    border-color: var(--brown-dark);
+    border-color: var(--gold);
   }
 
   .mp-pop-edit {
@@ -537,19 +539,22 @@
   }
 
   .mp-table-wrap::-webkit-scrollbar {
-  height: 5px;
-}
-.mp-table-wrap::-webkit-scrollbar-track {
-  background: rgba(139,107,185,.08);
-  border-radius: 50px;
-}
-.mp-table-wrap::-webkit-scrollbar-thumb {
-  background: rgba(139,107,185,.45);
-  border-radius: 50px;
-}
-.mp-table-wrap::-webkit-scrollbar-thumb:hover {
-  background: rgba(109,77,155,.7);
-}
+    height: 5px;
+  }
+
+  .mp-table-wrap::-webkit-scrollbar-track {
+    background: rgba(139, 107, 185, .08);
+    border-radius: 50px;
+  }
+
+  .mp-table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(139, 107, 185, .45);
+    border-radius: 50px;
+  }
+
+  .mp-table-wrap::-webkit-scrollbar-thumb:hover {
+    background: rgba(109, 77, 155, .7);
+  }
 </style>
 
 
@@ -760,9 +765,9 @@
     */
     const SEP = /\s+and\s+|\s*&\s*|\s+with\s+|\s+plus\s+/i;
     const pts = n => n.split(SEP).map(p => p.trim()).filter(Boolean);
-    const browseUrl  = n => U_BROWSE  + '?q='          + encodeURIComponent(pts(n).join(' '))  + '&from=planner';
-    const findUrl    = n => U_FIND    + '?ingredients=' + encodeURIComponent(pts(n).join(','))  + '&query_type=ingredients&from=planner';
-    const comradeUrl = n => U_COMRADE + '?ingredients=' + encodeURIComponent(pts(n).join(','))  + '&mode=ingredients&from=planner';
+    const browseUrl = n => U_BROWSE + '?q=' + encodeURIComponent(pts(n).join(' ')) + '&from=planner';
+    const findUrl = n => U_FIND + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&query_type=ingredients&from=planner';
+    const comradeUrl = n => U_COMRADE + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&mode=ingredients&from=planner';
     const mk = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
 
     /* Render */
@@ -948,7 +953,12 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { window.mpClose(); window.mpHideClear(); hidePop(); }
     });
-
+    if (window.location.hash === '#mealPlanner') {
+      setTimeout(() => {
+        const el = document.getElementById('mealPlanner');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
     render();
   })();
 </script>

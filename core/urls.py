@@ -13,3 +13,9 @@ urlpatterns = [
     path('skin/', views.skin, name='skin'),
     path('ai-scan-ajax/', views.ai_scan_ajax, name='ai_scan_ajax'),
 ]
+
+handler400 = 'django.views.defaults.bad_request'
+handler403 = 'django.views.defaults.permission_denied'
+handler404 = 'core.views.custom_404'
+handler500 = 'django.views.defaults.server_error'
+

@@ -150,6 +150,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -279,7 +280,8 @@
     <h1 class="section-heading text-white" style="font-size: clamp(2rem, 5vw, 3.2rem); margin-top: 0.4rem;">
       Browse All Dishes
     </h1>
-    <p style="font-family: 'Jost', sans-serif; color: rgba(255, 252, 248, 0.7); font-size: 0.99rem; margin-top: 0.8rem;">
+    <p
+      style="font-family: 'Jost', sans-serif; color: rgba(255, 252, 248, 0.7); font-size: 0.99rem; margin-top: 0.8rem;">
       Over a million ideas made specifically for you. Breakfast, Lunch, Dinner and Everything in between.
     </p>
 
@@ -302,6 +304,20 @@
     {% endif %}
   </div>
 </section>
+
+{% if request.GET.from == 'planner' %}
+<div style="padding: 1rem 0 0.5rem;">
+  <a href="{% url 'home' %}#mealPlanner" style="display:inline-flex;align-items:center;gap:7px;
+            font-family:'Jost',sans-serif;font-size:.88rem;font-weight:600;
+            color:var(--gold);text-decoration:none;
+            background:rgba(196,154,60,.08);border:1.5px solid rgba(196,154,60,.3);
+            border-radius:50px;padding:7px 18px;transition:all .2s;"
+    onmouseover="this.style.background='rgba(196,154,60,.16)'"
+    onmouseout="this.style.background='rgba(196,154,60,.08)'">
+    &#8592; Back to Meal Planner
+  </a>
+</div>
+{% endif %}
 
 <section style="padding: 3rem 0 5rem; background: var(--cream);">
   <div class="container">
@@ -338,7 +354,7 @@
 
     {% else %}
 
-    {# DRINKS SECTION  #}
+    {# DRINKS SECTION #}
     {% if drinks %}
     <div style="margin-bottom: 3rem;">
       <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
@@ -392,8 +408,7 @@
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 5px;">
                   {% for food_name in drink.best_with_foods %}
-                  <a href="{% url 'browse' %}?q={{ food_name }}&category={{ drink.category }}"
-                    style="display: inline-block; background: var(--cream);
+                  <a href="{% url 'browse' %}?q={{ food_name }}&category={{ drink.category }}" style="display: inline-block; background: var(--cream);
                            border: 1px solid rgba(196, 154, 60, 0.25); border-radius: 50px;
                            padding: 3px 10px; font-family: 'Jost', sans-serif;
                            font-size: 0.72rem; color: var(--text-dark); text-decoration: none;
@@ -418,8 +433,7 @@
                   <i class="bi bi-journal-text me-1"></i> View Recipe
                 </a>
                 {% if drink.youtube_url %}
-                <a href="{{ drink.youtube_url }}" target="_blank" class="btn"
-                  style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
+                <a href="{{ drink.youtube_url }}" target="_blank" class="btn" style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
                          padding: 0.55rem 1rem; border-radius: 50px;
                          font-family: 'Jost', sans-serif; color: var(--text-mid);">
                   <i class="bi bi-youtube text-danger"></i> How-to
@@ -434,7 +448,8 @@
 
       {# Drinks pagination #}
       {% if drinks.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{ drinks.paginator.num_pages }} 
+      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{
+        drinks.paginator.num_pages }}
         )
       </p>
       <div class="pagination-wrapper">
@@ -446,20 +461,20 @@
         {% endif %}
 
         {% for num in drinks.paginator.page_range %}
-          {% if drinks.number == num %}
-          <span class="page-btn active">{{ num }}</span>
-          {% elif num > drinks.number|add:'-3' and num < drinks.number|add:'3' %}
-          <a href="?drink_page={{ num }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
-            class="page-btn">{{ num }}</a>
+        {% if drinks.number == num %}
+        <span class="page-btn active">{{ num }}</span>
+        {% elif num > drinks.number|add:'-3' and num < drinks.number|add:'3' %} <a
+          href="?drink_page={{ num }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">{{ num }}</a>
           {% endif %}
-        {% endfor %}
+          {% endfor %}
 
-        {% if drinks.has_next %}
-        <a href="?drink_page={{ drinks.next_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
-          class="page-btn">Next Drinks →</a>
-        {% else %}
-        <span class="page-btn disabled">Next Drinks →</span>
-        {% endif %}
+          {% if drinks.has_next %}
+          <a href="?drink_page={{ drinks.next_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+            class="page-btn">Next Drinks →</a>
+          {% else %}
+          <span class="page-btn disabled">Next Drinks →</span>
+          {% endif %}
       </div>
       {% endif %}
 
@@ -483,7 +498,7 @@
         </div>
         <span class="dish-count-badge">
           {{ foods.paginator.count }} dish{{ foods.paginator.count|pluralize }}
-          
+
           ( page {{ foods.number }} of {{ foods.paginator.num_pages }} )
         </span>
       </div>
@@ -515,13 +530,11 @@
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 5px;">
                   {% for drink_name in dish.best_with_drinks %}
-                  <a href="{% url 'browse' %}?q={{ drink_name }}&category={{ dish.category }}"
-                    style="display: inline-block; background: rgba(181, 84, 30, 0.07);
+                  <a href="{% url 'browse' %}?q={{ drink_name }}&category={{ dish.category }}" style="display: inline-block; background: rgba(181, 84, 30, 0.07);
                            border: 1px solid rgba(181, 84, 30, 0.28); border-radius: 50px;
                            padding: 3px 10px; font-family: 'Jost', sans-serif;
                            font-size: 0.72rem; color: #b5541e; text-decoration: none;
-                           transition: all 0.2s;"
-                    onmouseover="this.style.background='rgba(181, 84, 30, 0.18)'"
+                           transition: all 0.2s;" onmouseover="this.style.background='rgba(181, 84, 30, 0.18)'"
                     onmouseout="this.style.background='rgba(181, 84, 30, 0.07)'">
                     {{ drink_name }}
                   </a>
@@ -541,8 +554,7 @@
                   <i class="bi bi-journal-text me-1"></i> MORE ON...
                 </a>
                 {% if dish.youtube_url %}
-                <a href="{{ dish.youtube_url }}" target="_blank" class="btn"
-                  style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
+                <a href="{{ dish.youtube_url }}" target="_blank" class="btn" style="border: 1.5px solid rgba(59, 42, 26, 0.2); font-size: 0.78rem;
                          padding: 0.55rem 1rem; border-radius: 50px;
                          font-family: 'Jost', sans-serif; color: var(--text-mid);">
                   <i class="bi bi-youtube text-danger"></i> How-to
@@ -557,7 +569,8 @@
 
       {# Foods pagination #}
       {% if foods.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{ foods.paginator.num_pages }} )</p>
+      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{
+        foods.paginator.num_pages }} )</p>
       <div class="pagination-wrapper">
         {% if foods.has_previous %}
         <a href="?food_page={{ foods.previous_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
@@ -567,20 +580,20 @@
         {% endif %}
 
         {% for num in foods.paginator.page_range %}
-          {% if foods.number == num %}
-          <span class="page-btn active">{{ num }}</span>
-          {% elif num > foods.number|add:'-3' and num < foods.number|add:'3' %}
-          <a href="?food_page={{ num }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
-            class="page-btn">{{ num }}</a>
+        {% if foods.number == num %}
+        <span class="page-btn active">{{ num }}</span>
+        {% elif num > foods.number|add:'-3' and num < foods.number|add:'3' %} <a
+          href="?food_page={{ num }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+          class="page-btn">{{ num }}</a>
           {% endif %}
-        {% endfor %}
+          {% endfor %}
 
-        {% if foods.has_next %}
-        <a href="?food_page={{ foods.next_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
-          class="page-btn">Next Foods →</a>
-        {% else %}
-        <span class="page-btn disabled">Next Foods →</span>
-        {% endif %}
+          {% if foods.has_next %}
+          <a href="?food_page={{ foods.next_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+            class="page-btn">Next Foods →</a>
+          {% else %}
+          <span class="page-btn disabled">Next Foods →</span>
+          {% endif %}
       </div>
       {% endif %}
 

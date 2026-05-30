@@ -1,0 +1,341 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}404 — Page Not Found | DishCraft{% endblock %}
+
+{% block extra_css %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Jost:wght@300;400;500;600;700;800&display=swap');
+
+  .err-page {
+    min-height: 100vh;
+    background: var(--cream, #faf7f2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative background blobs */
+  .err-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .err-blob-1 {
+    width: 480px; height: 480px;
+    background: rgba(196,154,60,.10);
+    top: -120px; right: -100px;
+    animation: blobFloat 8s ease-in-out infinite;
+  }
+  .err-blob-2 {
+    width: 320px; height: 320px;
+    background: rgba(59,42,26,.07);
+    bottom: -80px; left: -60px;
+    animation: blobFloat 10s ease-in-out infinite reverse;
+  }
+  @keyframes blobFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-24px) scale(1.04); }
+  }
+
+  /* Giant 404 watermark */
+  .err-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(180px, 28vw, 340px);
+    font-weight: 700;
+    color: rgba(196,154,60,.07);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    z-index: 0;
+    animation: watermarkPulse 6s ease-in-out infinite;
+  }
+  @keyframes watermarkPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+
+  /* Content */
+  .err-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .err-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold, #c49a3c);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .err-eyebrow::before,
+  .err-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold, #c49a3c);
+    opacity: 0.5;
+  }
+
+  .err-dish-icon {
+    font-size: 5rem;
+    display: block;
+    margin: 0 auto 1.2rem;
+    animation: dishWobble 2.5s ease-in-out infinite, fadeUp 0.5s ease both;
+  }
+  @keyframes dishWobble {
+    0%, 100% { transform: rotate(-4deg) scale(1); }
+    50%       { transform: rotate(4deg) scale(1.08); }
+  }
+
+  .err-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 600;
+    color: var(--brown-dark, #3b2a1a);
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+  .err-heading em {
+    font-style: italic;
+    color: var(--gold, #c49a3c);
+  }
+
+  .err-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text-mid, #7a6652);
+    line-height: 1.75;
+    margin: 0 0 2.4rem;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  /* Divider */
+  .err-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 auto 2.4rem;
+    max-width: 300px;
+    animation: fadeUp 0.7s ease 0.25s both;
+  }
+  .err-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(196,154,60,.4), transparent);
+  }
+  .err-divider-icon {
+    font-size: 1.1rem;
+    color: var(--gold, #c49a3c);
+    opacity: 0.7;
+  }
+
+  /* Action buttons */
+  .err-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .err-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brown-dark, #3b2a1a);
+    color: var(--cream, #faf7f2);
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 50px;
+    transition: all 0.25s;
+    border: 2px solid var(--brown-dark, #3b2a1a);
+  }
+  .err-btn-primary:hover {
+    background: transparent;
+    color: var(--brown-dark, #3b2a1a);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,42,26,.15);
+  }
+
+  .err-btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold, #c49a3c);
+    color: var(--brown-dark, #3b2a1a);
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 50px;
+    transition: all 0.25s;
+    border: 2px solid var(--gold, #c49a3c);
+  }
+  .err-btn-gold:hover {
+    background: transparent;
+    color: var(--gold, #c49a3c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(196,154,60,.2);
+  }
+
+  .err-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text-mid, #7a6652);
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(59,42,26,.2);
+    transition: all 0.25s;
+  }
+  .err-btn-ghost:hover {
+    border-color: rgba(59,42,26,.4);
+    color: var(--brown-dark, #3b2a1a);
+    transform: translateY(-2px);
+  }
+
+  /* Quick links */
+  .err-links {
+    margin-top: 3rem;
+    animation: fadeUp 0.7s ease 0.4s both;
+  }
+  .err-links-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-mid, #7a6652);
+    opacity: 0.6;
+    margin-bottom: 1rem;
+  }
+  .err-links-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .err-link-chip {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--brown-dark, #3b2a1a);
+    text-decoration: none;
+    padding: 7px 18px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(196,154,60,.3);
+    background: rgba(196,154,60,.05);
+    transition: all 0.2s;
+  }
+  .err-link-chip:hover {
+    background: var(--gold, #c49a3c);
+    border-color: var(--gold, #c49a3c);
+    color: var(--brown-dark, #3b2a1a);
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .err-actions { flex-direction: column; align-items: center; }
+    .err-btn-primary, .err-btn-gold, .err-btn-ghost { width: 100%; justify-content: center; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="err-page">
+
+  <!-- Background decorations -->
+  <div class="err-blob err-blob-1"></div>
+  <div class="err-blob err-blob-2"></div>
+  <div class="err-watermark">404</div>
+
+  <div class="err-content">
+
+    <span class="err-dish-icon">🍽️</span>
+
+    <p class="err-eyebrow">Error 404</p>
+
+    <h1 class="err-heading">
+      This dish has<br><em>left the menu.</em>
+    </h1>
+
+    <p class="err-desc">
+      The page you're looking for doesn't exist, was moved,
+      or maybe never made it to the table. Let's get you
+      back to something delicious.
+    </p>
+
+    <div class="err-divider">
+      <div class="err-divider-line"></div>
+      <span class="err-divider-icon">✦</span>
+      <div class="err-divider-line"></div>
+    </div>
+
+    <div class="err-actions">
+      <a href="{% url 'home' %}" class="err-btn-gold">
+        ← Back to Home
+      </a>
+      <a href="{% url 'browse' %}" class="err-btn-primary">
+        Browse Dishes
+      </a>
+      <a href="{% url 'find_dishes' %}" class="err-btn-ghost">
+        Find My Dish
+      </a>
+    </div>
+
+    <div class="err-links">
+      <p class="err-links-label">Or jump to</p>
+      <div class="err-links-row">
+        <a href="{% url 'comrade_kitchen' %}" class="err-link-chip">Low Cost Meals</a>
+        <a href="{% url 'gym' %}"             class="err-link-chip">Gym Foods</a>
+        <a href="{% url 'skin' %}"            class="err-link-chip">Skin & Body</a>
+        <a href="{% url 'about' %}"           class="err-link-chip">About</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -18,11 +18,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
+from django.urls import re_path
+
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'
+handler403 = 'core.views.handler403'
+handler400 = 'core.views.handler400'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
 ]
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
