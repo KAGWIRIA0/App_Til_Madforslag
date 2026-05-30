@@ -334,7 +334,7 @@
 </section>
 
 <!-- FEATURED DISHES -->
-{% if breakfast.main or breakfast.drink or breakfast.side %}
+{% if breakfast.mains or breakfast.drinks or breakfast.sides %}
 <section class="featured-section">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-4">
@@ -347,7 +347,7 @@
     </div>
     <div class="row g-4">
 
-      {% for dish in breakfast.values %} {# ✅ .values gives the Dish objects #}
+      {% for dish in breakfast.mains %} {# ✅ .mains gives the Dish objects #}
       {% if dish %}
       <div class="col-md-4">
         <div class="dish-card">
@@ -357,7 +357,7 @@
           <img src="{{ dish.image_url }}" alt="{{ dish.name }}" class="dish-card-img">
           {% endif %}
           <div class="dish-card-body">
-            <p class="dish-card-category">{{ dish.get_category_display }}</p>
+            <p class="dish-card-category">{{ dish.categories|join:", " }}</p>
             <h3 class="dish-card-title">{{ dish.name }}</h3>
             <p class="dish-card-desc">{{ dish.description }}</p>
             <div class="dish-meta mb-3">
@@ -392,7 +392,7 @@
   <div class="container">
     <div class="text-center mb-5">
       <p class="section-label justify-content-center" style="color:var(--gold-light);">Simple Process</p>
-      <h2 class="section-heading text-white" style="font-size:clamp(2rem,5vw,3rem);margin-top:.5rem;">How DishCraft
+      <h2 class="section-heading text-white" style="font-size:clamp(1.5rem,4vw,2rem);margin-top:.5rem;">How DishCraft
         Works</h2>
     </div>
     <div class="row g-4 text-center">

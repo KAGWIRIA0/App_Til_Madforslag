@@ -448,9 +448,7 @@
 
       {# Drinks pagination #}
       {% if drinks.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{
-        drinks.paginator.num_pages }}
-        )
+      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{ drinks.paginator.num_pages }} )
       </p>
       <div class="pagination-wrapper">
         {% if drinks.has_previous %}
@@ -569,8 +567,7 @@
 
       {# Foods pagination #}
       {% if foods.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{
-        foods.paginator.num_pages }} )</p>
+      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{ foods.paginator.num_pages }} )</p>
       <div class="pagination-wrapper">
         {% if foods.has_previous %}
         <a href="?food_page={{ foods.previous_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"

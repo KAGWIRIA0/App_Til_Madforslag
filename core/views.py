@@ -876,6 +876,7 @@ def comrade_kitchen(request):
         {'item': 'Blueband/ Prestige', 'qty': '1kg', 'tip': 'Makes Your Breakfast Fuller', 'price': 'Ksh 240', 'unit_price': '120 1/2kg'},
         {'item': 'Sossi', 'qty': 'Box of 80g Packets', 'tip': 'Can serve as a stew option in times of need for any base meal', 'price': 'Ksh 540', 'unit_price': '45 per packet'},
         {'item': 'Any Fruit of Choice', 'qty': 'Depends with type', 'tip': 'For a Healthier Body', 'price': 'Variable', 'unit_price': 'Varies '},
+        {'item': 'Tea Bags', 'qty': '1 Packet', 'tip': 'Helps you make easy breakfast fast', 'price': 'Ksh 100', 'unit_price': '5Ksh per packet'},
     ]
 
     return render(request, 'core/comrade_kitchen.html', {
