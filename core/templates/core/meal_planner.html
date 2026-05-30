@@ -1,322 +1,559 @@
 {% load static %}
 
-{# ═══ MEAL PLANNER  —  templates/core/meal_planner.html ═══ #}
+{# ═══ MEAL PLANNER — templates/core/meal_planner.html ═══ #}
 
 <style>
-  /* ── Section & box ── */
+  /* Section & box */
   .planner-section {
     padding: 5rem 0;
-    border-top: 1px solid rgba(196,154,60,.15);
+    border-top: 1px solid rgba(196, 154, 60, .15);
     background: var(--cream);
   }
+
   .planner-box {
     background: var(--white);
     border-radius: 28px;
-    border: 1.5px solid rgba(196,154,60,.2);
-    box-shadow: 0 8px 56px rgba(59,42,26,.09);
+    border: 1.5px solid rgba(196, 154, 60, .2);
+    box-shadow: 0 8px 56px rgba(59, 42, 26, .09);
     padding: 2.8rem 2.4rem 2.4rem;
   }
 
-  /* ── Week nav ── */
+  /* Week nav */
   .mp-week-btn {
     background: var(--cream);
-    border: 1.5px solid rgba(196,154,60,.4);
+    border: 1.5px solid rgba(196, 154, 60, .4);
     color: var(--gold);
-    width: 42px; height: 42px;
-    border-radius: 50%; font-size: 1.1rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all .2s;
   }
-  .mp-week-btn:hover { background: var(--gold); color: var(--white); }
 
-  /* ── Table wrapper ── */
+  .mp-week-btn:hover {
+    background: var(--gold);
+    color: var(--white);
+  }
+
+  /* Table wrapper */
   .mp-table-wrap {
     overflow-x: auto;
     border-radius: 16px;
-    border: 1px solid rgba(196,154,60,.15);
+    border: 1px solid rgba(196, 154, 60, .15);
   }
+
   .mp-rtable {
     display: grid;
     grid-template-columns: 96px repeat(7, minmax(136px, 1fr));
     min-width: 780px;
   }
 
-  /* ── Cell borders ── */
+  /* Cell borders */
   .mp-rc {
-    border-right: 1px solid rgba(196,154,60,.12);
-    border-bottom: 1px solid rgba(196,154,60,.12);
+    border-right: 1px solid rgba(196, 154, 60, .12);
+    border-bottom: 1px solid rgba(196, 154, 60, .12);
   }
-  .mp-rc:nth-child(8n)   { border-right: none; }
-  .mp-rc:nth-child(n+25) { border-bottom: none; }
+
+  .mp-rc:nth-child(8n) {
+    border-right: none;
+  }
+
+  .mp-rc:nth-child(n+25) {
+    border-bottom: none;
+  }
 
   /* ── Header row ── */
   .mp-rth {
     padding: 14px 10px 12px;
-    background: rgba(196,154,60,.05);
+    background: rgba(196, 154, 60, .05);
     text-align: center;
   }
-  .mp-rth-corner { background: rgba(196,154,60,.05); }
-  .mp-rth.is-today { background: rgba(196,154,60,.11); }
+
+  .mp-rth-corner {
+    background: rgba(196, 154, 60, .05);
+  }
+
+  .mp-rth.is-today {
+    background: rgba(196, 154, 60, .11);
+  }
 
   .mp-rth-name {
     font-family: 'Jost', sans-serif;
-    font-size: .82rem; font-weight: 700;
-    letter-spacing: .15em; text-transform: uppercase;
-    color: var(--text-mid); margin-bottom: 5px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 5px;
   }
+
   .mp-rth-date {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.75rem; font-weight: 700;
-    color: var(--text-dark); line-height: 1;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1;
   }
-  .mp-rth.is-today .mp-rth-date { color: var(--gold); }
+
+  .mp-rth.is-today .mp-rth-date {
+    color: var(--gold);
+  }
+
   .mp-today-pip {
     font-family: 'Jost', sans-serif;
-    font-size: .65rem; font-weight: 800;
-    letter-spacing: .12em; color: var(--gold); margin-top: 4px;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: var(--gold);
+    margin-top: 4px;
   }
 
-  /* ── Row label (slot) ── */
+  /* Row label (slot) */
   .mp-row-label {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
-    padding: 12px 6px; gap: 8px;
-    background: rgba(196,154,60,.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 6px;
+    gap: 8px;
+    background: rgba(196, 154, 60, .03);
   }
+
   .mp-rl-dot {
-    width: 9px; height: 9px;
-    border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
   }
+
   .mp-rl-text {
     font-family: 'Jost', sans-serif;
-    font-size: .72rem; font-weight: 700;
-    letter-spacing: .12em; text-transform: uppercase;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
     color: var(--text-mid);
-    writing-mode: vertical-rl; transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
   }
 
-  /* ── Day cell ── */
+  /* Day cell  */
   .mp-rcell {
     padding: 10px 9px 9px;
-    display: flex; flex-direction: column;
-    gap: 6px; min-height: 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 88px;
   }
-  .mp-rcell.is-today { background: rgba(196,154,60,.04); }
 
-  /* ── Meal pill ── */
+  .mp-rcell.is-today {
+    background: rgba(196, 154, 60, .04);
+  }
+
+  /* Meal pill */
   .mp-pill {
-    display: flex; align-items: center; gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     background: var(--white);
-    border: 1.5px solid rgba(196,154,60,.25);
-    border-radius: 10px; padding: 7px 8px 7px 11px;
+    border: 1.5px solid rgba(196, 154, 60, .25);
+    border-radius: 10px;
+    padding: 7px 8px 7px 11px;
     cursor: pointer;
     transition: border-color .15s, box-shadow .15s;
-    position: relative; min-height: 36px;
+    position: relative;
+    min-height: 36px;
   }
+
   .mp-pill:hover {
     border-color: var(--gold);
-    box-shadow: 0 3px 14px rgba(196,154,60,.14);
+    box-shadow: 0 3px 14px rgba(196, 154, 60, .14);
   }
+
   .mp-pill-name {
     font-family: 'Jost', sans-serif;
-    font-size: 1rem; font-weight: 600;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--text-dark);
-    flex: 1; min-width: 0;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
   .mp-pill-del {
-    background: none; border: none;
-    color: rgba(128,100,70,.3);
-    font-size: .9rem; cursor: pointer;
-    padding: 0 2px; line-height: 1;
-    transition: color .15s; flex-shrink: 0;
-  }
-  .mp-pill-del:hover { color: #c0392b; }
-
-  /* ── Add button ── */
-  .mp-cell-add {
-    display: flex; align-items: center; gap: 5px;
     background: none;
-    border: 1.5px dashed rgba(196,154,60,.3);
-    border-radius: 9px; padding: 6px 10px;
-    font-family: 'Jost', sans-serif;
-    font-size: .88rem; font-weight: 500;
-    color: rgba(196,154,60,.65);
-    cursor: pointer; width: 100%; transition: all .2s;
-  }
-  .mp-cell-add:hover {
-    border-color: var(--gold); color: var(--gold);
-    background: rgba(196,154,60,.04);
+    border: none;
+    color: rgba(128, 100, 70, .3);
+    font-size: .9rem;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color .15s;
+    flex-shrink: 0;
   }
 
-  /* ── Inline delete confirm ── */
-  .mp-del-confirm {
-    position: absolute; inset: 0;
-    background: rgba(255,252,248,.97);
-    border-radius: 9px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    z-index: 10; animation: mpanim .12s ease;
+  .mp-pill-del:hover {
+    color: #c0392b;
   }
-  @keyframes mpanim { from { opacity:0; } to { opacity:1; } }
+
+  /* Add button */
+  .mp-cell-add {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1.5px dashed rgba(196, 154, 60, .3);
+    border-radius: 9px;
+    padding: 6px 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: .88rem;
+    font-weight: 500;
+    color: rgba(251, 173, 4, 0.717);
+    cursor: pointer;
+    width: 100%;
+    transition: all .2s;
+  }
+
+  .mp-cell-add:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(196, 154, 60, .04);
+  }
+
+  /* Inline delete confirm */
+  .mp-del-confirm {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 252, 248, .97);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    z-index: 10;
+    animation: mpanim .12s ease;
+  }
+
+  @keyframes mpanim {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
   .mp-del-msg {
     font-family: 'Jost', sans-serif;
-    font-size: .82rem; font-weight: 600; color: var(--text-dark);
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--text-dark);
   }
+
   .mp-del-y {
-    background: #c0392b; color: #fff; border: none;
-    border-radius: 50px; padding: 3px 11px;
-    font-family: 'Jost', sans-serif; font-size: .78rem; font-weight: 600;
-    cursor: pointer;
-  }
-  .mp-del-n {
-    background: var(--cream); color: var(--text-mid);
-    border: 1px solid rgba(128,100,70,.25);
-    border-radius: 50px; padding: 3px 9px;
-    font-family: 'Jost', sans-serif; font-size: .78rem; font-weight: 600;
+    background: #c0392b;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 3px 11px;
+    font-family: 'Jost', sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
     cursor: pointer;
   }
 
-  /* ── Popover ── */
-  #mpPop {
-    display: none; position: fixed;
-    background: var(--white);
-    border: 1.5px solid rgba(196,154,60,.28);
-    border-radius: 16px; padding: 16px 18px;
-    box-shadow: 0 10px 48px rgba(59,42,26,.18);
-    z-index: 800; width: 230px;
+  .mp-del-n {
+    background: var(--cream);
+    color: var(--text-mid);
+    border: 1px solid rgba(128, 100, 70, .25);
+    border-radius: 50px;
+    padding: 3px 9px;
+    font-family: 'Jost', sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
   }
+
+  /* Popover */
+  #mpPop {
+    display: none;
+    position: fixed;
+    background: var(--white);
+    border: 1.5px solid rgba(196, 154, 60, .28);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 48px rgba(59, 42, 26, .18);
+    z-index: 800;
+    width: 230px;
+  }
+
   #mpPopName {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem; font-weight: 700;
-    color: var(--brown-dark); margin-bottom: 12px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .mp-pop-links { display: flex; flex-direction: column; gap: 7px; margin-bottom: 10px; }
+
+  .mp-pop-links {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+
   .mp-pop-link {
     font-family: 'Jost', sans-serif;
-    font-size: .9rem; font-weight: 600;
-    color: var(--gold); text-decoration: none;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-decoration: none;
     padding: 7px 14px;
-    border: 1px solid rgba(196,154,60,.32);
-    border-radius: 50px; text-align: center;
-    transition: all .15s; display: block;
+    border: 1px solid rgba(196, 154, 60, .32);
+    border-radius: 50px;
+    text-align: center;
+    transition: all .15s;
+    display: block;
   }
+
   .mp-pop-link:hover {
-    background: var(--gold); color: var(--white); border-color: var(--gold);
+    background: var(--gold);
+    color: var(--white);
+    border-color: var(--gold);
   }
-  .mp-pop-link.comrade { color: var(--brown-dark); border-color: rgba(44,26,14,.22); }
+
+  .mp-pop-link.comrade {
+    color: var(--brown-dark);
+    border-color: rgba(44, 26, 14, .22);
+  }
+
   .mp-pop-link.comrade:hover {
-    background: var(--brown-dark); color: var(--white); border-color: var(--brown-dark);
+    background: var(--brown-dark);
+    color: var(--white);
+    border-color: var(--brown-dark);
   }
+
   .mp-pop-edit {
-    width: 100%; background: rgba(59,42,26,.06); border: none;
-    border-radius: 50px; padding: 7px 14px;
-    font-family: 'Jost', sans-serif; font-size: .84rem; font-weight: 600;
-    color: var(--text-mid); cursor: pointer; transition: background .15s;
-  }
-  .mp-pop-edit:hover { background: rgba(59,42,26,.13); }
-
-  /* ── Legend ── */
-  .mp-legend {
-    display: flex; gap: 1.4rem; flex-wrap: wrap; align-items: center;
-    margin-top: 1.8rem; padding-top: 1.5rem;
-    border-top: 1px solid rgba(196,154,60,.12);
+    width: 100%;
+    background: rgba(59, 42, 26, .06);
+    border: none;
+    border-radius: 50px;
+    padding: 7px 14px;
     font-family: 'Jost', sans-serif;
-    font-size: .88rem; color: var(--text-mid);
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: background .15s;
   }
-  .mp-legend-item { display: flex; align-items: center; gap: 7px; }
-  .mp-ldot { width: 8px; height: 8px; border-radius: 50%; }
-  .mp-clear-btn {
-    font-family: 'Jost', sans-serif; font-size: .82rem;
-    background: none; border: none; cursor: pointer;
-    color: var(--text-mid); text-decoration: underline; opacity: .55;
-  }
-  .mp-clear-btn:hover { opacity: 1; }
 
-  /* ── Add/Edit Modal ── */
+  .mp-pop-edit:hover {
+    background: rgba(59, 42, 26, .13);
+  }
+
+  /* Legend */
+  .mp-legend {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 1.8rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(196, 154, 60, .12);
+    font-family: 'Jost', sans-serif;
+    font-size: .88rem;
+    color: var(--text-mid);
+  }
+
+  .mp-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .mp-ldot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .mp-clear-btn {
+    font-family: 'Jost', sans-serif;
+    font-size: .82rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-mid);
+    text-decoration: underline;
+    opacity: .55;
+  }
+
+  .mp-clear-btn:hover {
+    opacity: 1;
+  }
+
+  /* Add/Edit Modal */
   #mpOverlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(26,18,9,.48); z-index: 500;
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 18, 9, .48);
+    z-index: 500;
   }
+
   #mpModal {
-    display: none; position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 600; padding: 1rem; justify-content: center;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 600;
+    padding: 1rem;
+    justify-content: center;
   }
+
   .mp-modal-box {
     background: var(--white);
     border-radius: 28px 28px 20px 20px;
     padding: 2.4rem 2.2rem 2rem;
-    width: 100%; max-width: 520px;
-    box-shadow: 0 -12px 60px rgba(26,18,9,.2);
-    border: 1px solid rgba(196,154,60,.18);
-  }
-  .mp-modal-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-size: .75rem; font-weight: 700;
-    letter-spacing: .16em; text-transform: uppercase;
-    color: var(--text-mid); margin: 0 0 4px;
-  }
-  .mp-modal-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.75rem; font-weight: 700;
-    color: var(--text-dark); margin: 0;
-  }
-  .mp-tab {
-    font-family: 'Jost', sans-serif;
-    font-size: .9rem; font-weight: 600;
-    padding: 8px 18px; border-radius: 50px;
-    border: 1.5px solid rgba(196,154,60,.32);
-    background: transparent; color: var(--text-mid);
-    cursor: pointer; transition: all .2s;
-  }
-  .mp-tab.active {
-    background: var(--gold); border-color: var(--gold); color: var(--white);
-  }
-  .mp-modal-input {
-    width: 100%; padding: 13px 16px;
-    border: 1.5px solid rgba(196,154,60,.35);
-    border-radius: 12px;
-    font-family: 'Jost', sans-serif;
-    font-size: 1.05rem; font-weight: 500;
-    color: var(--text-dark); background: var(--cream);
-    outline: none; transition: border-color .2s, background .2s;
-  }
-  .mp-modal-input:focus {
-    border-color: var(--gold); background: var(--white);
-  }
-  .mp-modal-hint {
-    font-family: 'Jost', sans-serif;
-    font-size: .82rem; color: var(--text-mid);
-    margin-top: .45rem; line-height: 1.6;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 -12px 60px rgba(26, 18, 9, .2);
+    border: 1px solid rgba(196, 154, 60, .18);
   }
 
-  /* ── Clear-week confirm ── */
-  #mpClearConfirm {
-    display: none; position: fixed;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: var(--white); border-radius: 22px;
-    padding: 2.2rem 2rem 1.8rem;
-    width: 340px; max-width: 92vw;
-    box-shadow: 0 14px 70px rgba(26,18,9,.24);
-    border: 1px solid rgba(196,154,60,.18);
-    z-index: 700; text-align: center;
+  .mp-modal-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin: 0 0 4px;
   }
-  .mp-clear-icon { font-size: 2.2rem; margin-bottom: .7rem; }
+
+  .mp-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+  }
+
+  .mp-tab {
+    font-family: 'Jost', sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(196, 154, 60, .32);
+    background: transparent;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .mp-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+
+  .mp-modal-input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid rgba(196, 154, 60, .35);
+    border-radius: 12px;
+    font-family: 'Jost', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color .2s, background .2s;
+  }
+
+  .mp-modal-input:focus {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+
+  .mp-modal-hint {
+    font-family: 'Jost', sans-serif;
+    font-size: .82rem;
+    color: var(--text-mid);
+    margin-top: .45rem;
+    line-height: 1.6;
+  }
+
+  /* Clear-week confirm */
+  #mpClearConfirm {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    border-radius: 22px;
+    padding: 2.2rem 2rem 1.8rem;
+    width: 340px;
+    max-width: 92vw;
+    box-shadow: 0 14px 70px rgba(26, 18, 9, .24);
+    border: 1px solid rgba(196, 154, 60, .18);
+    z-index: 700;
+    text-align: center;
+  }
+
+  .mp-clear-icon {
+    font-size: 2.2rem;
+    margin-bottom: .7rem;
+  }
+
   .mp-clear-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.55rem; font-weight: 700;
-    color: var(--text-dark); margin: 0 0 .5rem;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 .5rem;
   }
+
   .mp-clear-body {
     font-family: 'Jost', sans-serif;
-    font-size: .9rem; color: var(--text-mid);
-    margin: 0 0 1.6rem; line-height: 1.65;
+    font-size: .9rem;
+    color: var(--text-mid);
+    margin: 0 0 1.6rem;
+    line-height: 1.65;
   }
+
+  .mp-table-wrap::-webkit-scrollbar {
+  height: 5px;
+}
+.mp-table-wrap::-webkit-scrollbar-track {
+  background: rgba(139,107,185,.08);
+  border-radius: 50px;
+}
+.mp-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(139,107,185,.45);
+  border-radius: 50px;
+}
+.mp-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(109,77,155,.7);
+}
 </style>
 
 
-<!-- ═══ SECTION ═══ -->
+<!-- SECTION -->
 <section class="planner-section" id="mealPlanner">
   <div class="container">
     <div class="planner-box">
@@ -329,14 +566,13 @@
             Your Meal Calendar
           </h2>
           <p class="section-subheading mt-2" style="font-size:1rem;">
-            Plan each day. Click any saved meal for <em>Browse</em>, <em>Find</em> &amp; <em>Comrade Kitchen</em> links.
+            Plan each day. Click any saved meal for <em>Browse</em>, <em>Find</em>and<em>Comrade Kitchen</em> links.
           </p>
         </div>
         <div class="d-flex flex-column align-items-end gap-2">
           <div class="d-flex align-items-center gap-2">
             <button id="mpPrev" class="mp-week-btn" title="Previous week">&#8592;</button>
-            <span id="mpWeekLabel"
-              style="font-family:'Jost',sans-serif;font-size:.95rem;font-weight:500;
+            <span id="mpWeekLabel" style="font-family:'Jost',sans-serif;font-size:.95rem;font-weight:500;
                      color:var(--text-mid);white-space:nowrap;min-width:165px;text-align:center;">
             </span>
             <button id="mpNext" class="mp-week-btn" title="Next week">&#8594;</button>
@@ -367,24 +603,24 @@
         </div>
       </div>
 
-    </div><!-- /.planner-box -->
+    </div>
   </div>
 </section>
 
 
-<!-- ═══ POPOVER ═══ -->
+<!-- POPOVER -->
 <div id="mpPop">
   <div id="mpPopName"></div>
   <div class="mp-pop-links">
-    <a id="mpPopBrowse"  class="mp-pop-link"         target="_blank">📖 Browse Dishes</a>
-    <a id="mpPopFind"    class="mp-pop-link"         target="_blank">Find My Dish</a>
+    <a id="mpPopBrowse" class="mp-pop-link" target="_blank">Browse Dishes</a>
+    <a id="mpPopFind" class="mp-pop-link" target="_blank">Find My Dish</a>
     <a id="mpPopComrade" class="mp-pop-link comrade" target="_blank">Comrade Kitchen</a>
   </div>
   <button id="mpPopEdit" class="mp-pop-edit">Edit meal name</button>
 </div>
 
 
-<!-- ═══ ADD / EDIT MODAL ═══ -->
+<!-- ADD / EDIT MODAL -->
 <div id="mpOverlay" onclick="mpClose()"></div>
 <div id="mpModal">
   <div class="mp-modal-box">
@@ -394,8 +630,7 @@
         <p class="mp-modal-eyebrow" id="mpModalAction">Add meal</p>
         <h3 class="mp-modal-title" id="mpModalDay"></h3>
       </div>
-      <button onclick="mpClose()"
-        style="background:rgba(196,154,60,.1);border:none;width:36px;height:36px;
+      <button onclick="mpClose()" style="background:rgba(196,154,60,.1);border:none;width:36px;height:36px;
                border-radius:50%;font-size:1.1rem;cursor:pointer;color:var(--text-mid);
                display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         &#x2715;
@@ -414,13 +649,11 @@
       </button>
     </div>
 
-    <input type="text" id="mpInput" class="mp-modal-input"
-      placeholder="e.g. Ugali and Sukuma, Tea, Chapati & Eggs…"
-      autocomplete="off"
-      onkeydown="if(event.key==='Enter') mpSave()">
+    <input type="text" id="mpInput" class="mp-modal-input" placeholder="e.g. Ugali and Sukuma, Tea, Chapati & Eggs…"
+      autocomplete="off" onkeydown="if(event.key==='Enter') mpSave()">
 
     <p class="mp-modal-hint">
-      One item at a time — save, then tap <strong>+ Add</strong> again for more.
+      One item at a time. Save, then tap <strong>+ Add</strong> again for more.
       Links will auto-search by dish name and any sides.
     </p>
 
@@ -428,8 +661,7 @@
       <button onclick="mpSave()" class="btn btn-gold" style="font-size:.95rem;padding:.7rem 2rem;">
         <i class="bi bi-check2"></i> Save
       </button>
-      <button onclick="mpClose()" class="btn"
-        style="border:1.5px solid rgba(128,100,70,.3);color:var(--text-mid);border-radius:50px;
+      <button onclick="mpClose()" class="btn" style="border:1.5px solid rgba(128,100,70,.3);color:var(--text-mid);border-radius:50px;
                font-family:'Jost',sans-serif;font-size:.95rem;padding:.7rem 1.4rem;">
         Cancel
       </button>
@@ -439,7 +671,7 @@
 </div>
 
 
-<!-- ═══ CLEAR-WEEK CONFIRM ═══ -->
+<!-- CLEAR-WEEK CONFIRM -->
 <div id="mpClearConfirm">
   <div class="mp-clear-icon">🗑️</div>
   <h4 class="mp-clear-title">Clear this week?</h4>
@@ -447,14 +679,12 @@
     All planned meals for this week will be permanently removed.
   </p>
   <div style="display:flex;gap:12px;justify-content:center;">
-    <button onclick="mpClearConfirmed()"
-      style="background:#c0392b;color:#fff;border:none;border-radius:50px;
+    <button onclick="mpClearConfirmed()" style="background:#c0392b;color:#fff;border:none;border-radius:50px;
              padding:10px 24px;font-family:'Jost',sans-serif;
              font-size:.95rem;font-weight:600;cursor:pointer;">
       Yes, clear it
     </button>
-    <button onclick="mpHideClear()"
-      style="background:var(--cream);color:var(--text-mid);
+    <button onclick="mpHideClear()" style="background:var(--cream);color:var(--text-mid);
              border:1px solid rgba(128,100,70,.25);border-radius:50px;
              padding:10px 20px;font-family:'Jost',sans-serif;
              font-size:.95rem;font-weight:600;cursor:pointer;">
@@ -465,241 +695,260 @@
 
 
 <script>
-(function () {
-  const SK = 'dishcraft_mp_v6';
+  (function () {
+    const SK = 'dishcraft_mp_v6';
 
-  const U_BROWSE  = "{% url 'browse' %}";
-  const U_FIND    = "{% url 'find_dishes' %}";
-  const U_COMRADE = "{% url 'comrade_kitchen' %}";
+    const U_BROWSE = "{% url 'browse' %}";
+    const U_FIND = "{% url 'find_dishes' %}";
+    const U_COMRADE = "{% url 'comrade_kitchen' %}";
 
-  const DAYS       = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const SLOTS      = ['breakfast','lunch','dinner'];
-  const SLOT_LABEL = { breakfast:'Breakfast', lunch:'Lunch', dinner:'Dinner' };
-  const DOT_COLOR  = {
-    breakfast: 'rgba(196,154,60,.8)',
-    lunch:     '#8B6347',
-    dinner:    '#3B2A1A',
-  };
+    const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const SLOTS = ['breakfast', 'lunch', 'dinner'];
+    const SLOT_LABEL = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner' };
+    const DOT_COLOR = {
+      breakfast: 'rgba(196,154,60,.8)',
+      lunch: '#8B6347',
+      dinner: '#3B2A1A',
+    };
 
-  let weekOffset  = 0;
-  let activeDay   = null;
-  let activeSlot  = 'breakfast';
-  let activeIndex = null;
-  let activePop   = null;
+    let weekOffset = 0;
+    let activeDay = null;
+    let activeSlot = 'breakfast';
+    let activeIndex = null;
+    let activePop = null;
 
-  /* ── Storage ── */
-  const load    = () => { try { return JSON.parse(localStorage.getItem(SK)||'{}'); } catch(e){ return {}; } };
-  const persist = d => { try { localStorage.setItem(SK, JSON.stringify(d)); } catch(e){} };
+    /* Storage */
+    const load = () => { try { return JSON.parse(localStorage.getItem(SK) || '{}'); } catch (e) { return {}; } };
+    const persist = d => { try { localStorage.setItem(SK, JSON.stringify(d)); } catch (e) { } };
 
-  /* Meals stored as arrays so multiple items per slot are supported */
-  const getMeals   = (d,ds,s) => { const v=(d[ds]||{})[s]; if(!v)return []; return Array.isArray(v)?v:[v]; };
-  const addMeal    = (d,ds,s,n) => { if(!d[ds])d[ds]={}; const a=getMeals(d,ds,s); a.push(n); d[ds][s]=a; persist(d); };
-  const editMealAt = (d,ds,s,i,n) => { if(!d[ds])d[ds]={}; const a=getMeals(d,ds,s); a[i]=n; d[ds][s]=a; persist(d); };
-  const delMealAt  = (d,ds,s,i) => {
-    if(!d[ds])return;
-    const a=getMeals(d,ds,s); a.splice(i,1);
-    if(a.length) d[ds][s]=a; else { delete d[ds][s]; if(!Object.keys(d[ds]).length) delete d[ds]; }
-    persist(d);
-  };
+    /* Meals stored as arrays so multiple items per slot are supported */
+    const getMeals = (d, ds, s) => { const v = (d[ds] || {})[s]; if (!v) return []; return Array.isArray(v) ? v : [v]; };
+    const addMeal = (d, ds, s, n) => { if (!d[ds]) d[ds] = {}; const a = getMeals(d, ds, s); a.push(n); d[ds][s] = a; persist(d); };
+    const editMealAt = (d, ds, s, i, n) => { if (!d[ds]) d[ds] = {}; const a = getMeals(d, ds, s); a[i] = n; d[ds][s] = a; persist(d); };
+    const delMealAt = (d, ds, s, i) => {
+      if (!d[ds]) return;
+      const a = getMeals(d, ds, s); a.splice(i, 1);
+      if (a.length) d[ds][s] = a; else { delete d[ds][s]; if (!Object.keys(d[ds]).length) delete d[ds]; }
+      persist(d);
+    };
 
-  /* ── Dates ── */
-  const toISO    = dt => dt.toISOString().slice(0,10);
-  const isToday  = ds => toISO(new Date())===ds;
-  const getMonday = off => {
-    const n=new Date(), day=n.getDay()||7, m=new Date(n);
-    m.setDate(n.getDate()-(day-1)+off*7); m.setHours(0,0,0,0); return m;
-  };
-  const fmtRange = m => {
-    const e=new Date(m); e.setDate(m.getDate()+6);
-    const o={day:'numeric',month:'short'};
-    return m.toLocaleDateString('en-GB',o)+' — '+e.toLocaleDateString('en-GB',{...o,year:'numeric'});
-  };
+    /* Dates  */
+    const toISO = dt => dt.toISOString().slice(0, 10);
+    const isToday = ds => toISO(new Date()) === ds;
+    const isPastDay = ds => ds < toISO(new Date());
+    const slotHour = { breakfast: 11, lunch: 16, dinner: 23 };
+    const isSlotPast = (ds, slot) => {
+      if (isPastDay(ds)) return true;
+      if (!isToday(ds)) return false;
+      return new Date().getHours() >= slotHour[slot];
+    };
+    const getMonday = off => {
+      const n = new Date(); n.setHours(0, 0, 0, 0);
+      const m = new Date(n); m.setDate(n.getDate() + off * 7); return m;
+    };
+    const fmtRange = m => {
+      const e = new Date(m); e.setDate(m.getDate() + 6);
+      const o = { day: 'numeric', month: 'short' };
+      return m.toLocaleDateString('en-GB', o) + ' — ' + e.toLocaleDateString('en-GB', { ...o, year: 'numeric' });
+    };
 
-  /* ── Smart URL builders ──
-     "Ugali and Sukuma" → parts: ['ugali','sukuma']
-     Browse:  ?q=ugali sukuma  (space-joined; ILIKE matches any word)
-     Find:    ?ingredients=ugali,sukuma  (comma-joined; scored per ingredient)
-     Comrade: same as find + mode=ingredients
-  ── */
-  const SEP        = /\s+and\s+|\s*&\s*|\s+with\s+|\s+plus\s+/i;
-  const pts        = n => n.split(SEP).map(p=>p.trim()).filter(Boolean);
-  const browseUrl  = n => U_BROWSE  + '?q='          + encodeURIComponent(pts(n).join(' '));
-  const findUrl    = n => U_FIND    + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&query_type=ingredients';
-  const comradeUrl = n => U_COMRADE + '?ingredients=' + encodeURIComponent(pts(n).join(',')) + '&mode=ingredients';
+    /* Smart URL builders
+       "Ugali and Sukuma" → parts: ['ugali','sukuma']
+       Browse:  ?q=ugali sukuma  (space-joined; ILIKE matches any word)
+       Find:    ?ingredients=ugali,sukuma  (comma-joined; scored per ingredient)
+       Comrade: same as find + mode=ingredients
+    */
+    const SEP = /\s+and\s+|\s*&\s*|\s+with\s+|\s+plus\s+/i;
+    const pts = n => n.split(SEP).map(p => p.trim()).filter(Boolean);
+    const browseUrl  = n => U_BROWSE  + '?q='          + encodeURIComponent(pts(n).join(' '))  + '&from=planner';
+    const findUrl    = n => U_FIND    + '?ingredients=' + encodeURIComponent(pts(n).join(','))  + '&query_type=ingredients&from=planner';
+    const comradeUrl = n => U_COMRADE + '?ingredients=' + encodeURIComponent(pts(n).join(','))  + '&mode=ingredients&from=planner';
+    const mk = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
 
-  const mk = (tag,cls) => { const e=document.createElement(tag); if(cls) e.className=cls; return e; };
+    /* Render */
+    function render() {
+      document.getElementById('mpWeekLabel').textContent = fmtRange(getMonday(weekOffset));
+      const data = load();
+      const grid = document.getElementById('mpGrid');
+      grid.innerHTML = '';
+      const mon = getMonday(weekOffset);
 
-  /* ── Render ── */
-  function render() {
-    document.getElementById('mpWeekLabel').textContent = fmtRange(getMonday(weekOffset));
-    const data = load();
-    const grid = document.getElementById('mpGrid');
-    grid.innerHTML = '';
-    const mon = getMonday(weekOffset);
+      const days = Array.from({ length: 7 }, (_, i) => {
+        const dt = new Date(mon); dt.setDate(mon.getDate() + i);
+        const ds = toISO(dt);
+        return { dt, ds, today: isToday(ds) };
+      });
 
-    const days = Array.from({length:7}, (_,i) => {
-      const dt=new Date(mon); dt.setDate(mon.getDate()+i);
-      return { dt, ds: toISO(dt), today: isToday(toISO(dt)) };
-    });
+      /* Header row */
+      grid.appendChild(mk('div', 'mp-rc mp-rth mp-rth-corner'));
+      days.forEach(({ dt, today }) => {
+        const th = mk('div', 'mp-rc mp-rth' + (today ? ' is-today' : ''));
+        const dayName = DAYS[(dt.getDay() + 6) % 7];
+        const mo = dt.toLocaleDateString('en-GB', { month: 'short' });
+        th.innerHTML =
+          `<div class="mp-rth-name">${dayName}</div>` +
+          `<div class="mp-rth-date">${dt.getDate()}` +
+          `<span style="font-size:.9rem;font-weight:400;color:var(--text-mid);"> ${mo}</span></div>` +
+          (today ? `<div class="mp-today-pip">TODAY</div>` : '');
+        grid.appendChild(th);
+      });
+      document.getElementById('mpWeekLabel').textContent =
+        weekOffset === 0
+          ? 'This Week (from Today)'
+          : fmtRange(getMonday(weekOffset));
 
-    /* ── Header row ── */
-    grid.appendChild(mk('div','mp-rc mp-rth mp-rth-corner'));
-    days.forEach(({dt, today}) => {
-      const th = mk('div','mp-rc mp-rth'+(today?' is-today':''));
-      const dayName = DAYS[(dt.getDay()+6)%7];
-      const mo = dt.toLocaleDateString('en-GB',{month:'short'});
-      th.innerHTML =
-        `<div class="mp-rth-name">${dayName}</div>` +
-        `<div class="mp-rth-date">${dt.getDate()}` +
-        `<span style="font-size:.9rem;font-weight:400;color:var(--text-mid);"> ${mo}</span></div>` +
-        (today ? `<div class="mp-today-pip">TODAY</div>` : '');
-      grid.appendChild(th);
-    });
+      /* Slot rows */
 
-    /* ── Slot rows ── */
-    SLOTS.forEach(slot => {
-      /* Row label */
-      const lbl = mk('div','mp-rc mp-row-label');
-      lbl.innerHTML =
-        `<div class="mp-rl-dot" style="background:${DOT_COLOR[slot]}"></div>` +
-        `<span class="mp-rl-text">${SLOT_LABEL[slot]}</span>`;
-      grid.appendChild(lbl);
+      SLOTS.forEach(slot => {
+        /* Row label */
+        const lbl = mk('div', 'mp-rc mp-row-label');
+        lbl.innerHTML =
+          `<div class="mp-rl-dot" style="background:${DOT_COLOR[slot]}"></div>` +
+          `<span class="mp-rl-text">${SLOT_LABEL[slot]}</span>`;
+        grid.appendChild(lbl);
 
-      /* Day cells */
-      days.forEach(({ds, today}) => {
-        const meals = getMeals(data, ds, slot);
-        const cell  = mk('div','mp-rc mp-rcell'+(today?' is-today':''));
+        /* Day cells */
+        days.forEach(({ ds, today }) => {
+          const meals = getMeals(data, ds, slot);
+          const cell = mk('div', 'mp-rc mp-rcell' + (today ? ' is-today' : ''));
 
-        meals.forEach((meal, idx) => {
-          const pill = mk('div','mp-pill');
-          const nm   = mk('span','mp-pill-name');
-          nm.title = meal; nm.textContent = meal;
-          const del  = mk('button','mp-pill-del');
-          del.title = 'Remove'; del.innerHTML = '&#x2715;';
-          pill.append(nm, del);
+          meals.forEach((meal, idx) => {
+            const pill = mk('div', 'mp-pill');
+            const nm = mk('span', 'mp-pill-name');
+            nm.title = meal; nm.textContent = meal;
+            const del = mk('button', 'mp-pill-del');
+            del.title = 'Remove'; del.innerHTML = '&#x2715;';
+            pill.append(nm, del);
 
-          nm.addEventListener('click', e => { e.stopPropagation(); showPop(pill,meal,ds,slot,idx); });
+            nm.addEventListener('click', e => { e.stopPropagation(); showPop(pill, meal, ds, slot, idx); });
 
-          del.addEventListener('click', e => {
-            e.stopPropagation(); hidePop();
-            if (pill.querySelector('.mp-del-confirm')) return;
-            const conf = mk('div','mp-del-confirm');
-            conf.innerHTML =
-              `<span class="mp-del-msg">Remove meal?</span>` +
-              `<button class="mp-del-y">Yes</button>` +
-              `<button class="mp-del-n">No</button>`;
-            conf.querySelector('.mp-del-y').addEventListener('click', ev => {
-              ev.stopPropagation(); delMealAt(load(),ds,slot,idx); render();
+            del.addEventListener('click', e => {
+              e.stopPropagation(); hidePop();
+              if (pill.querySelector('.mp-del-confirm')) return;
+              const conf = mk('div', 'mp-del-confirm');
+              conf.innerHTML =
+                `<span class="mp-del-msg">Remove meal?</span>` +
+                `<button class="mp-del-y">Yes</button>` +
+                `<button class="mp-del-n">No</button>`;
+              conf.querySelector('.mp-del-y').addEventListener('click', ev => {
+                ev.stopPropagation(); delMealAt(load(), ds, slot, idx); render();
+              });
+              conf.querySelector('.mp-del-n').addEventListener('click', ev => {
+                ev.stopPropagation(); conf.remove();
+              });
+              pill.appendChild(conf);
             });
-            conf.querySelector('.mp-del-n').addEventListener('click', ev => {
-              ev.stopPropagation(); conf.remove();
-            });
-            pill.appendChild(conf);
+
+            cell.appendChild(pill);
           });
 
-          cell.appendChild(pill);
+          /* + Add button */
+
+          const addBtn = mk('button', 'mp-cell-add');
+          const past = isSlotPast(ds, slot);
+          addBtn.innerHTML = `<span style="font-size:1rem;font-weight:300;line-height:1;">+</span> Add meal`;
+          if (past) {
+            addBtn.disabled = true;
+            addBtn.style.cssText += 'opacity:.3;cursor:not-allowed;border-style:solid;';
+            addBtn.title = 'Cannot add meals to past slots';
+          } else {
+            addBtn.addEventListener('click', () => openModal(ds, slot, '', null));
+          }
+          cell.appendChild(addBtn);
+          grid.appendChild(cell);
         });
-
-        /* + Add button */
-        const addBtn = mk('button','mp-cell-add');
-        addBtn.innerHTML = `<span style="font-size:1rem;font-weight:300;line-height:1;">+</span> Add meal`;
-        addBtn.addEventListener('click', () => openModal(ds, slot, '', null));
-        cell.appendChild(addBtn);
-
-        grid.appendChild(cell);
       });
+    }
+
+    /* Popover */
+    function showPop(pillEl, meal, ds, slot, idx) {
+      hidePop();
+      activePop = { ds, slot, idx, meal };
+      const pop = document.getElementById('mpPop');
+      document.getElementById('mpPopName').textContent = meal;
+      document.getElementById('mpPopBrowse').href = browseUrl(meal);
+      document.getElementById('mpPopFind').href = findUrl(meal);
+      document.getElementById('mpPopComrade').href = comradeUrl(meal);
+      pop.style.visibility = 'hidden';
+      pop.style.display = 'block';
+      const r = pillEl.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+      let left = r.left, top = r.bottom + 8;
+      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+      if (top + ph > window.innerHeight - 8) top = r.top - ph - 8;
+      pop.style.left = Math.max(8, left) + 'px';
+      pop.style.top = Math.max(8, top) + 'px';
+      pop.style.visibility = 'visible';
+    }
+    function hidePop() { document.getElementById('mpPop').style.display = 'none'; activePop = null; }
+
+    document.getElementById('mpPopEdit').addEventListener('click', () => {
+      if (!activePop) return;
+      const { ds, slot, idx, meal } = activePop; hidePop();
+      openModal(ds, slot, meal, idx);
     });
-  }
+    document.addEventListener('click', e => {
+      const pop = document.getElementById('mpPop');
+      if (pop.style.display !== 'none' && !pop.contains(e.target)) hidePop();
+    });
 
-  /* ── Popover ── */
-  function showPop(pillEl, meal, ds, slot, idx) {
-    hidePop();
-    activePop = { ds, slot, idx, meal };
-    const pop = document.getElementById('mpPop');
-    document.getElementById('mpPopName').textContent = meal;
-    document.getElementById('mpPopBrowse').href      = browseUrl(meal);
-    document.getElementById('mpPopFind').href        = findUrl(meal);
-    document.getElementById('mpPopComrade').href     = comradeUrl(meal);
-    pop.style.visibility = 'hidden';
-    pop.style.display    = 'block';
-    const r=pillEl.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight;
-    let left=r.left, top=r.bottom+8;
-    if (left+pw > window.innerWidth-8)  left = window.innerWidth-pw-8;
-    if (top +ph > window.innerHeight-8) top  = r.top-ph-8;
-    pop.style.left       = Math.max(8,left)+'px';
-    pop.style.top        = Math.max(8,top) +'px';
-    pop.style.visibility = 'visible';
-  }
-  function hidePop() { document.getElementById('mpPop').style.display='none'; activePop=null; }
+    /* Modal */
+    function openModal(ds, slot, existing, idx) {
+      activeDay = ds; activeSlot = slot; activeIndex = idx;
+      const dt = new Date(ds + 'T00:00:00');
+      document.getElementById('mpModalDay').textContent =
+        dt.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+      document.getElementById('mpModalAction').textContent =
+        (idx !== null && idx !== undefined) ? 'Edit meal' : 'Add meal';
+      document.querySelectorAll('.mp-tab').forEach(b => b.classList.toggle('active', b.dataset.s === slot));
+      document.getElementById('mpInput').value = existing || '';
+      document.getElementById('mpModal').style.display = 'flex';
+      document.getElementById('mpOverlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('mpInput').focus(), 50);
+    }
 
-  document.getElementById('mpPopEdit').addEventListener('click', () => {
-    if (!activePop) return;
-    const {ds,slot,idx,meal} = activePop; hidePop();
-    openModal(ds, slot, meal, idx);
-  });
-  document.addEventListener('click', e => {
-    const pop=document.getElementById('mpPop');
-    if (pop.style.display!=='none' && !pop.contains(e.target)) hidePop();
-  });
+    window.mpClose = () => {
+      document.getElementById('mpModal').style.display = 'none';
+      document.getElementById('mpOverlay').style.display = 'none';
+      document.body.style.overflow = '';
+      activeDay = null; activeIndex = null;
+    };
+    window.mpSlot = s => {
+      activeSlot = s;
+      document.querySelectorAll('.mp-tab').forEach(b => b.classList.toggle('active', b.dataset.s === s));
+      document.getElementById('mpInput').focus();
+    };
+    window.mpSave = () => {
+      const name = document.getElementById('mpInput').value.trim();
+      if (!name || !activeDay) return;
+      const d = load();
+      if (activeIndex !== null && activeIndex !== undefined) editMealAt(d, activeDay, activeSlot, activeIndex, name);
+      else addMeal(d, activeDay, activeSlot, name);
+      window.mpClose(); render();
+    };
 
-  /* ── Modal ── */
-  function openModal(ds, slot, existing, idx) {
-    activeDay=ds; activeSlot=slot; activeIndex=idx;
-    const dt=new Date(ds+'T00:00:00');
-    document.getElementById('mpModalDay').textContent =
-      dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-    document.getElementById('mpModalAction').textContent =
-      (idx!==null && idx!==undefined) ? 'Edit meal' : 'Add meal';
-    document.querySelectorAll('.mp-tab').forEach(b=>b.classList.toggle('active',b.dataset.s===slot));
-    document.getElementById('mpInput').value = existing||'';
-    document.getElementById('mpModal').style.display   = 'flex';
-    document.getElementById('mpOverlay').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    setTimeout(()=>document.getElementById('mpInput').focus(),50);
-  }
+    /* Clear-week */
+    window.mpAskClear = () => {
+      document.getElementById('mpClearConfirm').style.display = 'block';
+      document.getElementById('mpOverlay').style.display = 'block';
+    };
+    window.mpHideClear = () => {
+      document.getElementById('mpClearConfirm').style.display = 'none';
+      document.getElementById('mpOverlay').style.display = 'none';
+    };
+    window.mpClearConfirmed = () => {
+      const mon = getMonday(weekOffset), d = load();
+      for (let i = 0; i < 7; i++) { const dt = new Date(mon); dt.setDate(mon.getDate() + i); delete d[toISO(dt)]; }
+      persist(d); window.mpHideClear(); render();
+    };
 
-  window.mpClose = () => {
-    document.getElementById('mpModal').style.display   = 'none';
-    document.getElementById('mpOverlay').style.display = 'none';
-    document.body.style.overflow='';
-    activeDay=null; activeIndex=null;
-  };
-  window.mpSlot = s => {
-    activeSlot=s;
-    document.querySelectorAll('.mp-tab').forEach(b=>b.classList.toggle('active',b.dataset.s===s));
-    document.getElementById('mpInput').focus();
-  };
-  window.mpSave = () => {
-    const name=document.getElementById('mpInput').value.trim();
-    if (!name||!activeDay) return;
-    const d=load();
-    if (activeIndex!==null && activeIndex!==undefined) editMealAt(d,activeDay,activeSlot,activeIndex,name);
-    else addMeal(d,activeDay,activeSlot,name);
-    window.mpClose(); render();
-  };
+    /* Navigation */
+    document.getElementById('mpPrev').addEventListener('click', () => { weekOffset--; render(); });
+    document.getElementById('mpNext').addEventListener('click', () => { weekOffset++; render(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { window.mpClose(); window.mpHideClear(); hidePop(); }
+    });
 
-  /* ── Clear-week ── */
-  window.mpAskClear = () => {
-    document.getElementById('mpClearConfirm').style.display='block';
-    document.getElementById('mpOverlay').style.display='block';
-  };
-  window.mpHideClear = () => {
-    document.getElementById('mpClearConfirm').style.display='none';
-    document.getElementById('mpOverlay').style.display='none';
-  };
-  window.mpClearConfirmed = () => {
-    const mon=getMonday(weekOffset), d=load();
-    for(let i=0;i<7;i++){const dt=new Date(mon);dt.setDate(mon.getDate()+i);delete d[toISO(dt)];}
-    persist(d); window.mpHideClear(); render();
-  };
-
-  /* ── Navigation ── */
-  document.getElementById('mpPrev').addEventListener('click',()=>{weekOffset--;render();});
-  document.getElementById('mpNext').addEventListener('click',()=>{weekOffset++;render();});
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){window.mpClose();window.mpHideClear();hidePop();}
-  });
-
-  render();
-})();
+    render();
+  })();
 </script>

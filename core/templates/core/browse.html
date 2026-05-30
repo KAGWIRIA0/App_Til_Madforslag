@@ -351,9 +351,8 @@
           </p>
         </div>
         <span class="dish-count-badge">
-          {{ drinks.paginator.count }} drink{{ drinks.paginator.count|pluralize }}
-          page ( {{ drinks.number }} of {{ drinks.paginator.num_pages }} 
-          )
+          {{ drinks.paginator.count }} drink{{ drinks.paginator.count|pluralize }}(
+          page {{ drinks.number }} of {{ drinks.paginator.num_pages }} )
         </span>
       </div>
 

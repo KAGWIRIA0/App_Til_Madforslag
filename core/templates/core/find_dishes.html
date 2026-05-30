@@ -62,7 +62,7 @@
   .dc-tab-btn {
     flex: 1;
     font-family: 'Jost', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     letter-spacing: .05em;
     text-transform: uppercase;
@@ -109,7 +109,7 @@
   .dc-label {
     display: block;
     font-family: 'Jost', sans-serif;
-    font-size: .82rem;
+    font-size: .88rem;
     font-weight: 500;
     letter-spacing: .04em;
     color: var(--text-dark, #2a2218);
@@ -217,7 +217,7 @@
     background: transparent;
     color: var(--text-mid);
     font-family: 'Jost', sans-serif;
-    font-size: .72rem;
+    font-size: .85rem;
     font-weight: 600;
     letter-spacing: .04em;
     cursor: pointer;
@@ -305,7 +305,7 @@
 
   .ai-voice-status {
     font-family: 'Jost', sans-serif;
-    font-size: .8rem;
+    font-size: .88rem;
     color: var(--text-mid);
     text-align: center;
     margin-bottom: 10px;
@@ -433,7 +433,7 @@
   /* AI panel info note */
   .ai-note {
     font-family: 'Jost', sans-serif;
-    font-size: .7rem;
+    font-size: .80rem;
     color: var(--text-mid);
     text-align: center;
     margin-top: 8px;
@@ -483,7 +483,7 @@
       <div class="col-lg-8 text-center mb-4">
         <p class="section-label justify-content-center" style="font-size:16px;text-align:center;">✦ Smart Discovery</p>
         <h1 class="section-heading" style="font-size:clamp(2rem,5vw,3.2rem);margin-top:.5rem;">What Can You Make?</h1>
-        <p class="section-subheading mt-2" style="font-size:20px;">
+        <p class="section-subheading mt-2" style="font-size:22px;">
           Tell us what you have and we'll handle the rest
         </p>
       </div>
@@ -519,7 +519,7 @@
               <label class="dc-label">What ingredients do you have?</label>
               <input type="text" name="ingredients" class="dc-input" placeholder="e.g. eggs, tomatoes, onion, rice"
                 value="{{ ingredients_input|default:'' }}">
-              <p style="font-family:'Jost',sans-serif;font-size:.78rem;
+              <p style="font-family:'Jost',sans-serif;font-size:.85rem;
                         color:var(--text-mid);margin-top:.4rem;">
                 Separate ingredients with commas
               </p>
@@ -541,11 +541,11 @@
               <label class="dc-label">
                 <i class="bi bi-clock-history" style="color:var(--gold);"></i>
                 What did you eat recently?
-                <span style="color:var(--text-mid);font-weight:400;font-size:.82rem;">(optional)</span>
+                <span style="color:var(--text-mid);font-weight:400;font-size:.85rem;">(optional)</span>
               </label>
               <input type="text" name="recent_food" class="dc-input" placeholder="e.g. pasta, tacos, oats"
                 value="{{ recent_food|default:'' }}">
-              <p style="font-family:'Jost',sans-serif;font-size:.78rem;
+              <p style="font-family:'Jost',sans-serif;font-size:.88rem;
                         color:var(--text-mid);margin-top:.4rem;">
                 We'll suggest something different so you don't eat the same thing twice
               </p>
@@ -561,7 +561,7 @@
           <!-- AI PANEL -->
           <div id="aiPanel" style="{% if query_type != 'ai' %}display:none;{% endif %}">
 
-            <p style="font-family:'Jost',sans-serif;font-size:.8rem;
+            <p style="font-family:'Jost',sans-serif;font-size:.88rem;
                       color:var(--text-mid);margin-bottom:14px;line-height:1.6;">
               Ask Gemini AI for creative Kenyan meal ideas. Type, Speak, or
               Snap a photo of what you have.
@@ -584,7 +584,7 @@
             <div id="aiTextPanel">
               <textarea class="ai-text-input" id="aiTextInput" rows="2"
                 placeholder="e.g. I have eggs, maize flour, sukuma and cooking oil..."></textarea>
-              <p style="font-family:'Jost',sans-serif;font-size:.72rem;
+              <p style="font-family:'Jost',sans-serif;font-size:.85rem;
                         color:var(--text-mid);margin-bottom:12px;">
                 Describe what you have, Gemini will suggest meals and what to buy
               </p>
@@ -610,11 +610,11 @@
                 <input type="file" accept="image/*" capture="environment" id="imageFileInput"
                   onchange="previewImage(this)">
                 <span style="font-size:2rem;display:block;margin-bottom:8px;">📷</span>
-                <p style="font-family:'Jost',sans-serif;font-size:.85rem;
+                <p style="font-family:'Jost',sans-serif;font-size:.88rem;
                           color:var(--text-mid);margin:0;">
                   <strong>Tap to take a photo</strong> or upload from gallery
                 </p>
-                <p style="font-family:'Jost',sans-serif;font-size:.72rem;
+                <p style="font-family:'Jost',sans-serif;font-size:.85rem;
                           color:var(--text-mid);opacity:.65;margin:4px 0 0;">
                   Point at your fridge, pantry or ingredients
                 </p>
@@ -624,7 +624,7 @@
             <!-- AI loading -->
             <div class="ai-loading" id="aiLoading">
               <div class="ai-spinner"></div>
-              <p style="font-family:'Jost',sans-serif;font-size:.8rem;color:var(--text-mid);">
+              <p style="font-family:'Jost',sans-serif;font-size:.85rem;color:var(--text-mid);">
                 Gemini AI is thinking... 🤔
               </p>
             </div>
@@ -634,7 +634,7 @@
 
             <!-- Scan button -->
             <button type="button" class="ai-scan-btn" id="aiScanBtn" onclick="runAIScan()">
-              <i class="bi bi-stars"></i> Ask Gemini AI
+              Ask Gemini AI
             </button>
 
             <p class="ai-note">
@@ -736,7 +736,7 @@
 </section>
 {% endif %}
 
-<!-- ALL DISHES — UNCHANGED -->
+<!-- ALL DISHES -->
 <section id="results" style="padding:4rem 0;background:var(--cream);">
   <div class="container">
 
@@ -896,7 +896,7 @@
       document.getElementById('micBtn').classList.remove('recording');
       document.getElementById('micIcon').className = 'bi bi-mic-fill';
       document.getElementById('voiceStatus').textContent =
-        voiceText ? '✅ Got it! Click "Ask Gemini AI" below.' : 'Nothing heard. Tap to try again.';
+        voiceText ? 'Got it! Click "Ask Gemini AI" below.' : 'Nothing heard. Tap to try again.';
     };
 
     recognition.onerror = () => {

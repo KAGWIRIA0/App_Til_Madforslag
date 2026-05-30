@@ -5,20 +5,22 @@
 
 {% block extra_css %}
 <style>
-  /* ===== PAGE WRAPPER ===== */
+  /* PAGE WRAPPER  */
   .gym-page {
     background: var(--cream);
     min-height: 100vh;
     padding: 0 0 80px;
   }
 
-  /* ===== TOP HEADER ===== */
+  /* TOP HEADER */
   .gym-header {
     padding: 36px 0 0;
     background: var(--cream);
+    text-align: center;
+    display: block;
   }
 
-  /* eyebrow — was 0.68rem, now matches browse section-label */
+  /* eyebrow */
   .gym-header-eyebrow {
     font-family: 'Jost', sans-serif;
     font-size: 0.72rem;
@@ -32,7 +34,7 @@
     margin-bottom: 6px;
   }
 
-  /* H1 — was clamp(2.4,5vw,3.5rem), aligned to browse clamp */
+  /* H1 */
   .gym-header-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(2rem, 5vw, 3.2rem);
@@ -40,6 +42,9 @@
     color: var(--text-dark);
     line-height: 1.05;
     margin: 0 0 8px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .gym-header-title em {
@@ -47,38 +52,47 @@
     font-style: italic;
   }
 
-  /* sub — was 0.9rem, up to match browse hero desc */
+  /* sub */
   .gym-header-sub {
     font-family: 'Jost', sans-serif;
     font-size: 0.99rem;
     color: var(--text-mid);
     margin: 0 0 28px;
     line-height: 1.75;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  /* ===== SEGMENTED TIMING PILLS ===== */
+  /* SEGMENTED TIMING PILLS */
   .gym-timing-pills {
-    display: inline-flex;
+    display: flex;
     background: var(--beige);
     border-radius: 50px;
-    padding: 4px;
-    gap: 0;
+    padding: 6px 12px;
     margin-bottom: 28px;
     border: 1px solid rgba(59, 42, 26, 0.1);
-    flex-wrap: wrap;
-    max-width: 100%;
-    overflow-x: auto;
+    flex-wrap: nowrap !important; 
+    width: 100%;
+    max-width: 600px;
+    justify-content: flex-start;
+    overflow-x: auto !important;
     scrollbar-width: none;
+    align-items: center;               
+    gap: 12px; 
+    margin: 24px auto;
+    white-space: nowrap;       
+    -webkit-overflow-scrolling: touch;
   }
 
   .gym-timing-pills::-webkit-scrollbar { display: none; }
 
-  /* pill label — was 0.78rem, aligned to browse filter-btn */
+  /* pill label */
   .timing-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 50px;
     text-decoration: none;
     font-family: 'Jost', sans-serif;
@@ -103,10 +117,10 @@
 
   .timing-pill.inactive:hover { color: var(--brown-dark); }
 
-  /* ===== DIVIDER ===== */
+  /* DIVIDER */
   .gym-divider {
     font-family: 'Jost', sans-serif;
-    font-size: 0.72rem;       /* was 0.7rem — small bump for consistency */
+    font-size: 0.72rem;       
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -114,9 +128,10 @@
     opacity: 0.55;
     margin: 6px 0 18px;
     display: block;
+    text-align: center;
   }
 
-  /* ===== SEARCH BAR ===== */
+  /* SEARCH BAR */
   .gym-search-bar {
     display: flex;
     align-items: center;
@@ -141,7 +156,7 @@
     flex-shrink: 0;
   }
 
-  /* search input — was 0.9rem, up to match browse search */
+  /* search input */
   .gym-search-input {
     flex: 1;
     background: none;
@@ -157,7 +172,7 @@
     opacity: 0.5;
   }
 
-  /* ===== CATEGORY PILLS ===== */
+  /* CATEGORY PILLS */
   .gym-category-row {
     display: flex;
     gap: 8px;
@@ -165,7 +180,7 @@
     margin-bottom: 28px;
   }
 
-  /* cat pill — was 0.75rem, up to 0.82rem matching browse filter-btn */
+  /* cat pill */
   .cat-pill {
     padding: 0.5rem 1.2rem;
     border-radius: 50px;
@@ -193,8 +208,7 @@
     border-color: var(--brown-dark);
   }
 
-  /* ===== RESULTS INFO ===== */
-  /* was 0.82rem — keep, already matches browse */
+  /* RESULTS INFO */
   .gym-results-info {
     font-family: 'Jost', sans-serif;
     font-size: 0.82rem;
@@ -202,7 +216,7 @@
     margin-bottom: 16px;
   }
 
-  /* ===== FOOD CARDS ===== */
+  /* FOOD CARDS */
   .gym-foods-list {
     display: flex;
     flex-direction: column;
@@ -248,7 +262,7 @@
     background: linear-gradient(135deg, var(--beige), var(--cream));
   }
 
-  /* badge — was 0.6rem, small bump */
+  /* badge */
   .food-type-badge {
     position: absolute;
     top: 12px;
@@ -293,7 +307,7 @@
     margin-bottom: 4px;
   }
 
-  /* category chip — was 0.6rem, up to match browse dish-card-category */
+  /* category chip */
   .gym-food-category {
     font-family: 'Jost', sans-serif;
     font-size: 0.72rem;
@@ -304,7 +318,7 @@
     white-space: nowrap;
   }
 
-  /* food name — was 1.55rem, kept — already strong; align weight */
+  /* food name */
   .gym-food-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.55rem;
@@ -314,7 +328,7 @@
     line-height: 1.15;
   }
 
-  /* desc — was 0.84rem, up to 0.88rem matching browse card desc */
+  /* desc */
   .gym-food-desc {
     font-family: 'Jost', sans-serif;
     font-size: 0.88rem;
@@ -331,7 +345,7 @@
     margin-bottom: 14px;
   }
 
-  /* timing label — was 0.6rem */
+  /* timing label */
   .timing-section-label {
     font-family: 'Jost', sans-serif;
     font-size: 0.65rem;
@@ -341,7 +355,7 @@
     color: var(--gold);
   }
 
-  /* timing value — was 0.84rem */
+  /* timing value */
   .timing-value-text {
     font-family: 'Jost', sans-serif;
     font-size: 0.88rem;
@@ -351,7 +365,7 @@
 
   .gym-food-benefits { margin-bottom: 18px; }
 
-  /* benefits label — was 0.6rem */
+  /* benefits label */
   .benefits-section-label {
     font-family: 'Jost', sans-serif;
     font-size: 0.65rem;
@@ -372,7 +386,7 @@
     gap: 5px;
   }
 
-  /* benefit items — was 0.84rem */
+  /* benefit items */
   .gym-food-benefits li {
     font-family: 'Jost', sans-serif;
     font-size: 0.88rem;
@@ -392,7 +406,7 @@
     flex-shrink: 0;
   }
 
-  /* ===== MACRO BLOCK ===== */
+  /* MACRO BLOCK */
   .gym-food-macros {
     display: flex;
     gap: 0;
@@ -411,7 +425,7 @@
 
   .macro-item:last-child { border-right: none; }
 
-  /* macro value — was 1.3rem, up to match section stat numbers */
+  /* macro value  */
   .macro-value {
     display: block;
     font-family: 'Cormorant Garamond', serif;
@@ -421,7 +435,7 @@
     line-height: 1.1;
   }
 
-  /* macro label — was 0.58rem */
+  /* macro label */
   .macro-label {
     font-family: 'Jost', sans-serif;
     font-size: 0.65rem;
@@ -433,7 +447,7 @@
     margin-top: 3px;
   }
 
-  /* ===== EMPTY STATE ===== */
+  /* EMPTY STATE */
   .gym-empty {
     text-align: center;
     padding: 60px 20px;
@@ -441,12 +455,12 @@
 
   .gym-empty p {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;          /* was 1.6rem */
+    font-size: 2rem;         
     color: var(--text-mid);
     margin-bottom: 16px;
   }
 
-  /* ===== RESPONSIVE ===== */
+  /* RESPONSIVE */
   @media (min-width: 860px) {
     .gym-foods-list {
       display: grid;
@@ -471,7 +485,7 @@
 
     .timing-pill {
       padding: 9px 14px;
-      font-size: 0.75rem;     /* was 0.7rem */
+      font-size: 0.75rem;    
     }
 
     .gym-food-body {
@@ -491,7 +505,7 @@
 <div class="gym-page">
   <div class="container">
 
-    <!-- ── HEADER ── -->
+    <!-- HEADER -->
     <div class="gym-header">
       <h1 class="gym-header-title">Eat to <em>Perform</em></h1>
       <p class="gym-header-sub">
@@ -499,7 +513,7 @@
       </p>
     </div>
 
-    <!-- ── TIMING SEGMENTED CONTROL ── -->
+    <!-- TIMING SEGMENTED CONTROL -->
     <div class="gym-timing-pills">
 
       <a href="{% url 'gym' %}?category={{ active_category }}"
@@ -519,9 +533,9 @@
 
     </div>
 
-    <span class="gym-divider">Find up. Train smart.</span>
+    <span class="gym-divider">Fuel up. Train smart.</span>
 
-    <!-- ── SEARCH ── -->
+    <!-- SEARCH -->
     <form method="GET" action="{% url 'gym' %}">
       {% if active_timing %}
       <input type="hidden" name="timing" value="{{ active_timing }}">
@@ -536,7 +550,7 @@
       </div>
     </form>
 
-    <!-- ── CATEGORY PILLS ── -->
+    <!-- CATEGORY PILLS -->
     <div class="gym-category-row">
       <a href="{% url 'gym' %}{% if active_timing %}?timing={{ active_timing }}{% endif %}"
         class="cat-pill {% if active_category == 'all' %}active{% endif %}">
@@ -556,14 +570,14 @@
       {% endfor %}
     </div>
 
-    <!-- ── RESULTS INFO ── -->
+    <!-- RESULTS INFO -->
     {% if search_query %}
     <p class="gym-results-info">
       Results for <strong>"{{ search_query }}"</strong> — {{ foods|length }} found
     </p>
     {% endif %}
 
-    <!-- ── FOOD CARDS ── -->
+    <!-- FOOD CARDS -->
     {% if foods %}
     <div class="gym-foods-list">
       {% for food in foods %}

@@ -27,7 +27,7 @@ class Dish(models.Model):
     ]
 
     name = models.CharField(max_length=200)
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    categories = models.JSONField(default=list, blank=True, help_text="Select one or more: breakfast, lunch, dinner, anytime")
     description = models.TextField()
     ingredients = models.TextField(help_text="Comma-separated list of ingredients")
     estimated_cost = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
@@ -175,6 +175,23 @@ class GymFood(models.Model):
         return [s.strip() for s in self.recipe_steps.split('\n') if s.strip()]
 
 class ComradeFood(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    price_ksh = models.IntegerField(help_text="Price in Kenyan Shillings")
+    unit = models.CharField(max_length=100, help_text="e.g. per packet, per kg, per piece")
+    youtube_url = models.URLField(blank=True, null=True)
+    is_featured = models.BooleanField(default=False)
+    cooking_tip = models.TextField(
+        blank=True,
+        help_text="Budget cooking tip e.g. 'Boil with salt for fastest meal'"
+    )
+
+    def __str__(self):
+        return f"{self.name} — Ksh {self.price_ksh}"
+
+
+
+class ComradeMeal(models.Model):
     CATEGORY_CHOICES = [
         ('breakfast', 'Breakfast'),
         ('lunch', 'Lunch'),
@@ -186,45 +203,9 @@ class ComradeFood(models.Model):
         ('drink', 'Drink'),
         ('snack', 'Snack'),
     ]
-
     name = models.CharField(max_length=200)
-    description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    price_ksh = models.IntegerField(help_text="Price in Kenyan Shillings")
-    unit = models.CharField(max_length=100, help_text="e.g. per packet, per kg, per piece")
-    youtube_url = models.URLField(blank=True, null=True)
-    ingredients_needed = models.TextField(
-        help_text="Comma-separated ingredients needed to cook this",
-        blank=True
-    )
-    can_combine_with = models.TextField(
-        help_text="Comma-separated foods this goes well with",
-        blank=True
-    )
-    cooking_tip = models.TextField(
-        blank=True,
-        help_text="Budget cooking tip e.g. 'Boil with salt for fastest meal'"
-    )
-    upgrade_tip = models.TextField(
-        blank=True,
-        help_text="How to upgrade if they have more ingredients"
-    )
-    image = models.ImageField(upload_to='comrade_foods/', blank=True, null=True)
-    is_featured = models.BooleanField(default=False)
-
-    def get_ingredients_list(self):
-        return [i.strip() for i in self.ingredients_needed.split(',') if i.strip()]
-
-    def get_combinations(self):
-        return [c.strip() for c in self.can_combine_with.split(',') if c.strip()]
-
-    def __str__(self):
-        return f"{self.name} — Ksh {self.price_ksh}"
-
-
-
-class ComradeMeal(models.Model):
-    name = models.CharField(max_length=200)
+    categories = models.JSONField(default=list, blank=True, help_text="Select one or more: breakfast, lunch, dinner, anytime")
+    meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES, default='food')
     description = models.TextField()
     total_cost_ksh = models.IntegerField()
     items = models.JSONField(

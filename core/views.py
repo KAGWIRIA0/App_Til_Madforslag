@@ -10,22 +10,20 @@ import random
 
 def home(request):
     def get_meal(category):
-        mains  = list(Dish.objects.filter(category=category, food_role__icontains="main"))
-        drinks = list(Dish.objects.filter(category=category, food_role__icontains="drink"))
-        sides  = list(Dish.objects.filter(category=category, food_role__icontains="side"))
-        return {
-            "main":  random.choice(mains)  if mains  else None,
-            "drink": random.choice(drinks) if drinks else None,
-            "side":  random.choice(sides)  if sides  else None,
-        }
+        mains  = list(Dish.objects.filter(categories__contains=[category], food_role__icontains="main"))
+        sides  = list(Dish.objects.filter(categories__contains=[category], food_role__icontains="side"))
+        drinks = list(Dish.objects.filter(categories__contains=[category], food_role__icontains="drink"))
+        return {'mains': mains, 'sides': sides, 'drinks': drinks}
+
+    breakfast = get_meal('breakfast')
+    lunch     = get_meal('lunch')
+    dinner    = get_meal('dinner')
 
     return render(request, 'core/home.html', {
-        'breakfast': get_meal('breakfast'),
-        'lunch':     get_meal('lunch'),
-        'dinner':    get_meal('dinner'),
-        'anytime':   get_meal('anytime'),
+        'breakfast': breakfast,
+        'lunch':     lunch,
+        'dinner':    dinner,
     })
-
 
 def browse(request):
     category = request.GET.get('category', '')
@@ -34,8 +32,9 @@ def browse(request):
 
     dishes = Dish.objects.all()
 
+    
     if category:
-        dishes = dishes.filter(category=category)
+        dishes = dishes.filter(categories__contains=[category])
 
     if role:
         dishes = dishes.filter(food_role__icontains=role)
@@ -843,10 +842,11 @@ def comrade_kitchen(request):
                 if budget_int else []
             )
 
-    featured_meals = ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh')[:8]
+    featured_meals = ComradeMeal.objects.prefetch_related('stew_options').order_by('total_cost_ksh')
     all_foods = ComradeFood.objects.all().order_by('price_ksh')
     if active_category:
-        all_foods = all_foods.filter(category=active_category)
+        featured_meals = featured_meals.filter(categories__contains=[active_category])
+    featured_meals = featured_meals[:8]
 
     comrade_foods_display = (
         ComradeFood.objects
@@ -857,21 +857,25 @@ def comrade_kitchen(request):
     stock_items = [
         {'item': 'Rice', 'qty': '4kg', 'tip': 'Lasts ~3 months for one person', 'price': 'Ksh 520', 'unit_price': '130/kg'},
         {'item': 'Indomie (full box)', 'qty': '40 packets', 'tip': 'Instant meal any time. Add an egg to make it filling.', 'price': 'Ksh 400', 'unit_price': '10/packet'},
-        {'item': 'Maize Flour (Unga)', 'qty': '2kg', 'tip': 'Ugali base — most filling food per shilling', 'price': 'Ksh 160', 'unit_price': '80/kg'},
-        {'item': 'Cooking Oil', 'qty': '1 litre', 'tip': 'Essential for every single meal. Never run out.', 'price': 'Ksh 250', 'unit_price': '250/L'},
-        {'item': 'Eggs (tray)', 'qty': '30 eggs', 'tip': '10 full breakfasts at Ksh 45 each.', 'price': 'Ksh 450', 'unit_price': '15/egg'},
-        {'item': 'Onions', 'qty': '1kg', 'tip': 'Base for almost every Kenyan dish. Long shelf life.', 'price': 'Ksh 60', 'unit_price': '60/kg'},
-        {'item': 'Garlic', 'qty': '250g', 'tip': 'Lasts weeks. Huge flavour boost.', 'price': 'Ksh 50', 'unit_price': '200/kg'},
-        {'item': 'Milk (500ml packets)', 'qty': '10-pack box', 'tip': 'Tea and porridge sorted for a week.', 'price': 'Ksh 500', 'unit_price': '50/packet'},
+        {'item': 'Maize Flour (Unga)', 'qty': '2kg', 'tip': 'Ugali base. Most filling food per shilling', 'price': 'Ksh 160', 'unit_price': '80/kg'},
+        {'item': 'Cooking Oil', 'qty': '1 litre', 'tip': 'Essential for every single meal. Never run out.', 'price': 'Ksh 280', 'unit_price': '70 1/4L'},
+        {'item': 'Eggs (tray)', 'qty': '30 eggs', 'tip': '10 full breakfasts at Ksh 45 each.', 'price': 'Ksh 450', 'unit_price': '18/egg'},
+        {'item': 'Onions', 'qty': '1kg', 'tip': 'Base for almost every Kenyan dish. Long shelf life.', 'price': 'Ksh 80', 'unit_price': '80/kg'},
+        {'item': 'Garlic', 'qty': '250g', 'tip': 'Lasts weeks. Huge flavour boost.', 'price': 'Ksh 30', 'unit_price': '200/kg'},
+        {'item': 'Milk (500ml packets)', 'qty': '21-pack box', 'tip': 'Tea and porridge sorted for a week.', 'price': 'Ksh 420', 'unit_price': '30/packet'},
         {'item': 'Ndengu (Green Grams)', 'qty': '1kg', 'tip': 'Complete protein, cheap, cooks in 30 mins.', 'price': 'Ksh 130', 'unit_price': '130/kg'},
-        {'item': 'Beans (Maharagwe)', 'qty': '1kg', 'tip': 'Hearty, filling, nutritious.', 'price': 'Ksh 120', 'unit_price': '120/kg'},
+        {'item': 'Beans (Maharagwe)', 'qty': '1kg', 'tip': 'Hearty, filling, nutritious.', 'price': 'Ksh 100', 'unit_price': '35/small cup'},
         {'item': 'Njahi (Black Beans)', 'qty': '1kg', 'tip': 'Rich in iron. Long shelf life.', 'price': 'Ksh 150', 'unit_price': '150/kg'},
-        {'item': 'Kamande (Lentils)', 'qty': '1kg', 'tip': 'Fast cooking (no soaking). Very filling.', 'price': 'Ksh 140', 'unit_price': '140/kg'},
-        {'item': 'Porridge Flour (Uji)', 'qty': '1kg', 'tip': 'Quick filling breakfast.', 'price': 'Ksh 80', 'unit_price': '80/kg'},
-        {'item': 'Sugar', 'qty': '1kg', 'tip': 'For tea, porridge, beverages. Always have some.', 'price': 'Ksh 130', 'unit_price': '130/kg'},
+        {'item': 'Kamande (Lentils)', 'qty': '1kg', 'tip': 'Fast cooking (no soaking). Very filling.', 'price': 'Ksh 240', 'unit_price': '240/kg'},
+        {'item': 'Porridge Flour (Uji)', 'qty': '1kg', 'tip': 'Quick filling breakfast.', 'price': 'Ksh 90', 'unit_price': '90/kg'},
+        {'item': 'Sugar', 'qty': '1kg', 'tip': 'For tea, porridge, beverages. Always have some.', 'price': 'Ksh 150', 'unit_price': '150/kg'},
         {'item': 'Wheat Flour', 'qty': '2kg', 'tip': 'Chapati, pancakes, mandazi. Versatile and cheap.', 'price': 'Ksh 160', 'unit_price': '80/kg'},
-        {'item': 'Salt', 'qty': '1kg', 'tip': 'Never cook without it. Lasts months.', 'price': 'Ksh 30', 'unit_price': '30/kg'},
+        {'item': 'Salt', 'qty': '1kg', 'tip': 'Never cook without it. Lasts months.', 'price': 'Ksh 100', 'unit_price': '50 1/2kg'},
         {'item': 'Tomato Paste (tins)', 'qty': '3 tins', 'tip': 'Flavour base for stews. Cheaper than fresh tomatoes.', 'price': 'Ksh 90', 'unit_price': '30/tin'},
+        {'item': 'Royco', 'qty': '1Packet', 'tip': 'Spice Your Meals With It.', 'price': 'Ksh 130', 'unit_price': '1packet or @ at 5 ksh'},
+        {'item': 'Blueband/ Prestige', 'qty': '1kg', 'tip': 'Makes Your Breakfast Fuller', 'price': 'Ksh 240', 'unit_price': '120 1/2kg'},
+        {'item': 'Sossi', 'qty': 'Box of 80g Packets', 'tip': 'Can serve as a stew option in times of need for any base meal', 'price': 'Ksh 540', 'unit_price': '45 per packet'},
+        {'item': 'Any Fruit of Choice', 'qty': 'Depends with type', 'tip': 'For a Healthier Body', 'price': 'Variable', 'unit_price': 'Varies '},
     ]
 
     return render(request, 'core/comrade_kitchen.html', {

@@ -15,8 +15,7 @@
     padding: 60px 20px;
   }
   .ck-hero-overlay {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(26,14,6,0.88) 0%, rgba(59,32,12,0.68) 50%, rgba(26,14,6,0.55) 100%);
     z-index: 1;
   }
@@ -96,6 +95,50 @@
     color: var(--white); margin: 0;
   }
   .ck-section-sub { font-family: 'Jost', sans-serif; font-size: 0.88rem; color: var(--text-mid); margin: 6px 0 0; }
+
+  /* CATEGORY FILTER BAR (like browse page) */
+  .ck-filter-bar {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 4px 20px rgba(59,42,26,0.08);
+    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .ck-filter-btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1.5px solid rgba(59,42,26,0.15);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .ck-filter-btn:hover,
+  .ck-filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--text-dark);
+  }
+  .ck-dish-count {
+    margin-left: auto;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    white-space: nowrap;
+  }
+
+  /* FOOD CARDS */
   .ck-food-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
   @media (max-width: 991px) { .ck-food-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 575px) { .ck-food-grid { grid-template-columns: 1fr; } }
@@ -142,13 +185,6 @@
     letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none;
   }
   .ck-more-btn:hover { background: #1a0e06; color: var(--cream); }
-  .ck-eat-with-btn {
-    display: inline-flex; align-items: center; gap: 5px; background: var(--gold);
-    border: none; border-radius: 50px; padding: 0.5rem 1.1rem; font-family: 'Jost', sans-serif;
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-    color: var(--text-dark); cursor: pointer; transition: all 0.2s; text-decoration: none;
-  }
-  .ck-eat-with-btn:hover { background: var(--gold-light); color: var(--text-dark); transform: translateY(-1px); }
   .ck-yt-btn {
     display: inline-flex; align-items: center; gap: 5px; background: var(--white);
     color: var(--text-mid) !important; font-family: 'Jost', sans-serif; font-size: 0.75rem;
@@ -156,6 +192,8 @@
     border-radius: 50px; border: 1.5px solid rgba(59,42,26,0.2); transition: border-color 0.2s;
   }
   .ck-yt-btn:hover { border-color: #dc3545; }
+
+  /* RESULTS MEAL CARDS */
   .ck-meal-wrapper { display: flex; flex-direction: column; }
   .ck-meal-card {
     background: var(--white); border-radius: 20px; overflow: hidden;
@@ -224,43 +262,71 @@
   .ck-price-name { font-family: 'Jost', sans-serif; font-size: .9rem; font-weight: 500; color: var(--text-dark); }
   .ck-price-unit { font-family: 'Jost', sans-serif; font-size: .75rem; color: var(--text-mid); margin-top: 2px; }
   .ck-price-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold); }
-  .ck-market-row {
-    display: flex; align-items: center; gap: 14px; background: var(--white);
-    border-radius: 14px; padding: 14px 18px; border-bottom: 3px solid var(--brown-dark);
-    box-shadow: 0 2px 10px rgba(59,42,26,0.07); transition: transform 0.18s, box-shadow 0.18s;
-  }
-  .ck-market-row:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59,42,26,0.13); }
-  .ck-market-info { flex: 1; min-width: 0; }
-  .ck-market-name { font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--brown-dark); margin: 0 0 2px; }
-  .ck-market-unit { font-family: 'Jost', sans-serif; font-size: 0.74rem; color: var(--text-mid); margin: 0; }
-  .ck-empty { text-align: center; padding: 60px 20px; }
-  .ck-empty-icon { font-size: 4rem; margin-bottom: 16px; display: block; }
-  .ck-empty p { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--text-mid); }
-  .ck-stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-  @media (max-width: 991px) { .ck-stock-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 575px) { .ck-stock-grid { grid-template-columns: 1fr; } }
 
-  /* ---- Stew row styles ---- */
+  /* MARKET PRICE LIST */
+  .ck-market-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 991px) { .ck-market-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 575px) { .ck-market-grid { grid-template-columns: 1fr; } }
+
+  .ck-market-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid rgba(196,154,60,0.2);
+    box-shadow: 0 2px 12px rgba(59,42,26,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ck-market-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(59,42,26,0.16);
+    border-color: rgba(196,154,60,0.4);
+  }
+  .ck-market-card-name {
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .ck-market-card-unit {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    margin: 0;
+  }
+  .ck-market-card-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-top: 0.4rem;
+    line-height: 1;
+  }
+  .ck-market-card-price span {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--text-mid);
+    margin-left: 4px;
+  }
+
+  /* stew rows */
   .ck-stew-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 0.5rem 0.85rem; border-radius: 10px; background: var(--cream);
     border: 1px solid rgba(196,154,60,0.2); transition: background 0.15s;
   }
-  .ck-stew-faded {
-    background: rgba(59,42,26,0.04) !important;
-    border-color: rgba(59,42,26,0.1) !important;
-    opacity: 0.45;
-  }
-  .ck-stew-highlight {
-    background: rgba(196,154,60,0.09) !important;
-    border-color: rgba(196,154,60,0.45) !important;
-  }
-  /* Top-pick stew: bolder gold border */
-  .ck-stew-top-pick {
-    background: rgba(196,154,60,0.13) !important;
-    border: 2px solid var(--gold) !important;
-  }
-  /* Budget tick badge */
+  .ck-stew-faded { background: rgba(59,42,26,0.04) !important; border-color: rgba(59,42,26,0.1) !important; opacity: 0.45; }
+  .ck-stew-highlight { background: rgba(196,154,60,0.09) !important; border-color: rgba(196,154,60,0.45) !important; }
+  .ck-stew-top-pick { background: rgba(196,154,60,0.13) !important; border: 2px solid var(--gold) !important; }
   .ck-budget-tick {
     display: inline-flex; align-items: center; gap: 3px;
     font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 700;
@@ -272,39 +338,12 @@
     font-family: 'Jost', sans-serif; font-size: 0.63rem;
     color: var(--text-mid); opacity: 0.55; white-space: nowrap;
   }
-  /* Base meal budget tick (shown next to the price) */
   .ck-base-tick {
     display: inline-flex; align-items: center; gap: 4px;
     font-family: 'Jost', sans-serif; font-size: 0.68rem; font-weight: 700;
     color: #15803d; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
     border-radius: 50px; padding: 3px 10px;
   }
-
-  .ck-stock-card {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(196,154,60,0.2);
-    border-radius: 14px; padding: 1rem 1.2rem; display: flex; align-items: flex-start; gap: 0.75rem; transition: background 0.2s;
-  }
-  .ck-stock-card:hover { background: rgba(255,255,255,0.11); }
-  .ck-stock-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-  .ck-stock-name { font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); margin: 0 0 2px; }
-  .ck-stock-tip { font-family: 'Jost', sans-serif; font-size: 0.75rem; color: rgba(255,252,248,0.55); line-height: 1.45; margin: 0; }
-  .ck-stock-price { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-top: 3px; display: block; }
-  @media (max-width: 768px) {
-    .ck-meal-card,
-    .ck-meal-card.reverse {
-      grid-template-columns: 1fr !important;
-    }
-    .ck-meal-card.reverse .ck-meal-img { order: 0; }
-    .ck-meal-card.reverse .ck-meal-body { order: 0; }
-    .ck-meal-img { min-height: 240px !important; height: 240px; }
-    .ck-meal-body { padding: 1.4rem 1.2rem; }
-  }
-  @media (max-width: 768px) {
-    .ck-hero { min-height: 100svh; padding: 60px 20px; }
-    .ck-hero h1 { font-size: 2.2rem; }
-    .ck-stats { gap: 20px; }
-  }
-  @media (min-width: 769px) { .ck-hero { min-height: 70vh; } }
   .ck-stew-guide-note {
     display: flex; align-items: flex-start; gap: 8px;
     background: rgba(196,154,60,0.07); border: 1px solid rgba(196,154,60,0.25);
@@ -312,6 +351,112 @@
     font-family: 'Jost', sans-serif; font-size: 0.9rem; color: var(--text-mid); line-height: 1.5;
   }
   .ck-stew-guide-note strong { color: var(--brown-dark); }
+
+  /* STOCK UP */
+  .ck-stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  @media (max-width: 991px) { .ck-stock-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 575px) { .ck-stock-grid { grid-template-columns: 1fr; } }
+
+  .ck-stock-card {
+    background: var(--white);
+    border: 1px solid rgba(196,154,60,0.18);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .ck-stock-card:hover {
+    box-shadow: 0 6px 22px rgba(59,42,26,0.14);
+    transform: translateY(-2px);
+  }
+  .ck-stock-name {
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .ck-stock-qty {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-mid);
+    margin-left: 6px;
+  }
+  .ck-stock-tip {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+  .ck-stock-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 0.4rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(196,154,60,0.18);
+  }
+  .ck-stock-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .ck-stock-unit-price {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-mid);
+  }
+  .ck-stock-disclaimer {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    color: rgba(255,252,248,0.45);
+    margin-top: 1.8rem;
+    margin-bottom: 0;
+    text-align: center;
+    line-height: 1.6;
+    font-style: italic;
+    border-top: 1px solid rgba(196,154,60,0.12);
+    padding-top: 1.2rem;
+  }
+
+  .ck-empty { text-align: center; padding: 60px 20px; }
+  .ck-empty-icon { font-size: 4rem; margin-bottom: 16px; display: block; }
+  .ck-empty p { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--text-mid); }
+
+  /* category section heading */
+  .ck-cat-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--brown-dark);
+    margin: 0 0 0.3rem;
+  }
+  .ck-cat-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    margin: 0 0 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    .ck-meal-card, .ck-meal-card.reverse { grid-template-columns: 1fr !important; }
+    .ck-meal-card.reverse .ck-meal-img { order: 0; }
+    .ck-meal-card.reverse .ck-meal-body { order: 0; }
+    .ck-meal-img { min-height: 240px !important; height: 240px; }
+    .ck-meal-body { padding: 1.4rem 1.2rem; }
+    .ck-hero { min-height: 100svh; padding: 60px 20px; }
+    .ck-hero h1 { font-size: 2.2rem; }
+    .ck-stats { gap: 20px; }
+  }
+  @media (min-width: 769px) { .ck-hero { min-height: 70vh; } }
 </style>
 {% endblock %}
 
@@ -327,7 +472,7 @@
         <h1>Eat Well, Even on a<br><em>Student Budget.</em></h1>
         <p class="ck-hero-desc">
           Search by what you can spend, by what's already in your kitchen,
-          or both and never eat the same thing two days in a row.
+          or both — and never eat the same thing two days in a row.
         </p>
         <div class="ck-stats">
           <div>
@@ -350,29 +495,19 @@
           <form method="GET" action="{% url 'comrade_kitchen' %}#results" id="ck-form">
             <input type="hidden" name="mode" id="ck-mode-input" value="{{ search_mode|default:'budget' }}">
 
-            <!-- Mode tabs -->
             <div class="ck-mode-tabs" role="tablist">
-              <button type="button"
-                class="ck-mode-tab {% if search_mode == 'budget' or not search_mode %}active{% endif %}"
-                data-mode="budget" onclick="setMode(this)">Budget</button>
-              <button type="button"
-                class="ck-mode-tab {% if search_mode == 'ingredients' %}active{% endif %}"
-                data-mode="ingredients" onclick="setMode(this)">Ingredients</button>
-              <button type="button"
-                class="ck-mode-tab {% if search_mode == 'both' %}active{% endif %}"
-                data-mode="both" onclick="setMode(this)">Both</button>
+              <button type="button" class="ck-mode-tab {% if search_mode == 'budget' or not search_mode %}active{% endif %}" data-mode="budget" onclick="setMode(this)">Budget</button>
+              <button type="button" class="ck-mode-tab {% if search_mode == 'ingredients' %}active{% endif %}" data-mode="ingredients" onclick="setMode(this)">Ingredients</button>
+              <button type="button" class="ck-mode-tab {% if search_mode == 'both' %}active{% endif %}" data-mode="both" onclick="setMode(this)">Both</button>
             </div>
 
-            <!-- Budget field -->
             <div id="field-budget" {% if search_mode == 'ingredients' %}style="display:none;"{% endif %}>
               <label class="ck-label" for="input-budget">Your budget (Ksh)</label>
               <input type="number" name="budget" id="input-budget" class="ck-input"
                 placeholder="e.g. 50, 100, 150…"
-                value="{% if search_mode != 'ingredients' %}{{ budget|default:'' }}{% endif %}"
-                min="0">
+                value="{% if search_mode != 'ingredients' %}{{ budget|default:'' }}{% endif %}" min="0">
             </div>
 
-            <!-- Ingredients field -->
             <div id="field-ingredients" {% if search_mode == 'budget' or not search_mode %}style="display:none;"{% endif %}>
               <label class="ck-label" for="input-ingredients">What do you already have?</label>
               <input type="text" name="ingredients" id="input-ingredients" class="ck-input"
@@ -383,7 +518,6 @@
               </p>
             </div>
 
-            <!-- Recently eaten (always visible) -->
             <label class="ck-label" for="input-recent">Eaten recently? (we'll skip these)</label>
             <input type="text" name="recent" id="input-recent" class="ck-input"
               placeholder="e.g. Rice and Beans, Ugali and Sukuma…"
@@ -416,21 +550,12 @@
     <div class="d-flex align-items-baseline justify-content-between mb-4 flex-wrap gap-3">
       <div>
         <h2 class="ck-section-title">
-          {% if suggested_meals %}
-            {{ suggested_meals|length }} Meal{{ suggested_meals|length|pluralize }} Found
-          {% else %}
-            No Meals Found
-          {% endif %}
+          {% if suggested_meals %}{{ suggested_meals|length }} Meal{{ suggested_meals|length|pluralize }} Found
+          {% else %}No Meals Found{% endif %}
         </h2>
-        <p class="ck-section-sub">
-          Sorted by best match
-          {% if recent_food %} · Excluding: {{ recent_food }}{% endif %}
-        </p>
+        <p class="ck-section-sub">Sorted by best match{% if recent_food %} · Excluding: {{ recent_food }}{% endif %}</p>
       </div>
-      <a href="{% url 'comrade_kitchen' %}"
-        style="font-family:'Jost',sans-serif;font-size:.88rem;color:var(--gold);text-decoration:none;">
-        ← Search again
-      </a>
+      <a href="{% url 'comrade_kitchen' %}" style="font-family:'Jost',sans-serif;font-size:.88rem;color:var(--gold);text-decoration:none;">← Search again</a>
     </div>
 
     {% if suggested_meals %}
@@ -440,161 +565,98 @@
       <div class="ck-meal-wrapper">
         <div class="ck-meal-card {% if forloop.counter|divisibleby:2 %}reverse{% endif %}">
           <div class="ck-meal-img">
-            {% if meal.image %}
-            <img src="{{ meal.image.url }}" alt="{{ meal.name }}">
-            {% else %}
-            🍽️
-            {% endif %}
+            {% if meal.image %}<img src="{{ meal.image.url }}" alt="{{ meal.name }}">
+            {% else %}🍽️{% endif %}
           </div>
           <div class="ck-meal-body">
-
-            <!-- Tier badge -->
             {% if entry.tier_label == 'ingredients_unlock' %}
-            <span class="ck-tier-badge ingredients-unlock">✨ Your ingredients unlock this!</span>
+            <span class="ck-tier-badge ingredients-unlock">Your ingredients unlock this!</span>
             {% elif entry.tier_label == 'within_budget_match' or entry.tier_label == 'full_match' or entry.tier_label == 'most_match' %}
             <span class="ck-tier-badge within-budget-match">✓ Matches your ingredients</span>
             {% elif entry.tier_label == 'budget_only' %}
             <span class="ck-tier-badge budget-only">Within budget</span>
             {% endif %}
 
-            <!-- Tags -->
             {% if meal.get_tags %}
-            <div class="ck-tags">
-              {% for tag in meal.get_tags %}
-              <span class="ck-tag">{{ tag }}</span>
-              {% endfor %}
-            </div>
+            <div class="ck-tags">{% for tag in meal.get_tags %}<span class="ck-tag">{{ tag }}</span>{% endfor %}</div>
             {% endif %}
 
             <h3 class="ck-meal-name">{{ meal.name }}</h3>
             <p class="ck-meal-desc">{{ meal.description }}</p>
 
-            <!-- Price row with budget tick for base meal -->
             <div class="ck-meal-meta">
               {% if entry.savings > 0 %}
-              <span style="font-family:'Jost',sans-serif;font-size:.82rem;text-decoration:line-through;opacity:.5;color:var(--text-mid);">
-                Ksh {{ entry.original_cost }}
-              </span>
+              <span style="font-family:'Jost',sans-serif;font-size:.82rem;text-decoration:line-through;opacity:.5;color:var(--text-mid);">Ksh {{ entry.original_cost }}</span>
               <span class="ck-meal-meta-price">Ksh {{ entry.adjusted_cost }}</span>
               {% else %}
               <span class="ck-meal-meta-price">Ksh {{ meal.total_cost_ksh }}</span>
               {% endif %}
-              {# SCENARIO 1: Tick when base meal itself is within budget (no stew needed) #}
               {% if budget_int and entry.base_within_budget %}
               <span class="ck-base-tick">✓ Within Ksh {{ budget_int }}</span>
               {% endif %}
             </div>
 
             {% if entry.savings > 0 %}
-            <p class="ck-savings-badge">
-              💰 You save Ksh {{ entry.savings }} — you already have some ingredients!
-            </p>
+            <p class="ck-savings-badge">💰 You save Ksh {{ entry.savings }} — you already have some ingredients!</p>
             {% endif %}
 
-            <!-- Items user already has -->
             {% if entry.items_user_has or entry.kitchen_items_user_has %}
             <p class="ck-chip-label">You already have</p>
             <div style="margin-bottom:.7rem;">
-              {% for item in entry.items_user_has %}
-              <span class="ck-chip">✓ {{ item.item }}</span>
-              {% endfor %}
-              {% for k in entry.kitchen_items_user_has %}
-              <span class="ck-chip">✓ {{ k }}</span>
-              {% endfor %}
+              {% for item in entry.items_user_has %}<span class="ck-chip">✓ {{ item.item }}</span>{% endfor %}
+              {% for k in entry.kitchen_items_user_has %}<span class="ck-chip">✓ {{ k }}</span>{% endfor %}
             </div>
             {% endif %}
 
-            <!-- Items to buy -->
             {% if entry.items_to_buy %}
             <p class="ck-chip-label">Still need to buy</p>
             <div style="margin-bottom:.7rem;">
-              {% for item in entry.items_to_buy %}
-              <span class="ck-chip">{{ item.item }} — Ksh {{ item.cost }}</span>
-              {% endfor %}
+              {% for item in entry.items_to_buy %}<span class="ck-chip">{{ item.item }} — Ksh {{ item.cost }}</span>{% endfor %}
             </div>
             {% elif meal.get_items %}
             <p class="ck-chip-label">What to buy</p>
             <div style="margin-bottom:.7rem;">
-              {% for item in meal.get_items %}
-              <span class="ck-chip">{{ item.qty }} {{ item.item }} — Ksh {{ item.cost }}</span>
-              {% endfor %}
+              {% for item in meal.get_items %}<span class="ck-chip">{{ item.qty }} {{ item.item }} — Ksh {{ item.cost }}</span>{% endfor %}
             </div>
             {% endif %}
 
-            <!-- Kitchen items needed -->
             {% if entry.kitchen_items_needed %}
             <p class="ck-chip-label">Also need from kitchen</p>
             <div style="margin-bottom:.7rem;">
-              {% for k in entry.kitchen_items_needed %}
-              <span class="ck-chip">{{ k }}</span>
-              {% endfor %}
+              {% for k in entry.kitchen_items_needed %}<span class="ck-chip">{{ k }}</span>{% endfor %}
             </div>
             {% endif %}
 
             {% if entry.has_stew_options %}
             <p class="ck-chip-label" style="margin-top:.4rem;">
               Eat it with
-              {% if ingredients_input %}
-              <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">
-                — ⭐ marks your top pick &nbsp;·&nbsp; ★ you have ingredients for it
-              </span>
-              {% endif %}
-              {% if budget_int %}
-              <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">
-                — ✓ within Ksh {{ budget_int }}
-              </span>
-              {% endif %}
+              {% if ingredients_input %}<span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">— ⭐ marks your top pick &nbsp;·&nbsp; ★ you have ingredients for it</span>{% endif %}
+              {% if budget_int %}<span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">— ✓ within Ksh {{ budget_int }}</span>{% endif %}
             </p>
-
             {% if meal.comrade_food %}
             <div class="ck-stew-guide-note">
               <i class="bi bi-info-circle" style="color:var(--gold);flex-shrink:0;margin-top:1px;"></i>
-              <span> Click <strong>MORE ON..</strong> below to see full recipes, images, and cooking steps for each stew.</span>
+              <span>Click <strong>MORE ON..</strong> below to see full recipes, images, and cooking steps for each stew.</span>
             </div>
             {% endif %}
-
             <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
               {% for s in entry.all_stews %}
-              <div class="ck-stew-row
-                {% if s.recently_eaten %}ck-stew-faded
-                {% elif s.top_pick %}ck-stew-top-pick
-                {% elif s.user_has_ingredients %}ck-stew-highlight
-                {% endif %}">
+              <div class="ck-stew-row {% if s.recently_eaten %}ck-stew-faded{% elif s.top_pick %}ck-stew-top-pick{% elif s.user_has_ingredients %}ck-stew-highlight{% endif %}">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
-                  {# Top pick star (only when ingredient mode is active) #}
-                  {% if s.top_pick and ingredients_input %}
-                  <span style="color:var(--gold);font-size:0.85rem;font-weight:700;" title="Top pick based on your ingredients">⭐</span>
-                  {% elif s.user_has_ingredients and not s.recently_eaten %}
-                  <span style="color:var(--gold);font-size:0.8rem;" title="You have ingredients for this">★</span>
-                  {% endif %}
+                  {% if s.top_pick and ingredients_input %}<span style="color:var(--gold);font-size:0.85rem;font-weight:700;">⭐</span>
+                  {% elif s.user_has_ingredients and not s.recently_eaten %}<span style="color:var(--gold);font-size:0.8rem;">★</span>{% endif %}
                   <div style="min-width:0;">
-                    <span style="font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:{% if s.top_pick or s.user_has_ingredients and not s.recently_eaten %}600{% else %}500{% endif %};color:var(--text-dark);">
-                      {{ s.stew.name }}
-                    </span>
-                    {% if s.top_pick and ingredients_input %}
-                    <span style="font-family:'Jost',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-left:5px;">Top Pick</span>
-                    {% endif %}
-                    {% if s.recently_eaten %}
-                    <span style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;display:block;">
-                      had recently
-                    </span>
-                    {% endif %}
+                    <span style="font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:{% if s.top_pick or s.user_has_ingredients and not s.recently_eaten %}600{% else %}500{% endif %};color:var(--text-dark);">{{ s.stew.name }}</span>
+                    {% if s.top_pick and ingredients_input %}<span style="font-family:'Jost',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-left:5px;">Top Pick</span>{% endif %}
+                    {% if s.recently_eaten %}<span style="font-family:'Jost',sans-serif;font-size:0.68rem;color:var(--text-mid);font-style:italic;display:block;">had recently</span>{% endif %}
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;">
-                  <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--text-mid);">
-                    +Ksh {{ s.stew_cost|floatformat:0 }}
-                  </span>
-                  <span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);">
-                    Ksh {{ s.total_cost|floatformat:0 }}
-                  </span>
-                  {# SCENARIO 1: budget tick per stew combo #}
+                  <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--text-mid);">+Ksh {{ s.stew_cost|floatformat:0 }}</span>
+                  <span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);">Ksh {{ s.total_cost|floatformat:0 }}</span>
                   {% if budget_int %}
-                    {% if s.stew_affordable and not s.recently_eaten %}
-                    <span class="ck-budget-tick">✓</span>
-                    {% elif not s.stew_affordable %}
-                    <span class="ck-budget-over">over</span>
-                    {% endif %}
+                    {% if s.stew_affordable and not s.recently_eaten %}<span class="ck-budget-tick">✓</span>
+                    {% elif not s.stew_affordable %}<span class="ck-budget-over">over</span>{% endif %}
                   {% endif %}
                 </div>
               </div>
@@ -602,19 +664,12 @@
             </div>
             {% endif %}
 
-            <!-- Card actions -->
             <div class="ck-card-actions">
               {% if meal.comrade_food %}
-              {# Pass search context to detail page so it can show top-pick info #}
-              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}?ingredients={{ ingredients_input|urlencode }}&budget={{ budget }}&recent={{ recent_food|urlencode }}&mode={{ search_mode }}"
-                 class="ck-collapse-btn">
-                MORE ON..
-              </a>
+              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}?ingredients={{ ingredients_input|urlencode }}&budget={{ budget }}&recent={{ recent_food|urlencode }}&mode={{ search_mode }}" class="ck-collapse-btn">MORE ON..</a>
               {% endif %}
               {% if meal.youtube_url %}
-              <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
-                <i class="bi bi-youtube text-danger"></i> How-to
-              </a>
+              <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn"><i class="bi bi-youtube text-danger"></i> How-to</a>
               {% endif %}
             </div>
           </div>
@@ -625,29 +680,18 @@
     </div>
 
     {% else %}
-    <!-- Empty state -->
     <div class="ck-empty">
       <span class="ck-empty-icon">😔</span>
       <p>No meals found for that budget or ingredients.</p>
-      <p style="font-family:'Jost',sans-serif;font-size:.88rem;color:var(--text-mid);margin-top:8px;">
-        Try a higher budget or different ingredients.
-      </p>
+      <p style="font-family:'Jost',sans-serif;font-size:.88rem;color:var(--text-mid);margin-top:8px;">Try a higher budget or different ingredients.</p>
       {% if affordable_items %}
       <div style="margin-top:32px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
-        <p style="font-family:'Jost',sans-serif;font-size:.82rem;font-weight:600;
-                  letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">
-          With Ksh {{ budget_int }} you can still buy:
-        </p>
+        <p style="font-family:'Jost',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">With Ksh {{ budget_int }} you can still buy:</p>
         <div class="ck-price-list">
           {% for item in affordable_items %}
           <div class="ck-price-row">
-            <div>
-              <div class="ck-price-name">{{ item.name }}</div>
-              <div class="ck-price-unit">{{ item.unit }}</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:1rem;">
-              <div class="ck-price-amount">Ksh {{ item.price_ksh }}</div>
-            </div>
+            <div><div class="ck-price-name">{{ item.name }}</div><div class="ck-price-unit">{{ item.unit }}</div></div>
+            <div class="ck-price-amount">Ksh {{ item.price_ksh }}</div>
           </div>
           {% endfor %}
         </div>
@@ -665,7 +709,8 @@
 <!-- FEATURED MEALS -->
 <section class="ck-section">
   <div class="container">
-    <div class="d-flex align-items-baseline justify-content-between mb-4 flex-wrap gap-3">
+
+    <div class="d-flex align-items-baseline justify-content-between mb-3 flex-wrap gap-3">
       <div>
         <p class="section-label">Budget Picks</p>
         <h2 class="ck-section-title">Popular Budget Meals</h2>
@@ -673,140 +718,128 @@
       </div>
     </div>
 
+    <!-- Category filter bar -->
+    <div class="ck-filter-bar" id="mealFilterBar">
+      <button class="ck-filter-btn active" onclick="filterMeals('all', this)">All</button>
+      <button class="ck-filter-btn" onclick="filterMeals('breakfast', this)">Breakfast</button>
+      <button class="ck-filter-btn" onclick="filterMeals('lunch', this)">Lunch</button>
+      <button class="ck-filter-btn" onclick="filterMeals('dinner', this)">Dinner / Supper</button>
+      <button class="ck-filter-btn" onclick="filterMeals('anytime', this)">Anytime</button>
+      <span class="ck-dish-count" id="mealCount">{{ featured_meals|length }} meal{{ featured_meals|length|pluralize }}</span>
+    </div>
+
     {% if featured_meals %}
-    <div class="ck-food-grid">
+    <div class="ck-food-grid" id="mealsGrid">
       {% for meal in featured_meals %}
-      <div>
-        <div class="ck-food-card" id="meal-card-{{ meal.pk }}">
+      <div class="meal-grid-item" data-category="{% for cat in meal.categories %}{{ cat|lower }} {% endfor %}">
+        <div class="ck-food-card">
           <div class="ck-food-card-img">
-            {% if meal.image %}
-            <img src="{{ meal.image.url }}" alt="{{ meal.name }}">
-            {% else %}
-            🍽️
-            {% endif %}
+            {% if meal.image %}<img src="{{ meal.image.url }}" alt="{{ meal.name }}">
+            {% else %}🍽️{% endif %}
           </div>
           <div class="ck-food-card-body">
             {% if meal.get_tags %}
-            <span class="ck-food-card-cat">
-              {% for tag in meal.get_tags %}{{ tag }}{% if not forloop.last %} · {% endif %}{% endfor %}
-            </span>
+            <span class="ck-food-card-cat">{% for tag in meal.get_tags %}{{ tag }}{% if not forloop.last %} · {% endif %}{% endfor %}</span>
             {% endif %}
             <h3 class="ck-food-card-name">{{ meal.name }}</h3>
             <p class="ck-food-card-desc">{{ meal.description }}</p>
             {% if meal.stew_options.exists %}
             <p class="ck-eat-with-label">Eat with</p>
             <div class="ck-eat-chips">
-              {% for stew in meal.stew_options.all|slice:":4" %}
-              <span class="ck-eat-chip">{{ stew.name }}</span>
-              {% endfor %}
-              {% if meal.stew_options.count > 4 %}
-              <span class="ck-eat-chip">+{{ meal.stew_options.count|add:"-4" }} more</span>
-              {% endif %}
+              {% for stew in meal.stew_options.all|slice:":4" %}<span class="ck-eat-chip">{{ stew.name }}</span>{% endfor %}
+              {% if meal.stew_options.count > 4 %}<span class="ck-eat-chip">+{{ meal.stew_options.count|add:"-4" }} more</span>{% endif %}
             </div>
             {% elif meal.get_kitchen_items %}
             <p class="ck-eat-with-label">From your kitchen</p>
-            <div class="ck-eat-chips">
-              {% for k in meal.get_kitchen_items|slice:":3" %}
-              <span class="ck-eat-chip">{{ k }}</span>
-              {% endfor %}
-            </div>
+            <div class="ck-eat-chips">{% for k in meal.get_kitchen_items|slice:":3" %}<span class="ck-eat-chip">{{ k }}</span>{% endfor %}</div>
             {% endif %}
             <div class="ck-food-card-meta">
               <i class="bi bi-wallet2" style="color:var(--gold);font-size:0.85rem;"></i>
               <span class="ck-food-card-price">Ksh {{ meal.total_cost_ksh }}</span>
-              {% if meal.get_items %}
-              <span class="ck-food-card-time">
-                <i class="bi bi-bag2"></i> {{ meal.get_items|length }} item{{ meal.get_items|length|pluralize }}
-              </span>
-              {% endif %}
+              {% if meal.get_items %}<span class="ck-food-card-time"><i class="bi bi-bag2"></i> {{ meal.get_items|length }} item{{ meal.get_items|length|pluralize }}</span>{% endif %}
             </div>
             <div class="ck-food-card-actions">
-              {% if meal.comrade_food %}
-              <a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-more-btn">
-                MORE ON..
-              </a>
-              {% endif %}
-              {% if meal.youtube_url %}
-              <a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn">
-                <i class="bi bi-youtube text-danger"></i> How-to
-              </a>
-              {% endif %}
+              {% if meal.comrade_food %}<a href="{% url 'comrade_food_detail' meal.comrade_food.pk %}" class="ck-more-btn">MORE ON..</a>{% endif %}
+              {% if meal.youtube_url %}<a href="{{ meal.youtube_url }}" target="_blank" rel="noopener noreferrer" class="ck-yt-btn"><i class="bi bi-youtube text-danger"></i> How-to</a>{% endif %}
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
+    </div>
+
+    <!-- Empty filter state -->
+    <div id="noMealsMsg" style="display:none;text-align:center;padding:3rem 0;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--text-mid);">No meals in this category yet.</p>
     </div>
 
     {% else %}
     <div class="ck-empty">
       <span class="ck-empty-icon">🍽️</span>
       <p>No meals added yet.</p>
-      <p style="font-family:'Jost',sans-serif;font-size:.9rem;color:var(--text-mid);">
-        Add meals to see available meals.
-      </p>
     </div>
     {% endif %}
   </div>
 </section>
 
-<!-- MARKET PRICE LIST -->
+
+<!-- MARKET PRICE LIST (improved) -->
 <section class="ck-section-dark">
   <div class="container">
     <p class="section-label" style="color:var(--gold-light);">Reference</p>
     <h2 class="ck-section-title-light" style="margin-bottom:8px;">Market Price List</h2>
     <p style="font-family:'Jost',sans-serif;font-size:.88rem;color:rgba(255,252,248,0.5);margin-bottom:28px;">
-      Common prices around Kenyan markets &amp; shops.
-      Click <strong style="color:var(--gold);">MORE ON..</strong> to see stew options.
+      Everyday prices at Kenyan markets &amp; shops. Use these as a guide when budgeting your meals.
     </p>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+
+    {% if all_foods %}
+    <div class="ck-market-grid">
       {% for food in all_foods %}
-      <div class="ck-market-row">
-        <div class="ck-market-info">
-          <p class="ck-market-name">{{ food.name }}</p>
-          <p class="ck-market-unit">{{ food.unit }}</p>
-        </div>
-      </div>
-      {% empty %}
-      <div style="grid-column:1/-1;padding:24px;text-align:center;
-                  color:rgba(255,252,248,0.5);font-family:'Jost',sans-serif;font-size:.88rem;">
-        No prices added yet.
+      <div class="ck-market-card">
+        <p class="ck-market-card-name">{{ food.name }}</p>
+        <p class="ck-market-card-unit">{{ food.unit }}</p>
+        <p class="ck-market-card-price">
+          Ksh {{ food.price_ksh }}
+        </p>
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <div style="grid-column:1/-1;padding:24px;text-align:center;color:rgba(255,252,248,0.5);font-family:'Jost',sans-serif;font-size:.88rem;">
+      No prices added yet.
+    </div>
+    {% endif %}
   </div>
 </section>
 
-<!-- STOCK UP SECTION -->
+
+<!-- STOCK UP -->
 <section style="padding:60px 0 80px;background:var(--cream);">
   <div class="container">
     <div class="d-flex align-items-baseline justify-content-between mb-2 flex-wrap gap-3">
       <div>
         <p class="section-label">Smart Shopping</p>
-        <h2 class="ck-section-title">Stock Up! Never Go Hungry!</h2>
+        <h2 class="ck-section-title">Stock Up! Never Go Hungry</h2>
         <p class="ck-section-sub">Keep these around so an empty pocket doesn't mean an empty plate.</p>
       </div>
     </div>
-    <div style="background:var(--brown-dark);border-radius:20px;padding:2rem 2rem 1.5rem;margin-top:1.5rem;">
+    <div style="background:var(--brown-dark);border-radius:24px;padding:2.2rem 2rem 1.8rem;margin-top:1.5rem;">
       <div class="ck-stock-grid">
         {% for s in stock_items %}
         <div class="ck-stock-card">
-          <div class="ck-stock-icon"></div>
           <div>
-            <p class="ck-stock-name">{{ s.item }}
-              <small style="font-weight:400;opacity:.6;font-size:.75rem;">({{ s.qty }})</small>
-            </p>
-            <p class="ck-stock-tip">{{ s.tip }}</p>
-            <span class="ck-stock-price">{{ s.price }}
-              <small style="font-size:.7rem;opacity:.6;">· {{ s.unit_price }}</small>
-            </span>
+            <p class="ck-stock-name">{{ s.item }}<span class="ck-stock-qty">({{ s.qty }})</span></p>
+          </div>
+          <p class="ck-stock-tip">{{ s.tip }}</p>
+          <div class="ck-stock-price-row">
+            <span class="ck-stock-price">{{ s.price }}</span>
+            <span class="ck-stock-unit-price">· {{ s.unit_price }}</span>
           </div>
         </div>
         {% endfor %}
       </div>
-      <p style="font-family:'Jost',sans-serif;font-size:.75rem;color:rgba(255,252,248,0.4);
-                margin-top:1.5rem;margin-bottom:0;text-align:center;">
-        <em>Disclaimer: Not a must to have all items in stock. Keep the essentials and top up when the money comes in.</em>
+      <p class="ck-stock-disclaimer">
+        Not a must to have everything at once. Start with the essentials and top up when money comes in.
       </p>
     </div>
   </div>
@@ -815,6 +848,7 @@
 {% endif %}
 
 {% endblock %}
+
 
 {% block extra_js %}
 <script>
@@ -828,26 +862,20 @@ document.addEventListener('DOMContentLoaded', function () {
 function setMode(tab) {
   document.querySelectorAll('.ck-mode-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
-
   const mode = tab.dataset.mode;
   document.getElementById('ck-mode-input').value = mode;
-
   const budgetField      = document.getElementById('field-budget');
   const ingredientsField = document.getElementById('field-ingredients');
   const budgetInput      = document.getElementById('input-budget');
   const ingredientsInput = document.getElementById('input-ingredients');
-
   if (mode === 'budget') {
-    budgetField.style.display      = '';
-    ingredientsField.style.display = 'none';
+    budgetField.style.display = ''; ingredientsField.style.display = 'none';
     if (ingredientsInput) ingredientsInput.value = '';
   } else if (mode === 'ingredients') {
-    budgetField.style.display      = 'none';
-    ingredientsField.style.display = '';
+    budgetField.style.display = 'none'; ingredientsField.style.display = '';
     if (budgetInput) budgetInput.value = '';
   } else {
-    budgetField.style.display      = '';
-    ingredientsField.style.display = '';
+    budgetField.style.display = ''; ingredientsField.style.display = '';
   }
 }
 
@@ -855,12 +883,30 @@ document.getElementById('ck-form').addEventListener('submit', function () {
   const mode             = document.getElementById('ck-mode-input').value;
   const budgetInput      = document.getElementById('input-budget');
   const ingredientsInput = document.getElementById('input-ingredients');
-
-  if (mode === 'budget' && ingredientsInput) {
-    ingredientsInput.value = '';
-  } else if (mode === 'ingredients' && budgetInput) {
-    budgetInput.value = '';
-  }
+  if (mode === 'budget' && ingredientsInput) ingredientsInput.value = '';
+  else if (mode === 'ingredients' && budgetInput) budgetInput.value = '';
 });
+
+/* Category filter for featured meals */
+function filterMeals(category, btn) {
+  document.querySelectorAll('.ck-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const items  = document.querySelectorAll('.meal-grid-item');
+  let   visible = 0;
+
+  items.forEach(item => {
+    const cat = item.dataset.category || '';
+    const show = category === 'all' || cat.includes(category);
+    item.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  const countEl = document.getElementById('mealCount');
+  if (countEl) countEl.textContent = visible + ' meal' + (visible !== 1 ? 's' : '');
+
+  const noMsg = document.getElementById('noMealsMsg');
+  if (noMsg) noMsg.style.display = visible === 0 ? 'block' : 'none';
+}
 </script>
 {% endblock %}
