@@ -372,3 +372,17 @@ class WellnessFood(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_category_display()})"
+    
+
+class MealPlanEntry(models.Model):
+    session_key = models.CharField(max_length=40, db_index=True)
+    date = models.CharField(max_length=10)   # ISO format e.g. "2026-06-30"
+    slot = models.CharField(max_length=10)   # breakfast / lunch / dinner
+    name = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'slot', 'created_at']
+
+    def __str__(self):
+        return f"{self.name} — {self.date} {self.slot}"

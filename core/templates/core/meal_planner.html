@@ -217,7 +217,8 @@
     font-family: 'Jost', sans-serif;
     font-size: .88rem;
     font-weight: 500;
-    color: var(--gold); text-decoration: none;
+    color: var(--gold);
+    text-decoration: none;
     cursor: pointer;
     width: 100%;
     transition: all .2s;
@@ -560,6 +561,7 @@
 
 <!-- SECTION -->
 <section class="planner-section" id="mealPlanner">
+  {% csrf_token %}
   <div class="container">
     <div class="planner-box">
 
@@ -701,8 +703,6 @@
 
 <script>
   (function () {
-    const SK = 'dishcraft_mp_v6';
-
     const U_BROWSE = "{% url 'browse' %}";
     const U_FIND = "{% url 'find_dishes' %}";
     const U_COMRADE = "{% url 'comrade_kitchen' %}";
@@ -722,23 +722,110 @@
     let activeIndex = null;
     let activePop = null;
 
-    /* Storage */
-    const load = () => { try { return JSON.parse(localStorage.getItem(SK) || '{}'); } catch (e) { return {}; } };
-    const persist = d => { try { localStorage.setItem(SK, JSON.stringify(d)); } catch (e) { } };
+    /* CSRF helper */
+    function getCookie(name) {
+      const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+      return v ? v.pop() : '';
+    }
+    // Fall back to the hidden form input's CSRF token if the cookie isn't readable for any reason
+    function getCSRFToken() {
+      const cookieToken = getCookie('csrftoken');
+      if (cookieToken) return cookieToken;
+      const inputToken = document.querySelector('input[name="csrfmiddlewaretoken"]');
+      return inputToken ? inputToken.value : '';
+    }
+    const CSRF = getCSRFToken();
 
-    /* Meals stored as arrays so multiple items per slot are supported */
-    const getMeals = (d, ds, s) => { const v = (d[ds] || {})[s]; if (!v) return []; return Array.isArray(v) ? v : [v]; };
-    const addMeal = (d, ds, s, n) => { if (!d[ds]) d[ds] = {}; const a = getMeals(d, ds, s); a.push(n); d[ds][s] = a; persist(d); };
-    const editMealAt = (d, ds, s, i, n) => { if (!d[ds]) d[ds] = {}; const a = getMeals(d, ds, s); a[i] = n; d[ds][s] = a; persist(d); };
-    const delMealAt = (d, ds, s, i) => {
-      if (!d[ds]) return;
-      const a = getMeals(d, ds, s); a.splice(i, 1);
-      if (a.length) d[ds][s] = a; else { delete d[ds][s]; if (!Object.keys(d[ds]).length) delete d[ds]; }
-      persist(d);
+    /* Server-backed storage */
+    async function load() {
+      try {
+        const res = await fetch("{% url 'meal_plan_list' %}");
+        if (!res.ok) {
+          console.error('meal_plan_list failed:', res.status);
+          return {};
+        }
+        const json = await res.json();
+        return json.data || {};
+      } catch (err) {
+        console.error('meal_plan_list error:', err);
+        return {};
+      }
+    }
+
+    const getMeals = (d, ds, s) => {
+      const v = (d[ds] || {})[s];
+      if (!v) return [];
+      return v; // array of {id, name}
     };
 
-    /* Dates  */
-    const toISO = dt => dt.toISOString().slice(0, 10);
+    async function addMeal(ds, s, n) {
+      try {
+        const res = await fetch("{% url 'meal_plan_add' %}", {
+          method: 'POST',
+          headers: { 'X-CSRFToken': CSRF, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `date=${encodeURIComponent(ds)}&slot=${encodeURIComponent(s)}&name=${encodeURIComponent(n)}`
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          console.error('addMeal failed:', res.status, text);
+          alert('Could not save meal. Please refresh the page and try again.');
+          return null;
+        }
+        return res.json();
+      } catch (err) {
+        console.error('addMeal error:', err);
+        alert('Could not save meal. Check your connection and try again.');
+        return null;
+      }
+    }
+
+    async function editMealAt(entryId, n) {
+      try {
+        const res = await fetch(`/meal-plan/${entryId}/edit/`, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': CSRF, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `name=${encodeURIComponent(n)}`
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          console.error('editMealAt failed:', res.status, text);
+          alert('Could not update meal. Please refresh the page and try again.');
+          return null;
+        }
+        return res.json();
+      } catch (err) {
+        console.error('editMealAt error:', err);
+        alert('Could not update meal. Check your connection and try again.');
+        return null;
+      }
+    }
+
+    async function delMealAt(entryId) {
+      try {
+        const res = await fetch(`/meal-plan/${entryId}/delete/`, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': CSRF }
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          console.error('delMealAt failed:', res.status, text);
+          alert('Could not remove meal. Please refresh the page and try again.');
+          return null;
+        }
+        return res.json();
+      } catch (err) {
+        console.error('delMealAt error:', err);
+        alert('Could not remove meal. Check your connection and try again.');
+        return null;
+      }
+    }
+
+    /* Dates — fixed to use LOCAL calendar date instead of UTC, so "today" matches the user's clock */
+    const toISO = dt => {
+      const offset = dt.getTimezoneOffset();
+      const local = new Date(dt.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 10);
+    };
     const isToday = ds => toISO(new Date()) === ds;
     const isPastDay = ds => ds < toISO(new Date());
     const slotHour = { breakfast: 11, lunch: 16, dinner: 23 };
@@ -771,9 +858,9 @@
     const mk = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
 
     /* Render */
-    function render() {
+    async function render() {
       document.getElementById('mpWeekLabel').textContent = fmtRange(getMonday(weekOffset));
-      const data = load();
+      const data = await load();
       const grid = document.getElementById('mpGrid');
       grid.innerHTML = '';
       const mon = getMonday(weekOffset);
@@ -817,15 +904,15 @@
           const meals = getMeals(data, ds, slot);
           const cell = mk('div', 'mp-rc mp-rcell' + (today ? ' is-today' : ''));
 
-          meals.forEach((meal, idx) => {
+          meals.forEach((meal) => {
             const pill = mk('div', 'mp-pill');
             const nm = mk('span', 'mp-pill-name');
-            nm.title = meal; nm.textContent = meal;
+            nm.title = meal.name; nm.textContent = meal.name;
             const del = mk('button', 'mp-pill-del');
             del.title = 'Remove'; del.innerHTML = '&#x2715;';
             pill.append(nm, del);
 
-            nm.addEventListener('click', e => { e.stopPropagation(); showPop(pill, meal, ds, slot, idx); });
+            nm.addEventListener('click', e => { e.stopPropagation(); showPop(pill, meal.name, ds, slot, meal.id); });
 
             del.addEventListener('click', e => {
               e.stopPropagation(); hidePop();
@@ -835,8 +922,10 @@
                 `<span class="mp-del-msg">Remove meal?</span>` +
                 `<button class="mp-del-y">Yes</button>` +
                 `<button class="mp-del-n">No</button>`;
-              conf.querySelector('.mp-del-y').addEventListener('click', ev => {
-                ev.stopPropagation(); delMealAt(load(), ds, slot, idx); render();
+              conf.querySelector('.mp-del-y').addEventListener('click', async ev => {
+                ev.stopPropagation();
+                const result = await delMealAt(meal.id);
+                if (result !== null) render();
               });
               conf.querySelector('.mp-del-n').addEventListener('click', ev => {
                 ev.stopPropagation(); conf.remove();
@@ -866,9 +955,9 @@
     }
 
     /* Popover */
-    function showPop(pillEl, meal, ds, slot, idx) {
+    function showPop(pillEl, meal, ds, slot, entryId) {
       hidePop();
-      activePop = { ds, slot, idx, meal };
+      activePop = { ds, slot, entryId, meal };
       const pop = document.getElementById('mpPop');
       document.getElementById('mpPopName').textContent = meal;
       document.getElementById('mpPopBrowse').href = browseUrl(meal);
@@ -888,8 +977,8 @@
 
     document.getElementById('mpPopEdit').addEventListener('click', () => {
       if (!activePop) return;
-      const { ds, slot, idx, meal } = activePop; hidePop();
-      openModal(ds, slot, meal, idx);
+      const { ds, slot, entryId, meal } = activePop; hidePop();
+      openModal(ds, slot, meal, entryId);
     });
     document.addEventListener('click', e => {
       const pop = document.getElementById('mpPop');
@@ -923,13 +1012,18 @@
       document.querySelectorAll('.mp-tab').forEach(b => b.classList.toggle('active', b.dataset.s === s));
       document.getElementById('mpInput').focus();
     };
-    window.mpSave = () => {
+    window.mpSave = async () => {
       const name = document.getElementById('mpInput').value.trim();
       if (!name || !activeDay) return;
-      const d = load();
-      if (activeIndex !== null && activeIndex !== undefined) editMealAt(d, activeDay, activeSlot, activeIndex, name);
-      else addMeal(d, activeDay, activeSlot, name);
-      window.mpClose(); render();
+      let result;
+      if (activeIndex !== null && activeIndex !== undefined) {
+        result = await editMealAt(activeIndex, name);
+      } else {
+        result = await addMeal(activeDay, activeSlot, name);
+      }
+      if (result === null) return; // keep modal open so the user can retry
+      window.mpClose();
+      render();
     };
 
     /* Clear-week */
@@ -941,10 +1035,29 @@
       document.getElementById('mpClearConfirm').style.display = 'none';
       document.getElementById('mpOverlay').style.display = 'none';
     };
-    window.mpClearConfirmed = () => {
-      const mon = getMonday(weekOffset), d = load();
-      for (let i = 0; i < 7; i++) { const dt = new Date(mon); dt.setDate(mon.getDate() + i); delete d[toISO(dt)]; }
-      persist(d); window.mpHideClear(); render();
+    window.mpClearConfirmed = async () => {
+      const mon = getMonday(weekOffset);
+      const dates = Array.from({ length: 7 }, (_, i) => {
+        const dt = new Date(mon); dt.setDate(mon.getDate() + i); return toISO(dt);
+      });
+      const body = dates.map(d => `dates[]=${encodeURIComponent(d)}`).join('&');
+      try {
+        const res = await fetch("{% url 'meal_plan_clear_week' %}", {
+          method: 'POST',
+          headers: { 'X-CSRFToken': CSRF, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          console.error('clear_week failed:', res.status, text);
+          alert('Could not clear this week. Please refresh the page and try again.');
+        }
+      } catch (err) {
+        console.error('clear_week error:', err);
+        alert('Could not clear this week. Check your connection and try again.');
+      }
+      window.mpHideClear();
+      render();
     };
 
     /* Navigation */

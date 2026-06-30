@@ -5,6 +5,7 @@ from .models import Dish, GymFood, ComradeFood, ComradeMeal, ComradeMealStewOpti
 from .ai_engine import suggest_from_voice, suggest_meals_from_image, suggest_meals_from_ingredients
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from .models import MealPlanEntry
 import random
 
 
@@ -978,6 +979,50 @@ def comrade_food_detail(request, pk):
         'has_search_context': bool(user_ingredients or budget_int),
     })
 
+def meal_plan_list(request):
+    entries = MealPlanEntry.objects.filter(session_key=request.session.session_key)
+    data = {}
+    for e in entries:
+        data.setdefault(e.date, {}).setdefault(e.slot, []).append({'id': e.id, 'name': e.name})
+    return JsonResponse({'data': data})
+
+
+@require_POST
+def meal_plan_add(request):
+    date = request.POST.get('date')
+    slot = request.POST.get('slot')
+    name = request.POST.get('name', '').strip()
+    if not (date and slot and name):
+        return JsonResponse({'error': 'Missing fields'}, status=400)
+    entry = MealPlanEntry.objects.create(
+        session_key=request.session.session_key, date=date, slot=slot, name=name
+    )
+    return JsonResponse({'success': True, 'id': entry.id})
+
+
+@require_POST
+def meal_plan_edit(request, entry_id):
+    entry = get_object_or_404(MealPlanEntry, id=entry_id, session_key=request.session.session_key)
+    name = request.POST.get('name', '').strip()
+    if not name:
+        return JsonResponse({'error': 'Missing name'}, status=400)
+    entry.name = name
+    entry.save()
+    return JsonResponse({'success': True})
+
+
+@require_POST
+def meal_plan_delete(request, entry_id):
+    entry = get_object_or_404(MealPlanEntry, id=entry_id, session_key=request.session.session_key)
+    entry.delete()
+    return JsonResponse({'success': True})
+
+
+@require_POST
+def meal_plan_clear_week(request):
+    dates = request.POST.getlist('dates[]')
+    MealPlanEntry.objects.filter(session_key=request.session.session_key, date__in=dates).delete()
+    return JsonResponse({'success': True})
 
 @require_POST
 def ai_scan_ajax(request):

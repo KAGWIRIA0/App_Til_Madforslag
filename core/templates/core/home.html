@@ -7,13 +7,19 @@
   /* HERO */
   .hero {
     position: relative;
-    min-height: 95vh;
+    min-height: 70vh;
     background-image: url('../static/images/hero-food.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
     overflow: hidden;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 4rem 0 5rem;
   }
 
   .hero::after {
@@ -199,9 +205,8 @@
         </p>
         <div class="hero-btns fade-up fade-up-4">
           <a href="{% url 'find_dishes' %}" class="btn btn-gold">Start Cooking →</a>
-          <a href="{% url 'browse' %}" class="btn btn-outline-dark-custom"
-            style="border-color:rgba(255,252,248,0.5);color:var(--white);">Browse All</a>
-          <a href="{% url 'comrade_kitchen' %}" class="btn btn-gold">View Low Cost Meals →</a> 
+          <a href="{% url 'browse' %}" class="btn btn-gold">Browse All</a>
+          <a href="{% url 'comrade_kitchen' %}" class="btn btn-gold">View Low Cost Meals →</a>
         </div>
       </div>
     </div>
@@ -293,7 +298,7 @@
                 <i class="bi bi-search"></i> Ingredients
               </button>
               <button type="button" class="dc-tab-btn" onclick="switchTab('budget')">
-                 Budget<span>(Ksh) {{ dish.estimated_cost }}</span> 
+                Budget<span>(Ksh) {{ dish.estimated_cost }}</span>
               </button>
             </div>
             <input type="hidden" name="query_type" id="queryTypeInput" value="ingredients">

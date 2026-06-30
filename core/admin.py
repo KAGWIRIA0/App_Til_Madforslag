@@ -3,7 +3,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import (
     Dish, DishStewOption, ComradeMealStewOption,
-    GymFood, ComradeFood, ComradeMeal, SkinFood, WellnessFood
+    GymFood, ComradeFood, ComradeMeal, SkinFood, WellnessFood, MealPlanEntry
 )
 
 MEAL_CATEGORY_CHOICES = [
@@ -137,3 +137,10 @@ class WellnessFoodAdmin(ImportExportModelAdmin):
     list_filter = ['category', 'is_featured']
     list_editable = ['order', 'is_featured']
     search_fields = ['name', 'key_nutrient']
+
+@admin.register(MealPlanEntry)
+class MealPlanEntryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date', 'slot', 'session_key', 'created_at')
+    list_filter = ('slot', 'date')
+    search_fields = ('name', 'session_key')
+    ordering = ('-created_at',)    
