@@ -1,10 +1,14 @@
-from pathlib import Path
-from decouple import config
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+import dj_database_url
+from decouple import config
+
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Django(protected)
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
@@ -55,8 +59,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CSync.wsgi.application'
 
-import dj_database_url
-
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
@@ -77,7 +79,7 @@ else:
             'HOST': config('DB_HOST', default='localhost'),
             'PORT': config('DB_PORT', default='5432'),
             'OPTIONS': {
-                'sslmode': 'require',
+                'sslmode': 'prefer',
                 'connect_timeout': 10,
             },
             'CONN_MAX_AGE': 60,
@@ -104,6 +106,7 @@ STATICFILES_DIRS = []
 # ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -125,8 +128,7 @@ CLOUDINARY_STORAGE = {
     'API_KEY':    os.getenv('CLOUDINARY_API_KEY'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' 
 
 handler404 = 'core.views.handler404'
 handler500 = 'core.views.handler500'
