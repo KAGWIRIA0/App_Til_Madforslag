@@ -82,6 +82,38 @@
     flex-shrink: 0;
   }
 
+  .category-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.4rem;
+  }
+
+  .category-pill {
+    font-family: 'Jost', sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border: 1.5px solid rgba(196, 154, 60, .3);
+    border-radius: 50px;
+    padding: 7px 16px;
+    background: var(--beige);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .category-pill:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--brown-dark);
+  }
+
+  .category-pill.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--text-dark);
+  }
 
   .dc-tab-btn span {
     font-size: .6rem;
@@ -509,11 +541,29 @@
             </button>
           </div>
 
-          <!-- ══ EXISTING FORM (Ingredients + Budget + Recent) ══ -->
+          <!-- EXISTING FORM (Ingredients + Budget + Recent) -->
           <form method="GET" action="{% url 'find_dishes' %}#results" id="mainForm">
             <input type="hidden" name="query_type" id="queryTypeInput" value="{{ query_type|default:'ingredients' }}">
+            <input type="hidden" name="category" id="categoryInput" value="{{ category|default:'' }}">
 
-            <!-- Ingredients panel — UNCHANGED -->
+            <!-- MEAL TIME FILTER -->
+            <div id="categorySection" style="{% if query_type == 'ai' %}display:none;{% endif %}">
+              <label class="dc-label">What meal is this for?</label>
+              <div class="category-pills">
+                <button type="button" class="category-pill {% if not category %}active{% endif %}"
+                  onclick="selectCategory('', this)">Any</button>
+                <button type="button" class="category-pill {% if category == 'breakfast' %}active{% endif %}"
+                  onclick="selectCategory('breakfast', this)">Breakfast</button>
+                <button type="button" class="category-pill {% if category == 'lunch' %}active{% endif %}"
+                  onclick="selectCategory('lunch', this)">Lunch</button>
+                <button type="button" class="category-pill {% if category == 'dinner' %}active{% endif %}"
+                  onclick="selectCategory('dinner', this)">Dinner / Supper</button>
+                <button type="button" class="category-pill {% if category == 'anytime' %}active{% endif %}"
+                  onclick="selectCategory('anytime', this)">Anytime</button>
+              </div>
+            </div>
+
+            <!-- Ingredients panel  -->
             <div id="ingredientsPanel"
               style="{% if query_type == 'budget' or query_type == 'ai' %}display:none;{% endif %}">
               <label class="dc-label">What ingredients do you have?</label>
@@ -836,6 +886,7 @@
 
     // Show/hide AI panel
     document.getElementById('aiPanel').style.display = (type === 'ai') ? 'block' : 'none';
+    document.getElementById('categorySection').style.display = (type === 'ai') ? 'none' : 'block';
 
     // Hide recent food + submit button when AI is active
     document.getElementById('recentFoodSection').style.display = (type === 'ai') ? 'none' : 'block';
@@ -845,6 +896,12 @@
     if (type !== 'ai') {
       document.getElementById('aiResultBox').style.display = 'none';
     }
+  }
+
+  function selectCategory(value, btn) {
+    document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('categoryInput').value = value;
   }
 
   function switchAIInput(mode) {

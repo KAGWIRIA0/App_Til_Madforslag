@@ -104,8 +104,9 @@ def skin(request):
 def find_dishes(request):
     query_type        = request.GET.get('query_type', 'ingredients')
     ingredients_input = request.GET.get('ingredients', '')
-    budget_input      = request.GET.get('budget', '')
-    recent_food       = request.GET.get('recent_food', '')
+    budget_input       = request.GET.get('budget', '')
+    recent_food        = request.GET.get('recent_food', '')
+    category            = request.GET.get('category', '')
     searched          = False
     results           = []
     comrade_results   = []
@@ -166,16 +167,21 @@ def find_dishes(request):
         coverage = user_has_count / total
         return (len(matched_user_ings), coverage, matched_user_ings)
 
-    if request.GET.get('ingredients') or request.GET.get('budget'):
+    if request.GET.get('ingredients') or request.GET.get('budget') or request.GET.get('category'):
         searched = True
         dishes   = Dish.objects.all()
 
+        if category:
+            dishes = dishes.filter(categories__contains=[category])
+
         if recent_food:
-            for item in [r.strip().lower() for r in recent_food.split(',') if r.strip()]:
-                synonyms = get_synonyms(item)
-                for variant in synonyms:
-                    if variant:
-                        dishes = dishes.exclude(name__icontains=variant)
+
+            if recent_food:
+                for item in [r.strip().lower() for r in recent_food.split(',') if r.strip()]:
+                    synonyms = get_synonyms(item)
+                    for variant in synonyms:
+                        if variant:
+                            dishes = dishes.exclude(name__icontains=variant)
 
         if query_type == 'budget' and budget_input:
             try:
@@ -186,6 +192,18 @@ def find_dishes(request):
                     .filter(total_cost_ksh__lte=int(budget))
                     .order_by('total_cost_ksh')[:6]
                 )
+            except ValueError:
+                pass
+            results = list(dishes[:12])
+
+        if query_type == 'budget' and budget_input:
+            try:
+                budget = float(budget_input)
+                dishes = dishes.filter(estimated_cost__lte=budget)
+                comrade_qs = ComradeMeal.objects.filter(total_cost_ksh__lte=int(budget))
+                if category:
+                    comrade_qs = comrade_qs.filter(categories__contains=[category])
+                comrade_results = list(comrade_qs.order_by('total_cost_ksh')[:6])
             except ValueError:
                 pass
             results = list(dishes[:12])
@@ -285,6 +303,11 @@ def find_dishes(request):
                     break
             comrade_results = ordered_c[:6]
 
+            comrade_dishes = ComradeMeal.objects.filter(comrade_q).distinct()
+            if category:
+                comrade_dishes = comrade_dishes.filter(categories__contains=[category])
+            c_tier1, c_tier2, c_tier3 = [], [], []
+
     return render(request, 'core/find_dishes.html', {
         'results':           results,
         'comrade_results':   comrade_results,
@@ -293,6 +316,7 @@ def find_dishes(request):
         'budget_input':      budget_input,
         'recent_food':       recent_food,
         'query_type':        query_type,
+        'category':          category,
     })
 
 
