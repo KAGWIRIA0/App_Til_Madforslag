@@ -356,7 +356,7 @@
 
     {# DRINKS SECTION #}
     {% if drinks %}
-    <div style="margin-bottom: 3rem;">
+    <div style="margin-bottom: 3rem;" id="drinksSection">
       <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
         <div>
           <p class="section-label" style="margin-bottom: 4px;">
@@ -448,11 +448,12 @@
 
       {# Drinks pagination #}
       {% if drinks.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{ drinks.paginator.num_pages }} )
+      <p class="section-pagination-label" style="margin-top: 2rem;">Drinks ( Page {{ drinks.number }} of {{
+        drinks.paginator.num_pages }} )
       </p>
       <div class="pagination-wrapper">
         {% if drinks.has_previous %}
-        <a href="?drink_page={{ drinks.previous_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+        <a href="?drink_page={{ drinks.previous_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}#drinksSection"
           class="page-btn">← Prev Drinks</a>
         {% else %}
         <span class="page-btn disabled">← Prev Drinks</span>
@@ -462,13 +463,13 @@
         {% if drinks.number == num %}
         <span class="page-btn active">{{ num }}</span>
         {% elif num > drinks.number|add:'-3' and num < drinks.number|add:'3' %} <a
-          href="?drink_page={{ num }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+          href="?drink_page={{ num }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}#drinksSection"
           class="page-btn">{{ num }}</a>
           {% endif %}
           {% endfor %}
 
           {% if drinks.has_next %}
-          <a href="?drink_page={{ drinks.next_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}"
+          <a href="?drink_page={{ drinks.next_page_number }}&food_page={{ foods.number }}&category={{ selected_category }}&q={{ search_query }}#drinksSection"
             class="page-btn">Next Drinks →</a>
           {% else %}
           <span class="page-btn disabled">Next Drinks →</span>
@@ -484,7 +485,7 @@
     {# FOODS SECTION #}
 
     {% if foods %}
-    <div>
+    <div id="foodsSection">
       <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
         <div>
           <p class="section-label" style="margin-bottom: 4px;">
@@ -567,10 +568,11 @@
 
       {# Foods pagination #}
       {% if foods.has_other_pages %}
-      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{ foods.paginator.num_pages }} )</p>
+      <p class="section-pagination-label" style="margin-top: 2rem;">Foods ( Page {{ foods.number }} of {{
+        foods.paginator.num_pages }} )</p>
       <div class="pagination-wrapper">
         {% if foods.has_previous %}
-        <a href="?food_page={{ foods.previous_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+        <a href="?food_page={{ foods.previous_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}#foodsSection"
           class="page-btn">← Prev Foods</a>
         {% else %}
         <span class="page-btn disabled">← Prev Foods</span>
@@ -580,13 +582,13 @@
         {% if foods.number == num %}
         <span class="page-btn active">{{ num }}</span>
         {% elif num > foods.number|add:'-3' and num < foods.number|add:'3' %} <a
-          href="?food_page={{ num }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+          href="?food_page={{ num }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}#foodsSection"
           class="page-btn">{{ num }}</a>
           {% endif %}
           {% endfor %}
 
           {% if foods.has_next %}
-          <a href="?food_page={{ foods.next_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}"
+          <a href="?food_page={{ foods.next_page_number }}&drink_page={{ drinks.number }}&category={{ selected_category }}&q={{ search_query }}#foodsSection"
             class="page-btn">Next Foods →</a>
           {% else %}
           <span class="page-btn disabled">Next Foods →</span>
