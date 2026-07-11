@@ -349,11 +349,11 @@
         <h2 class="section-heading" style="font-size:2rem;">Breakfast Ideas</h2>
       </div>
       <a href="{% url 'browse' %}?category=breakfast"
-        style="font-family:'Jost',sans-serif;font-size:.85rem;color:var(--gold);text-decoration:none;">View all →</a>
+        style="font-family:'Jost',sans-serif;font: size 0.110em;rem;color:var(--gold);text-decoration:none;">View all →</a>
     </div>
     <div class="row g-4">
 
-      {% for dish in breakfast.mains %} {# ✅ .mains gives the Dish objects #}
+      {% for dish in breakfast.mains|slice:":6" %} {# only show first 6 #}
       {% if dish %}
       <div class="col-md-4">
         <div class="dish-card">
