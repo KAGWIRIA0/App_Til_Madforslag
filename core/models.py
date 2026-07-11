@@ -176,6 +176,7 @@ class GymFood(models.Model):
 
 class ComradeFood(models.Model):
     name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='comrade_foods/', blank=True, null=True)
     description = models.TextField()
     price_ksh = models.IntegerField(help_text="Price in Kenyan Shillings")
     unit = models.CharField(max_length=100, help_text="e.g. per packet, per kg, per piece")

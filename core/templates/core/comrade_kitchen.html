@@ -281,6 +281,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+    align-items: stretch;
   }
 
   @media (max-width: 991px) {
@@ -295,6 +296,11 @@
     }
   }
 
+  .meal-grid-item {
+    height: 100%;
+    display: flex;
+  }
+
   .ck-food-card {
     background: var(--white);
     border-radius: 20px;
@@ -304,6 +310,8 @@
     transition: transform 0.25s, box-shadow 0.25s;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
   }
 
   .ck-food-card:hover {
@@ -386,6 +394,7 @@
     flex-wrap: wrap;
     gap: 5px;
     margin-bottom: 0.85rem;
+    min-height: 24px;
   }
 
   .ck-eat-chip {
@@ -427,6 +436,8 @@
     gap: 0.5rem;
     align-items: center;
     flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.5rem;
   }
 
   .ck-more-btn {
