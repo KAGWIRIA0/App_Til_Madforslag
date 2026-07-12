@@ -46,6 +46,11 @@
       overflow-x: hidden;
     }
 
+    html,
+    body {
+      overflow-x: hidden;
+    }
+
     /* NAVBAR */
     .navbar {
       background-color: var(--white);
@@ -416,27 +421,37 @@
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
-      h1, h2, h3, .section-heading {
+
+      h1,
+      h2,
+      h3,
+      .section-heading {
         font-size: clamp(1.8rem, 7vw, 2.5rem) !important;
         overflow-wrap: break-word !important;
         word-break: break-word !important;
         hyphens: auto;
       }
-    
-      p, .section-subheading, .dish-card-desc {
+
+      p,
+      .section-subheading,
+      .dish-card-desc {
         font-size: 0.95rem !important;
         line-height: 1.5 !important;
       }
 
-      .container, .row, [class*="col-"] {
+      .container,
+      .row,
+      [class*="col-"] {
         max-width: 100% !important;
         overflow-x: hidden !important;
       }
 
-      .btn-gold, .btn-outline-dark-custom, .btn-brown {
+      .btn-gold,
+      .btn-outline-dark-custom,
+      .btn-brown {
         padding: 0.6rem 1.5rem !important;
         font-size: 0.8rem !important;
-        width: 100% !important; 
+        width: 100% !important;
         text-align: center;
       }
 
@@ -445,7 +460,6 @@
         gap: 12px !important;
       }
     }
-
   </style>
 
   {% block extra_css %}{% endblock %}
@@ -475,7 +489,7 @@
           <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'gym' %}active{% endif %}"
               href="{% url 'gym' %}">GYM</a></li>
           <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'skin' %}active{% endif %}"
-              href="{% url 'skin' %}">SKIN AND BODY</a></li>    
+              href="{% url 'skin' %}">SKIN AND BODY</a></li>
           <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
               href="{% url 'about' %}">ABOUT</a></li>
         </ul>
