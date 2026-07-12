@@ -1,0 +1,2655 @@
+[
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1200000$3cQoGlxhRfmYmLnWHN9dd1$G73AvbkyeQYLLjNpdNnIE2IOz8yWm1Jg0wEy2Xq5dJY=",
+        "last_login": "2026-05-09T18:20:36.474Z",
+        "is_superuser": true,
+        "username": "kagwiria",
+        "first_name": "",
+        "last_name": "",
+        "email": "kagwiriafaith45@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-04-25T17:44:26.308Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "0j8pqr9fb3hfwtirlsryrzt0rg9wcnz3",
+    "fields": {
+        "session_data": ".eJxVjEEOgjAURO_StWn4LcXi0r1naH47H4uaklBYGe8uJCx0O--9eavA65LDWmUOI9RFkTr9bpHTU8oO8OByn3SayjKPUe-KPmjVtwnyuh7u30Hmmre68SwCQExr4JwFW_YpMvVozkl8TyZZ3pgZOu4sKLZE4CQWjgby6vMFEE840Q:1wLmI0:N1h8awVUA93_GjOCuhFyknJFzM3AuPZJRkKqz2iLq2Q",
+        "expire_date": "2026-05-23T18:20:36.500Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "am6vu9ozonhtg3vg7e5wsdvm53ja8mpe",
+    "fields": {
+        "session_data": ".eJxVjEEOgjAURO_StWn4LcXi0r1naH47H4uaklBYGe8uJCx0O--9eavA65LDWmUOI9RFkTr9bpHTU8oO8OByn3SayjKPUe-KPmjVtwnyuh7u30Hmmre68SwCQExr4JwFW_YpMvVozkl8TyZZ3pgZOu4sKLZE4CQWjgby6vMFEE840Q:1wGh4w:9ijOFjZgTHYYA4oEi5nP5AzAxcg8bq7win7OlJhsCgw",
+        "expire_date": "2026-05-09T17:46:06.631Z"
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 1,
+    "fields": {
+        "name": "Tea",
+        "category": "breakfast",
+        "description": "Hot Kenyan chai with milk and spices.",
+        "ingredients": "tea leaves, milk, sugar, water",
+        "estimated_cost": "0.50",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=chai+recipe",
+        "image_url": null,
+        "image": "dish_images/kenyan_tea.png",
+        "budget_level": "low",
+        "meal_type": "drink",
+        "best_with_drinks": [],
+        "best_with_foods": [
+            "mandazi",
+            "chapati",
+            "bread",
+            "pancakes"
+        ],
+        "add_ons": [
+            "A Squeeze Of Fresh Lemon",
+            "A drizzle of honey",
+            "warm spices like ginger or cinnamon",
+            "a splash of milk or creamy dairy alternatives",
+            "Fragrant Herbs Like Fresh Mint",
+            "A Tea Bag(Any Flavour)"
+        ],
+        "is_dry": false,
+        "food_role": [
+            "drink"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 2,
+    "fields": {
+        "name": "Plain Chapati",
+        "category": "breakfast",
+        "description": "Soft layered flatbread, simple and filling.",
+        "ingredients": "flour, water, oil, salt",
+        "estimated_cost": "0.50",
+        "prep_time": "15 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=making+chapati+recipe",
+        "image_url": null,
+        "image": "dish_images/chapati.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "milk"
+        ],
+        "best_with_foods": [
+            "beans",
+            "eggs"
+        ],
+        "add_ons": [],
+        "is_dry": true,
+        "food_role": [
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 3,
+    "fields": {
+        "name": "Mandazi",
+        "category": "['breakfast']",
+        "description": "Sweet, fluffy East African doughnuts flavoured with coconut and cardamom.",
+        "ingredients": "flour, coconut milk, sugar, egg, cardamom, baking powder, oil",
+        "estimated_cost": "1.00",
+        "prep_time": "25 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=mandazi+recipe+kenya",
+        "image_url": null,
+        "image": "dish_images/mandazi.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "milk"
+        ],
+        "best_with_foods": [
+            "eggs"
+        ],
+        "add_ons": [],
+        "is_dry": true,
+        "food_role": [
+            "side",
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 4,
+    "fields": {
+        "name": "Boiled Eggs",
+        "category": "breakfast",
+        "description": "Simple protein-rich boiled eggs.",
+        "ingredients": "eggs, water, salt",
+        "estimated_cost": "0.60",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=boiled+eggs+recipe",
+        "image_url": null,
+        "image": "dish_images/boiled_eggs.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "juice"
+        ],
+        "best_with_foods": [
+            "bread",
+            "avocado",
+            "chapati"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "side",
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 5,
+    "fields": {
+        "name": "Pancakes",
+        "category": "breakfast",
+        "description": "Soft fluffy pancakes.",
+        "ingredients": "flour, eggs, milk, sugar",
+        "estimated_cost": "1.20",
+        "prep_time": "15 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=simple+and+complex+pancakes+recipe+",
+        "image_url": null,
+        "image": "dish_images/pancakes.jpeg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "coffee",
+            "milk"
+        ],
+        "best_with_foods": [
+            "honey",
+            "fruit"
+        ],
+        "add_ons": [],
+        "is_dry": true,
+        "food_role": [
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 6,
+    "fields": {
+        "name": "Avocado Toast",
+        "category": "breakfast",
+        "description": "Creamy smashed avocado on toasted sourdough, topped with a poached egg and chilli flakes.",
+        "ingredients": "sourdough bread, avocado, egg, chilli flakes, lemon, olive oil, salt, pepper",
+        "estimated_cost": "3.50",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=avocado+toast+recipe",
+        "image_url": null,
+        "image": "dish_images/avocado_toast.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "coffee",
+            "juice"
+        ],
+        "best_with_foods": [],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "side",
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 7,
+    "fields": {
+        "name": "Classic Omelette",
+        "category": "breakfast",
+        "description": "Fluffy three-egg omelette filled with cheese, mushrooms, and fresh herbs.",
+        "ingredients": "eggs, cheese, mushrooms, butter, parsley, salt, pepper",
+        "estimated_cost": "2.00",
+        "prep_time": "8 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=classic+omelette+recipe",
+        "image_url": null,
+        "image": "dish_images/classic_om.jpg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "juice"
+        ],
+        "best_with_foods": [
+            "toast",
+            "chapati"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "side",
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 8,
+    "fields": {
+        "name": "Banana Pancakes",
+        "category": "breakfast",
+        "description": "Fluffy banana pancakes made with just three ingredients — a healthy weekend treat.",
+        "ingredients": "banana, eggs, oats, honey, cinnamon",
+        "estimated_cost": "1.50",
+        "prep_time": "15 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=banana+pancakes+recipe",
+        "image_url": null,
+        "image": "dish_images/banana_pancake.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "milk"
+        ],
+        "best_with_foods": [
+            "honey",
+            "fruit"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 9,
+    "fields": {
+        "name": "Overnight Oats",
+        "category": "breakfast",
+        "description": "No-cook creamy oats soaked overnight with fruits, nuts, and a drizzle of honey.",
+        "ingredients": "oats, milk, yogurt, honey, banana, berries, chia seeds",
+        "estimated_cost": "1.80",
+        "prep_time": "5 mins + overnight",
+        "youtube_url": "https://www.youtube.com/results?search_query=overnight+oats+recipe",
+        "image_url": null,
+        "image": "dish_images/overnight_oats.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "tea"
+        ],
+        "best_with_foods": [],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 10,
+    "fields": {
+        "name": "Shakshuka",
+        "category": "breakfast",
+        "description": "Spiced tomato sauce with poached eggs, perfect with crusty bread.",
+        "ingredients": "eggs, tomatoes, onion, garlic, cumin, paprika, chilli, olive oil, bread",
+        "estimated_cost": "3.00",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=shakshuka+recipe",
+        "image_url": null,
+        "image": "dish_images/shakshuka.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "juice"
+        ],
+        "best_with_foods": [
+            "bread",
+            "chapati"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 11,
+    "fields": {
+        "name": "Chapati & Eggs",
+        "category": "breakfast",
+        "description": "Soft homemade chapati served with scrambled eggs and a cup of chai.",
+        "ingredients": "flour, water, salt, oil, eggs, milk, butter",
+        "estimated_cost": "1.20",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=chapati+and+eggs+recipe",
+        "image_url": null,
+        "image": "dish_images/chapati_eggs.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "milk"
+        ],
+        "best_with_foods": [],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 51,
+    "fields": {
+        "name": "Pilau",
+        "category": "lunch",
+        "description": "Fragrant Kenyan spiced rice with tender meat, onions, and a blend of whole spices.",
+        "ingredients": "rice, chicken, soy sauce, eggs, garlic, ginger, carrot, peas, sesame oil",
+        "estimated_cost": "4.00",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=pilau+recipe",
+        "image_url": null,
+        "image": "dish_images/pilau.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "soda"
+        ],
+        "best_with_foods": [
+            "kachumbari"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 52,
+    "fields": {
+        "name": "Chicken Fried Rice",
+        "category": "lunch",
+        "description": "Quick wok-tossed fried rice with tender chicken pieces, veggies, and soy sauce.",
+        "ingredients": "rice, chicken, soy sauce, eggs, garlic, ginger, carrot, peas, sesame oil",
+        "estimated_cost": "4.00",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=chicken+fried+rice+recipe",
+        "image_url": null,
+        "image": "dish_images/chicken_fried_rice.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "soda"
+        ],
+        "best_with_foods": [
+            "salad"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 53,
+    "fields": {
+        "name": "Lentil Soup",
+        "category": "lunch",
+        "description": "Hearty red lentil soup with cumin, tomatoes, and a squeeze of lemon.",
+        "ingredients": "red lentils, tomatoes, onion, garlic, cumin, turmeric, lemon, olive oil",
+        "estimated_cost": "2.50",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=lentil+soup+recipe",
+        "image_url": null,
+        "image": "dish_images/lentil_soup.jpg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "water",
+            "juice"
+        ],
+        "best_with_foods": [
+            "bread",
+            "chapati"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 54,
+    "fields": {
+        "name": "Tuna Salad Wrap",
+        "category": "lunch",
+        "description": "Protein-packed tuna mixed with mayo and veggies, wrapped in a soft tortilla.",
+        "ingredients": "tuna, tortilla, mayo, lettuce, tomato, onion, lemon, cucumber",
+        "estimated_cost": "3.20",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=tuna+salad+wrap+recipe",
+        "image_url": null,
+        "image": "dish_images/tuna_salad_wrap.png",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "water"
+        ],
+        "best_with_foods": [
+            "chips",
+            "salad"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 55,
+    "fields": {
+        "name": "Githeri",
+        "category": "lunch",
+        "description": "Traditional Kenyan mix of maize and beans, sautéed with onions and tomatoes.",
+        "ingredients": "maize, beans, tomatoes, onion, garlic, coriander, oil, salt",
+        "estimated_cost": "1.50",
+        "prep_time": "45 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=githeri+recipe+kenya",
+        "image_url": null,
+        "image": "dish_images/githeri.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "water"
+        ],
+        "best_with_foods": [
+            "chapati",
+            "ugali"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 56,
+    "fields": {
+        "name": "Pasta Aglio e Olio",
+        "category": "lunch",
+        "description": "Simple Italian pasta with garlic-infused olive oil, chilli, and parmesan.",
+        "ingredients": "spaghetti, garlic, olive oil, chilli flakes, parsley, parmesan, salt",
+        "estimated_cost": "2.80",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=pasta+aglio+olio+recipe",
+        "image_url": null,
+        "image": "dish_images/pasta_ag.png",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "water"
+        ],
+        "best_with_foods": [
+            "salad",
+            "bread"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 57,
+    "fields": {
+        "name": "Bean & Veggie Stew",
+        "category": "lunch",
+        "description": "Thick, nourishing stew of mixed beans and seasonal vegetables in a rich tomato base.",
+        "ingredients": "mixed beans, potatoes, carrots, tomatoes, onion, garlic, paprika, cumin, oil",
+        "estimated_cost": "2.20",
+        "prep_time": "35 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=bean+vegetable+stew+recipe",
+        "image_url": null,
+        "image": "dish_images/beans_veg.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "water",
+            "juice"
+        ],
+        "best_with_foods": [
+            "ugali",
+            "rice",
+            "chapati"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 101,
+    "fields": {
+        "name": "Beef Stew & Ugali",
+        "category": "dinner",
+        "description": "Slow-cooked tender beef in a rich stew, served with firm white ugali.",
+        "ingredients": "beef, potatoes, carrots, tomatoes, onion, garlic, ugali flour, oil, salt",
+        "estimated_cost": "6.00",
+        "prep_time": "60 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=beef+stew+ugali+recipe+kenya",
+        "image_url": null,
+        "image": "dish_images/ugali_beef.png",
+        "budget_level": "mid-high",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "water",
+            "soda"
+        ],
+        "best_with_foods": [
+            "kachumbari",
+            "sukuma wiki"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 102,
+    "fields": {
+        "name": "Grilled Tilapia",
+        "category": "dinner",
+        "description": "Whole tilapia marinated in spices and grilled to perfection, served with kachumbari.",
+        "ingredients": "tilapia, lemon, garlic, paprika, coriander, tomato, onion, chilli, oil",
+        "estimated_cost": "5.50",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=grilled+tilapia+recipe+kenya",
+        "image_url": null,
+        "image": "dish_images/grilled_tilapia.jpg",
+        "budget_level": "mid-high",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "soda"
+        ],
+        "best_with_foods": [
+            "ugali",
+            "chips",
+            "kachumbari"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 103,
+    "fields": {
+        "name": "Chicken Curry",
+        "category": "dinner",
+        "description": "Aromatic chicken curry simmered in coconut milk and spices, served with rice.",
+        "ingredients": "chicken, coconut milk, tomatoes, onion, garlic, ginger, curry powder, oil",
+        "estimated_cost": "5.00",
+        "prep_time": "40 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=chicken+curry+coconut+recipe",
+        "image_url": null,
+        "image": "dish_images/chicken_curry.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "water"
+        ],
+        "best_with_foods": [
+            "rice",
+            "chapati",
+            "naan"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": ""
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 104,
+    "fields": {
+        "name": "Kenyan Pilau",
+        "category": "dinner",
+        "description": "Fragrant Kenyan spiced rice with tender meat, onions, and a blend of whole spices.",
+        "ingredients": "rice, beef, onion, garlic, ginger, cumin, cardamom, cinnamon, cloves, oil",
+        "estimated_cost": "4.50",
+        "prep_time": "50 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=kenyan+pilau+recipe",
+        "image_url": null,
+        "image": "dish_images/pilau.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "soda"
+        ],
+        "best_with_foods": [
+            "kachumbari",
+            "salad"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 105,
+    "fields": {
+        "name": "Vegetable Biryani",
+        "category": "dinner",
+        "description": "Layered fragrant basmati rice with mixed vegetables and saffron.",
+        "ingredients": "basmati rice, carrots, peas, potato, onion, yogurt, saffron, ghee, spices",
+        "estimated_cost": "3.80",
+        "prep_time": "45 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=vegetable+biryani+recipe",
+        "image_url": null,
+        "image": "dish_images/veg_biryani.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "lassi"
+        ],
+        "best_with_foods": [
+            "raita",
+            "salad"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 106,
+    "fields": {
+        "name": "Spaghetti Bolognese",
+        "category": "dinner",
+        "description": "Rich minced beef sauce slow-cooked with tomatoes and herbs over al dente pasta.",
+        "ingredients": "spaghetti, minced beef, tomatoes, onion, garlic, olive oil, basil, parmesan, wine",
+        "estimated_cost": "4.20",
+        "prep_time": "40 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=spaghetti+bolognese+recipe",
+        "image_url": null,
+        "image": "dish_images/spaghetti_b.png",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "water"
+        ],
+        "best_with_foods": [
+            "garlic bread",
+            "salad"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 152,
+    "fields": {
+        "name": "Fruit Salad",
+        "category": "anytime",
+        "description": "Fresh seasonal fruits tossed with honey and a squeeze of lime — light and refreshing.",
+        "ingredients": "mango, banana, watermelon, pineapple, passion fruit, honey, lime",
+        "estimated_cost": "2.00",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=fruit+salad+recipe",
+        "image_url": null,
+        "image": "dish_images/fruit_salad.jpg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "yogurt"
+        ],
+        "best_with_foods": [],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 153,
+    "fields": {
+        "name": "Cheese Quesadilla",
+        "category": "anytime",
+        "description": "Crispy toasted tortilla filled with melted cheese, peppers, and salsa.",
+        "ingredients": "tortilla, cheese, peppers, onion, salsa, sour cream, butter",
+        "estimated_cost": "2.50",
+        "prep_time": "10 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=cheese+quesadilla+recipe",
+        "image_url": null,
+        "image": "dish_images/cheese_q.jpg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "soda"
+        ],
+        "best_with_foods": [
+            "salsa",
+            "guacamole"
+        ],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 154,
+    "fields": {
+        "name": "Samosa",
+        "category": "anytime",
+        "description": "Crispy golden pastry filled with spiced minced meat or vegetables.",
+        "ingredients": "flour, minced meat, potato, peas, onion, cumin, coriander, oil",
+        "estimated_cost": "1.50",
+        "prep_time": "40 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=samosa+recipe+kenya",
+        "image_url": null,
+        "image": "dish_images/samosa.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "tea",
+            "juice"
+        ],
+        "best_with_foods": [
+            "chutney"
+        ],
+        "add_ons": [],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 155,
+    "fields": {
+        "name": "Smoothie Bowl",
+        "category": "anytime",
+        "description": "Thick blended fruit smoothie bowl topped with granola, nuts, and fresh berries.",
+        "ingredients": "banana, berries, yogurt, milk, granola, honey, chia seeds, nuts",
+        "estimated_cost": "3.00",
+        "prep_time": "8 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=smoothie+bowl+recipe",
+        "image_url": null,
+        "image": "dish_images/smoothie_bowl.jpg",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "juice",
+            "water"
+        ],
+        "best_with_foods": [],
+        "add_ons": [],
+        "is_dry": false,
+        "food_role": [
+            "drink",
+            "main",
+            "side"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 156,
+    "fields": {
+        "name": "Chips (Fries)",
+        "category": "anytime",
+        "description": "Golden crispy potato fries seasoned with salt and your favourite spices.",
+        "ingredients": "potatoes, oil, salt, paprika, garlic powder",
+        "estimated_cost": "1.20",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=crispy+fries+recipe",
+        "image_url": null,
+        "image": "dish_images/fries.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "soda",
+            "juice"
+        ],
+        "best_with_foods": [
+            "ketchup",
+            "grilled chicken",
+            "tilapia"
+        ],
+        "add_ons": [],
+        "is_dry": true,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": null
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 157,
+    "fields": {
+        "name": "Uji/Porridge",
+        "category": "breakfast",
+        "description": "Enjoy a warm, nourishing bowl of uji(Fermented and Unfermented).  Known for its smooth texture and rich, comforting taste , perfect for starting your day with energy and warmth.",
+        "ingredients": "Millet, Sorghum,  Maize flour,\r\nWater,\r\nSugar (optional),\r\nMilk (optional)",
+        "estimated_cost": "0.90",
+        "prep_time": "15 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=uji%2F+porridge+recipe",
+        "image_url": null,
+        "image": "dish_images/uji.png",
+        "budget_level": "low",
+        "meal_type": "drink",
+        "best_with_drinks": [],
+        "best_with_foods": [
+            "Mandazi or bread",
+            "Sweet potatoes",
+            "Arrowroots (nduma)",
+            "Chapati",
+            "Groundnuts (peanuts)",
+            "Milk or tea on the side"
+        ],
+        "add_ons": [
+            "Milk or mala",
+            "Sugar or honey",
+            "Peanut butter or groundnuts",
+            "Bananas or other fruits",
+            "Spices (cinnamon, cardamom)",
+            "Margarine or butter",
+            "Lemon (for a tangy taste)"
+        ],
+        "is_dry": false,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": "Mix flour with a little cold water to form a smooth paste.\r\nBoil water in a pot.\r\nAdd the paste while stirring continuously.\r\nCook on low heat, stirring until it thickens.\r\nAdd sugar or milk (optional).\r\nServe hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 158,
+    "fields": {
+        "name": "Sweet Potatoes",
+        "category": "breakfast",
+        "description": "Just Perfect For You! Enjoy  a bowl of naturally sweet Sweet potatoes, nutrient-rich roots rich in fiber, vitamin A, and energy. They can be boiled, roasted, fried, or mashed into simple, filling meals or snacks.",
+        "ingredients": "Sweet potatoes, Water (For Boiling), Cooking Oil(For Frying)",
+        "estimated_cost": "0.90",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=sweet+potatoes+recipe",
+        "image_url": null,
+        "image": "dish_images/sweet_potatoes.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea",
+            "Milk"
+        ],
+        "best_with_foods": [
+            "Grilled Meat",
+            "Fried Eggs",
+            "Beans",
+            "Avocado"
+        ],
+        "add_ons": [
+            "Butter",
+            "Margarine",
+            "Honey",
+            "Sugar",
+            "Salt",
+            "Cinnamon",
+            "Chili powder",
+            "Lemon juice",
+            "Peanuts",
+            "Coconut flakes"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": "Boiling: Peel and wash sweet potatoes, cut if needed, add to boiling salted water, cook until soft, then drain and serve.\r\n\r\nFrying: Peel and slice sweet potatoes, heat oil in a pan, fry until golden and crisp, then drain and serve hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 159,
+    "fields": {
+        "name": "Boiled Maize (Mahindi)",
+        "category": "breakfast",
+        "description": "Enjoy tender, naturally sweet maize kernels boiled in lightly salted water, a simple and filling Kenyan snack or meal.",
+        "ingredients": "Fresh Maize, Water,  Salt (Optional)",
+        "estimated_cost": "0.60",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=boiled+maize+recipe",
+        "image_url": null,
+        "image": "dish_images/boiled_maize.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea",
+            "Milk"
+        ],
+        "best_with_foods": [
+            "Grilled meat",
+            "Beans",
+            "Avocado"
+        ],
+        "add_ons": [
+            "Butter",
+            "Salt",
+            "Lemon Juice",
+            "Chili Powder",
+            "Margarine"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": "Boil peeled maize in water until soft, add salt if desired, drain and serve hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 160,
+    "fields": {
+        "name": "Sausage + Bread",
+        "category": "breakfast",
+        "description": "Enjoy a simple, tasty combo of juicy grilled or fried sausage served in soft or toasted bread. Perfect for a quick, filling snack or breakfast.",
+        "ingredients": "\"Sausages\", \"Bread\", Oil/Blueband/Margarine(For Toasting Bread)",
+        "estimated_cost": "0.98",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=bread+%2B+sausage",
+        "image_url": null,
+        "image": "dish_images/bread.jpg",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea/Chai",
+            "Coffee",
+            "Juice",
+            "Milk"
+        ],
+        "best_with_foods": [],
+        "add_ons": [
+            "Eggs",
+            "Ketchup",
+            "Mustard",
+            "Mayonnaise",
+            "Chili Sauce",
+            "Onions",
+            "Tomato Slices"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": "Fry or grill sausages until cooked through, place inside or alongside bread, add sauces or toppings, and serve hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 161,
+    "fields": {
+        "name": "Arrowroots (Nduma)",
+        "category": "breakfast",
+        "description": "Earthy, wholesome tubers with a soft, slightly nutty taste when boiled, making a warm and satisfying traditional meal.",
+        "ingredients": "\"Arrowroots\", \"Water\", \"Salt (Optional)\"",
+        "estimated_cost": "1.00",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=arrowroots+recipe",
+        "image_url": null,
+        "image": "dish_images/arrowroot.png",
+        "budget_level": "mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea",
+            "Milk"
+        ],
+        "best_with_foods": [
+            "Beans",
+            "Greens",
+            "Eggs"
+        ],
+        "add_ons": [
+            "Butter",
+            "Salt",
+            "Tea",
+            "Avocado",
+            "Chili"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": "Wash and peel arrowroots.\r\nBoil in water until tender.\r\nAdd salt if desired.\r\nDrain and serve hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 162,
+    "fields": {
+        "name": "Mahindi Choma (Roasted Maize)",
+        "category": "anytime",
+        "description": "Smoky, charred maize roasted over an open flame, delivering a bold, crunchy and slightly sweet street-style flavor.",
+        "ingredients": "Fresh maize, Salt(Optional), Chili Powder",
+        "estimated_cost": "0.39",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=mahindi+choma",
+        "image_url": null,
+        "image": "dish_images/mahindi_choma.jpg",
+        "budget_level": "low-mid",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea",
+            "Soda",
+            "Juice",
+            "Water"
+        ],
+        "best_with_foods": [],
+        "add_ons": [
+            "Lemon juice",
+            "Salt",
+            "Chili powder",
+            "Butter"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main",
+            "side"
+        ],
+        "recipe_steps": "Roast maize over hot coals or flame,\r\nTurn until evenly charred.\r\nApply add-ons if desired.\r\nServe hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 163,
+    "fields": {
+        "name": "Ugali",
+        "category": "anytime",
+        "description": "A firm, smooth maize flour staple cooked with boiling water. The heart of any Kenyan meal. Filling, cheap, and pairs with almost everything.",
+        "ingredients": "Maize flour, Water, Salt",
+        "estimated_cost": "100.00",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=how+to+make+ugali",
+        "image_url": null,
+        "image": "dish_images/ugali.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Uji",
+            "Mala",
+            "Water",
+            "Juice"
+        ],
+        "best_with_foods": [
+            "Sukuma Wiki",
+            "Beef Stew",
+            "Fried Fish",
+            "Managu",
+            "Beans",
+            "Other Meat Options",
+            "Eggs"
+        ],
+        "add_ons": [
+            "Butter",
+            "Milk",
+            "Salt"
+        ],
+        "is_dry": true,
+        "food_role": [
+            "main"
+        ],
+        "recipe_steps": "Boil 2 cups of water in a sufuria and add a pinch of salt\r\nSlowly add maize flour while stirring continuously\r\nKeep stirring on medium heat to avoid lumps\r\nReduce heat, cover and let it cook for 5 minutes\r\nStir again firmly until ugali is thick and leaves the sides\r\nShape and serve hot"
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 164,
+    "fields": {
+        "name": "Chapati Rolex",
+        "category": "anytime",
+        "description": "Popular East African street food made with chapati rolled with eggs and fresh vegetables.",
+        "ingredients": "Chapati, Eggs, Tomato, Onion, Cabbage, Cooking oil, Salt, Black pepper",
+        "estimated_cost": "120.00",
+        "prep_time": "20 mins",
+        "youtube_url": "https://www.youtube.com/watch?v=XnuEVKzu7KQ",
+        "image_url": null,
+        "image": "dish_images/rolex.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Tea",
+            "Coffee",
+            "Juice"
+        ],
+        "best_with_foods": [
+            "Samosa",
+            "French fries"
+        ],
+        "add_ons": [
+            "Chili sauce",
+            "Ketchup",
+            "Avocado"
+        ],
+        "is_dry": false,
+        "food_role": [
+            "Street food",
+            "Snack",
+            "Fast food"
+        ],
+        "recipe_steps": "Prepare chapati.\r\nBeat eggs with onions and tomatoes.\r\nFry egg mixture.\r\nPlace eggs on chapati and roll.\r\nServe hot."
+    }
+},
+{
+    "model": "core.dish",
+    "pk": 165,
+    "fields": {
+        "name": "Steamed White Rice",
+        "category": "anytime",
+        "description": "Soft, fluffy steamed white rice cooked to perfection. \r\nA versatile staple meal that pairs well with different stew options \r\nsuch as beef stew, chicken stew, fish stew, lentil stew, and vegetable curry.",
+        "ingredients": "Rice, Water, Salt, Cooking Oil or Butter",
+        "estimated_cost": "99.99",
+        "prep_time": "30 mins",
+        "youtube_url": "https://www.youtube.com/results?search_query=how+to+cook+rice+",
+        "image_url": null,
+        "image": "dish_images/rice.png",
+        "budget_level": "low",
+        "meal_type": "food",
+        "best_with_drinks": [
+            "Fresh Orange Juice",
+            "Passion Juice",
+            "Soda",
+            "Lemon Water",
+            "Iced Tea"
+        ],
+        "best_with_foods": [
+            "Beef Stew",
+            "Chicken Stew",
+            "Fish Stew",
+            "Bean Stew",
+            "Vegetable Curry"
+        ],
+        "add_ons": [
+            "Kachumbari",
+            "Avocado",
+            "Fried Plantains",
+            "Chapati",
+            "Steamed Vegetables"
+        ],
+        "is_dry": false,
+        "food_role": [
+            "main meal",
+            "energy giving",
+            "lunch",
+            "dinner"
+        ],
+        "recipe_steps": "Wash the rice thoroughly with clean water.\r\nBoil water in a cooking pot.\r\nAdd rice and a little salt.\r\nCook on medium heat until the water is absorbed.\r\nReduce heat and cover the pot.\",\r\nAllow the rice to steam until soft and fluffy.\r\nServe hot with your preferred stew option."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 1,
+    "fields": {
+        "dish": 163,
+        "name": "Sukuma Wiki",
+        "category": "greens",
+        "description": "Braised kale cooked with onions and tomatoes. A classic budget-friendly side that goes perfectly with ugali.",
+        "budget_level": "low",
+        "image": "stew_options/sukuma.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=how+to+cook+ugali+and+sukuma+wiki",
+        "estimated_cost": "20.00",
+        "is_vegetarian": true,
+        "is_featured": true,
+        "ingredients": "Kale (Sukuma Wiki), Onion, Tomato, Cooking Oil, Salt",
+        "add_ons": [
+            "Avocado",
+            "Beef Stew",
+            "Fried Eggs"
+        ],
+        "recipe_steps": "Wash and chop the sukuma wiki (kale)\r\nSlice onions and tomatoes\r\nHeat cooking oil in a pan\r\nFry onions until golden brown\r\nAdd tomatoes, then cook until soft\r\nAdd chopped sukuma wiki and stir well\r\nSeason with salt\r\nCook for 5–7 minutes until tender\r\nServe hot with Ugali"
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 2,
+    "fields": {
+        "dish": 163,
+        "name": "Beef Stew",
+        "category": "beef",
+        "description": "Rich and flavorful Kenyan-style beef stew cooked with tomatoes, onions, and spices.",
+        "budget_level": "mid",
+        "image": "stew_options/ugalibeef.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=ugali+beef+stew",
+        "estimated_cost": "250.00",
+        "is_vegetarian": false,
+        "is_featured": true,
+        "ingredients": "Beef, Onion, Tomato, Garlic, Ginger, Cooking oil, Salt, Black pepper, Coriander",
+        "add_ons": [
+            "Ugali",
+            "Rice",
+            "Chapati",
+            "Kachumbari",
+            "Avocado"
+        ],
+        "recipe_steps": "Heat oil and fry onions until golden.\r\nAdd garlic and ginger.\r\nAdd tomatoes and cook into a thick sauce.\r\nAdd beef pieces and stir well.\r\nAdd water and simmer until meat is tender.\r\nSeason and serve hot."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 3,
+    "fields": {
+        "dish": 165,
+        "name": "Chicken Stew",
+        "category": "chicken",
+        "description": "Tender chicken pieces simmered in a rich tomato and herb sauce.",
+        "budget_level": "mid",
+        "image": "stew_options/chicken.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=how+to+chicken+stew",
+        "estimated_cost": "450.00",
+        "is_vegetarian": false,
+        "is_featured": true,
+        "ingredients": "Chicken, Tomatoes, Onions, Garlic, Ginger, Cooking Oil, Coriander",
+        "add_ons": [
+            "Kachumbari",
+            "French Fries",
+            "Vegetables"
+        ],
+        "recipe_steps": "Boil or fry chicken pieces.\r\nPrepare tomato sauce with onions and spices.\r\nAdd chicken and simmer.\r\nCook until tender.\r\nServe hot with rice."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 4,
+    "fields": {
+        "dish": 165,
+        "name": "Bean Stew",
+        "category": "legumes",
+        "description": "Rich and hearty bean stew cooked with tomatoes, onions, and spices. A nutritious and affordable option for rice.",
+        "budget_level": "low",
+        "image": "stew_options/bean_stew.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/watch?v=7JNFkpTS1og",
+        "estimated_cost": "150.00",
+        "is_vegetarian": true,
+        "is_featured": true,
+        "ingredients": "Beans, Tomatoes, Onions, Garlic, Cooking Oil, Salt, Coriander",
+        "add_ons": [
+            "Avocado",
+            "Kachumbari",
+            "Chapati"
+        ],
+        "recipe_steps": "Boil beans until soft.\r\nFry onions, tomatoes, and garlic.\r\nAdd beans and spices.\r\nSimmer for 15 minutes.\r\nServe hot with rice."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 5,
+    "fields": {
+        "dish": 165,
+        "name": "Fish Coconut Stew",
+        "category": "fish",
+        "description": "Delicious fish fillet simmered in creamy coconut sauce with herbs and spices.",
+        "budget_level": "high",
+        "image": "stew_options/Fish_coconut.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=fish+coconut+stew+recipe",
+        "estimated_cost": "850.00",
+        "is_vegetarian": false,
+        "is_featured": true,
+        "ingredients": "Fish Fillet, Coconut Milk, Tomatoes, Garlic, Lemon Juice, Coriander",
+        "add_ons": [
+            "Lemon Wedges",
+            "Vegetables",
+            "Plantains"
+        ],
+        "recipe_steps": "Season fish and lightly fry.\r\nPrepare coconut sauce.\r\nAdd fish into the sauce.\r\nSimmer gently for 10 minutes.\r\nServe hot with rice."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 6,
+    "fields": {
+        "dish": 165,
+        "name": "Lentil Curry",
+        "category": "greens",
+        "description": "Creamy lentil curry with mild spices and coconut flavor, perfect with steamed rice.",
+        "budget_level": "low",
+        "image": "stew_options/lentil.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=lentil+stew+recipe",
+        "estimated_cost": "180.00",
+        "is_vegetarian": true,
+        "is_featured": false,
+        "ingredients": "Lentils, Coconut Milk, Tomatoes, Onions, Curry Powder, Garlic",
+        "add_ons": [
+            "Steamed Vegetables",
+            "Avocado"
+        ],
+        "recipe_steps": "Boil lentils until tender.\",\r\nPrepare curry base using onions and tomatoes.\r\nAdd coconut milk and lentils.\r\nCook until thick.\r\nServe with rice."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 7,
+    "fields": {
+        "dish": 165,
+        "name": "Beef Stew",
+        "category": "beef",
+        "description": "Slow-cooked beef stew with rich gravy and aromatic spices.",
+        "budget_level": "mid",
+        "image": "stew_options/beef.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/results?search_query=beef+stew+recipe",
+        "estimated_cost": "500.00",
+        "is_vegetarian": false,
+        "is_featured": true,
+        "ingredients": "Beef, Tomatoes, Onions, Garlic, Ginger, Carrots, Cooking Oil, Potatoes(Optional)",
+        "add_ons": [
+            "Chapati",
+            "Spinach",
+            "Avocado"
+        ],
+        "recipe_steps": "Boil beef until tender.\r\nFry onions, garlic, and tomatoes.\r\nAdd beef and spices.\r\nSimmer to form thick gravy.\r\nServe with rice."
+    }
+},
+{
+    "model": "core.stewoption",
+    "pk": 8,
+    "fields": {
+        "dish": 165,
+        "name": "Lamb Stew",
+        "category": "pork",
+        "description": "Premium slow-cooked lamb stew with herbs, vegetables, and rich flavorful gravy.",
+        "budget_level": "high",
+        "image": "stew_options/lamb.png",
+        "image_url": null,
+        "youtube_url": "https://www.youtube.com/watch?v=mDYifggCD1I",
+        "estimated_cost": "1200.00",
+        "is_vegetarian": false,
+        "is_featured": true,
+        "ingredients": "Lamb Meat, Carrots, Potatoes, Garlic, Rosemary, Tomatoes, Onions",
+        "add_ons": [
+            "Garlic Bread",
+            "Salad",
+            "Steamed Vegetables"
+        ],
+        "recipe_steps": "Brown lamb pieces in a pot.\r\nAdd vegetables and spices.\r\nPour water or stock and simmer slowly.\r\nCook until lamb is soft and tender.\r\nServe warm with rice."
+    }
+},
+{
+    "model": "core.comradefood",
+    "pk": 1,
+    "fields": {
+        "name": "Noodles",
+        "description": "A quick, versatile dish of soft strands, often cooked and served with sauces, vegetables, or meat.",
+        "category": "staple",
+        "price_ksh": 45,
+        "unit": "1 Packet",
+        "youtube_url": "https://www.youtube.com/results?search_query=noodles+recipe",
+        "ingredients_needed": "Water",
+        "can_combine_with": "Vegetables, Eggs, Chicken, Beef, Sausages, Beans, Soy sauce , Spices, e.g Garlic",
+        "cooking_tip": "Boil 2 cups water, Add noodles for 3 mins, Add seasoning",
+        "upgrade_tip": "Add 1 egg (Ksh 15) + dhania (Ksh 5) for a fuller meal + 1 Tomato(Ksh 10) + Hoho(Ksh 10) + Carrot(Ksh 10)",
+        "image": "comrade_foods/noodles.png",
+        "is_featured": true
+    }
+},
+{
+    "model": "core.comradefood",
+    "pk": 2,
+    "fields": {
+        "name": "Maize Flour",
+        "description": "Staple grain flour used to make ugali — the backbone of Kenyan meals",
+        "category": "staple",
+        "price_ksh": 99,
+        "unit": "per 1kg packet",
+        "youtube_url": null,
+        "ingredients_needed": "Water, Salt",
+        "can_combine_with": "Sukuma Wiki, Beans, Eggs, Cabbage, Ndengu, Meat, Fish",
+        "cooking_tip": "Boil 2 cups water, add flour gradually while stirring to avoid lumps, cook on low heat for 10 mins",
+        "upgrade_tip": "Add more water for softer ugali, or less for firmer ugali that holds its shape better",
+        "image": "",
+        "is_featured": true
+    }
+},
+{
+    "model": "core.comradefood",
+    "pk": 3,
+    "fields": {
+        "name": "Eggs(Mayai)",
+        "description": "Versatile, Nutrient-dense protein sources consisting of a protective shell, a clear white, and a vitamin-rich yolk.",
+        "category": "protein",
+        "price_ksh": 35,
+        "unit": "2",
+        "youtube_url": null,
+        "ingredients_needed": "Cooking oil, Salt, Onion, Tomato",
+        "can_combine_with": "Ugali, Chapati, Bread, Rice, Indomie",
+        "cooking_tip": "Fry onion first, add tomato, then beat and pour eggs — scrambles in 3 mins",
+        "upgrade_tip": "Add dhania and hoho for a fuller scrambled egg.",
+        "image": "",
+        "is_featured": true
+    }
+},
+{
+    "model": "core.comradefood",
+    "pk": 4,
+    "fields": {
+        "name": "Rice",
+        "description": "Loved by half the Population. Rich in Starch.",
+        "category": "staple",
+        "price_ksh": 70,
+        "unit": "1/2 kg",
+        "youtube_url": null,
+        "ingredients_needed": "Water, Salt, Cooking oil",
+        "can_combine_with": "Beans, Ndengu, Cabbage, Sukuma Wiki, Meat, Any Cereal",
+        "cooking_tip": "Rinse rice, boil 2:1 water ratio, simmer covered for 15 mins",
+        "upgrade_tip": "Add onion and tomato when boiling for pilau-style rice",
+        "image": "",
+        "is_featured": true
+    }
+},
+{
+    "model": "core.comrademeal",
+    "pk": 1,
+    "fields": {
+        "name": "Noodles",
+        "description": "A quick, versatile dish of soft strands, often cooked and served with sauces, vegetables, or meat.",
+        "total_cost_ksh": 45,
+        "items": [
+            {
+                "item": "Noodles",
+                "cost": 45,
+                "qty": "1 packet"
+            }
+        ],
+        "kitchen_items_needed": "Water",
+        "steps": "Boil 1.5 cups of water.\r\nAdd noodles for 3 mins.\r\nAdd seasoning. OR:\r\n\r\nSauté 1/2 onion in oil until soft.\r\nAdd noodles and 1.5 cups of water (or broth).\r\nCook for 3-4 mins until water evaporates.\r\nThen add seasoning.\"",
+        "upgrade_with": "Add 1 egg (Ksh 15) + dhania (Ksh 5)+ 1 Tomato(Ksh 10) + Hoho(Ksh 10) + Carrot(Ksh 10)\r\nFOR A FULLER MEAL",
+        "cooking_tip": "",
+        "youtube_url": "https://www.youtube.com/results?search_query=noodles+recipe",
+        "image": "comrade_meals/noodles.png",
+        "tags": "fastest,vegetarian,under-50"
+    }
+},
+{
+    "model": "core.comrademeal",
+    "pk": 2,
+    "fields": {
+        "name": "Ugali & Sukuma Wiki",
+        "description": "The backbone of every comrade's diet. It is cheap, filling, and takes less than 20 minutes to prepare.",
+        "total_cost_ksh": 140,
+        "items": [
+            {
+                "item": "Maize Flour",
+                "cost": 100,
+                "qty": "1kg"
+            },
+            {
+                "item": "Sukuma Wiki (Kales)",
+                "cost": 20,
+                "qty": "1 Bunch/Packet"
+            },
+            {
+                "item": "Onion & Tomato",
+                "cost": 20,
+                "qty": "1 each"
+            }
+        ],
+        "kitchen_items_needed": "Cooking oil, Salt, Water, Maize flour, Sukuma Wiki",
+        "steps": "Boil water in a sufuria.\r\nAdd maize flour gradually while stirring until thick and firm.\r\nIn a separate pan, fry onions and tomatoes until soft, you can add spices too after frying onions and tomatoes.\r\nAdd chopped sukuma wiki and salt; stir for 5 minutes.\r\nServe hot.",
+        "upgrade_with": "Add a fried Egg, Meat or Avocado if the HELB has landed.",
+        "cooking_tip": "",
+        "youtube_url": "https://www.youtube.com/watch?v=7seIPgxQOY0",
+        "image": "comrade_meals/UgaliSukuma.png",
+        "tags": "Budget,Vegetarian,Flling,Classic"
+    }
+},
+{
+    "model": "core.comrademeal",
+    "pk": 3,
+    "fields": {
+        "name": "Fried Githeri",
+        "description": "A protein-packed mix of maize and beans that keeps you full for hours during long lectures.",
+        "total_cost_ksh": 100,
+        "items": [
+            {
+                "item": "Boiled Githeri",
+                "cost": 50,
+                "qty": "3 Small Cups"
+            },
+            {
+                "item": "Potatoes",
+                "cost": 50,
+                "qty": "7 Medium Size"
+            },
+            {
+                "item": "Onion & Tomatoes",
+                "cost": 20,
+                "qty": "1  each"
+            }
+        ],
+        "kitchen_items_needed": "Cooking oil, Salt, Royco (optional)",
+        "steps": "Fry onions in a pot until golden brown.\r\nAdd tomatoes, cook until soft then diced potatoes\r\nPour in the boiled githeri and add half a cup of water.\r\nCover and simmer for 15 minutes until potatoes are tender.\r\nSeason and serve.",
+        "upgrade_with": "Add carrots, hoho or dhania (coriander) for extra flavor.",
+        "cooking_tip": "",
+        "youtube_url": "https://www.youtube.com/results?search_query=githeri+recipe",
+        "image": "comrade_meals/githeri.png",
+        "tags": "Filling,One-pot,High-protein,Cheap"
+    }
+},
+{
+    "model": "core.comrademeal",
+    "pk": 4,
+    "fields": {
+        "name": "Cabbage & Rice (The End-Month Special)",
+        "description": "A very light and affordable meal when the budget is tight. Great for a quick dinner.",
+        "total_cost_ksh": 90,
+        "items": [
+            {
+                "item": "Rice",
+                "cost": 50,
+                "qty": "1/2kg"
+            },
+            {
+                "item": "Small Cabbage",
+                "cost": 30,
+                "qty": "1/2 head"
+            },
+            {
+                "item": "Onion and  Tomato",
+                "cost": 20,
+                "qty": "1 large each"
+            }
+        ],
+        "kitchen_items_needed": "Cooking oil, Salt",
+        "steps": "Boil rice with salt until water is absorbed.\r\nShred cabbage into thin strips.\r\nFry onions in oil, then add the cabbage.\r\nStir-fry for 5-8 minutes (keep it crunchy).\r\nMix with rice or serve on the side.",
+        "upgrade_with": "Add soy sauce or a cube of beef stock for a 'fried rice' vibe.",
+        "cooking_tip": "",
+        "youtube_url": "https://www.youtube.com/results?search_query=rice+cabbage+recipe",
+        "image": "comrade_meals/RiceCabbage.png",
+        "tags": "Fastest,Vegetarian,Budget,Light"
+    }
+},
+{
+    "model": "core.comrademeal",
+    "pk": 5,
+    "fields": {
+        "name": "Ugali & Mayai (Eggs)",
+        "description": "The ultimate 'end of the month' protein boost. Fast, reliable, and keeps you going through long study nights.",
+        "total_cost_ksh": 150,
+        "items": [
+            {
+                "item": "Maize Flour",
+                "cost": 100,
+                "qty": "1kg"
+            },
+            {
+                "item": "Eggs",
+                "cost": 35,
+                "qty": "2 large"
+            },
+            {
+                "item": "Onion",
+                "cost": 5,
+                "qty": "1 small"
+            }
+        ],
+        "kitchen_items_needed": "Cooking oil, Salt, Tomatoes (optional)",
+        "steps": "Prepare the ugali by adding flour to boiling water and stirring until firm.\r\nBeat the eggs in a cup with a pinch of salt.\r\nHeat oil in a pan and fry chopped onions until soft.\r\nPour in the eggs and scramble or fry as a flat omelette.\r\nServe the hot eggs alongside the ugali.",
+        "upgrade_with": "Add a side of sliced avocado or a simple kachumbari.",
+        "cooking_tip": "",
+        "youtube_url": "https://www.youtube.com/results?search_query=ugali+mayai+recipe",
+        "image": "comrade_meals/Ugali_Mayai.png",
+        "tags": "fastest,protein,cheap,classic"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2026-04-25T18:31:05.256Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "157",
+        "object_repr": "Uji/Porridge",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2026-04-25T18:32:04.719Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "157",
+        "object_repr": "Uji/Porridge",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2026-04-25T18:33:10.770Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "157",
+        "object_repr": "Uji/Porridge",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2026-04-25T18:34:32.030Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "157",
+        "object_repr": "Uji/Porridge",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Ingredients\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2026-04-25T18:49:55.878Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "158",
+        "object_repr": "Sweet Potatoes",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2026-04-25T18:53:33.723Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "158",
+        "object_repr": "Sweet Potatoes",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\", \"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2026-04-25T18:54:44.436Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "158",
+        "object_repr": "Sweet Potatoes",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2026-04-25T18:55:24.926Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "158",
+        "object_repr": "Sweet Potatoes",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2026-04-25T18:56:09.783Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "158",
+        "object_repr": "Sweet Potatoes",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Ingredients\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2026-04-25T19:05:11.124Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "159",
+        "object_repr": "Boiled Maize (Mahindi)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2026-04-25T19:33:10.287Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "160",
+        "object_repr": "Sausage + Bread",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2026-04-25T19:35:26.644Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "160",
+        "object_repr": "Sausage + Bread",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\", \"Add ons\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2026-04-26T13:10:04.174Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "161",
+        "object_repr": "Arrowroots (Nduma)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2026-04-26T13:28:09.768Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "162",
+        "object_repr": "Mahindi Choma (Roasted Maize)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2026-04-26T13:28:27.315Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "162",
+        "object_repr": "Mahindi Choma (Roasted Maize)",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2026-04-26T16:09:37.850Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2026-04-26T16:10:14.818Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Youtube url\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2026-04-26T16:15:33.056Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2026-04-26T16:16:42.146Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2026-04-26T16:21:33.798Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Youtube url\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2026-04-26T16:43:16.807Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2026-04-27T09:31:56.181Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Items\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2026-04-27T09:41:00.752Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "1",
+        "object_repr": "Noodles — Ksh 45",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Steps\", \"Upgrade with\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2026-04-27T15:59:59.460Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "2",
+        "object_repr": "Ugali & Sukuma Wiki — Ksh 140",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2026-04-27T16:09:11.483Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "3",
+        "object_repr": "Fried Githeri — Ksh 100",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2026-04-27T16:18:39.157Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "4",
+        "object_repr": "Cabbage & Rice (The End-Month Special) — Ksh 90",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2026-04-27T16:36:10.264Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "3",
+        "object_repr": "Fried Githeri — Ksh 100",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2026-04-27T16:52:31.713Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "5",
+        "object_repr": "Ugali & Mayai (Eggs) — Ksh 150",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2026-04-28T14:57:28.136Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "5",
+        "object_repr": "Ugali & Mayai (Eggs) — Ksh 150",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2026-04-28T14:57:48.306Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "5",
+        "object_repr": "Ugali & Mayai (Eggs) — Ksh 150",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2026-04-28T16:51:31.723Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comrademeal"
+        ],
+        "object_id": "2",
+        "object_repr": "Ugali & Sukuma Wiki — Ksh 140",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Kitchen items needed\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2026-04-29T03:05:09.117Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "2",
+        "object_repr": "Maize Flour — Ksh 99",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2026-04-29T03:09:57.221Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "3",
+        "object_repr": "Eggs(Mayai) — Ksh 35",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+        "action_time": "2026-04-29T03:13:34.062Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "comradefood"
+        ],
+        "object_id": "4",
+        "object_repr": "Rice — Ksh 70",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+        "action_time": "2026-05-03T03:40:19.879Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"stew option\", \"object\": \"Sukuma Wiki (goes with Ugali)\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+        "action_time": "2026-05-03T04:00:12.147Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"name\": \"stew option\", \"object\": \"Sukuma Wiki (goes with Ugali)\", \"fields\": [\"Youtube url\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+        "action_time": "2026-05-03T04:00:21.479Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+        "action_time": "2026-05-03T04:00:58.559Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 39,
+    "fields": {
+        "action_time": "2026-05-07T18:24:38.860Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "164",
+        "object_repr": "Chapati Rolex",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 40,
+    "fields": {
+        "action_time": "2026-05-07T18:26:56.073Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "164",
+        "object_repr": "Chapati Rolex",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Youtube url\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 41,
+    "fields": {
+        "action_time": "2026-05-07T18:53:31.703Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 2,
+        "change_message": "[{\"added\": {\"name\": \"stew option\", \"object\": \"Beef Stew (goes with Ugali)\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 42,
+    "fields": {
+        "action_time": "2026-05-07T18:56:25.370Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "stewoption"
+        ],
+        "object_id": "2",
+        "object_repr": "Beef Stew (goes with Ugali)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Ingredients\", \"Add ons\", \"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 43,
+    "fields": {
+        "action_time": "2026-05-07T19:04:06.331Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "164",
+        "object_repr": "Chapati Rolex",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 44,
+    "fields": {
+        "action_time": "2026-05-07T19:04:17.566Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "163",
+        "object_repr": "Ugali",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 45,
+    "fields": {
+        "action_time": "2026-05-09T18:27:55.757Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "stewoption"
+        ],
+        "object_id": "1",
+        "object_repr": "Sukuma Wiki (goes with Ugali)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Ingredients\", \"Add ons\", \"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 46,
+    "fields": {
+        "action_time": "2026-05-09T18:28:22.866Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "stewoption"
+        ],
+        "object_id": "1",
+        "object_repr": "Sukuma Wiki (goes with Ugali)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 47,
+    "fields": {
+        "action_time": "2026-05-12T18:58:58.082Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "165",
+        "object_repr": "Steamed White Rice",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"stew option\", \"object\": \"Chicken Stew (goes with Steamed White Rice)\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 48,
+    "fields": {
+        "action_time": "2026-05-14T20:34:42.468Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "165",
+        "object_repr": "Steamed White Rice",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"name\": \"stew option\", \"object\": \"Chicken Stew (goes with Steamed White Rice)\", \"fields\": [\"Ingredients\", \"Add ons\", \"Recipe steps\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 49,
+    "fields": {
+        "action_time": "2026-05-14T20:50:13.347Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "165",
+        "object_repr": "Steamed White Rice",
+        "action_flag": 2,
+        "change_message": "[{\"added\": {\"name\": \"stew option\", \"object\": \"Bean Stew (goes with Steamed White Rice)\"}}, {\"added\": {\"name\": \"stew option\", \"object\": \"Fish Coconut Stew (goes with Steamed White Rice)\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 50,
+    "fields": {
+        "action_time": "2026-05-14T21:15:45.736Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "165",
+        "object_repr": "Steamed White Rice",
+        "action_flag": 2,
+        "change_message": "[{\"added\": {\"name\": \"stew option\", \"object\": \"Lentil Curry (goes with Steamed White Rice)\"}}, {\"changed\": {\"name\": \"stew option\", \"object\": \"Fish Coconut Stew (goes with Steamed White Rice)\", \"fields\": [\"Youtube url\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 51,
+    "fields": {
+        "action_time": "2026-05-14T21:23:24.866Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "165",
+        "object_repr": "Steamed White Rice",
+        "action_flag": 2,
+        "change_message": "[{\"added\": {\"name\": \"stew option\", \"object\": \"Beef Stew (goes with Steamed White Rice)\"}}, {\"added\": {\"name\": \"stew option\", \"object\": \"Lamb Stew (goes with Steamed White Rice)\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 52,
+    "fields": {
+        "action_time": "2026-05-15T17:24:53.888Z",
+        "user": [
+            "kagwiria"
+        ],
+        "content_type": [
+            "core",
+            "dish"
+        ],
+        "object_id": "103",
+        "object_repr": "Chicken Curry",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Ingredients\"]}}]"
+    }
+}
+]
